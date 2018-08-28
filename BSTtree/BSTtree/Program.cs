@@ -50,7 +50,14 @@ namespace BSTtree
                 right = inputRight;
             }
 
-            void setHeight(int inputHeight)
+            BSTnode(int input)
+            {
+                data = input;
+                left = null;
+                right = null;
+            }
+
+            void setHeight(int inpu tHeight)
             {
                 if (height < inputHeight)
                     height = inputHeight;
@@ -62,7 +69,7 @@ namespace BSTtree
         private int insert(int input, BSTnode node)
             {
             if (node == null)
-                node = new BSTnode(input); //trying to make a recursive function to insert into the tree.
+                node = new BSTnode(input, null,null); //trying to make a recursive function to insert into the tree.
                 return node.height;
             }
     }
