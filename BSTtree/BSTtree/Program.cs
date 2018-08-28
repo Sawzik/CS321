@@ -8,18 +8,26 @@ namespace BSTtree
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string[] args) //Main of the program
         {
-            // The code provided will print ‘Hello World’ to the console.
-            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
+            Console.WriteLine("test input by typing numbers. no error detection");
 
-            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
+            string input = Console.ReadLine(); //reading input from user. Gets the whole line
+
+            string[] parsedInput = input.Split(' ');
+
+            Console.WriteLine(input);
+
+            foreach (string s in parsedInput) //use this loop to add each element into the tree.
+            {
+                Console.WriteLine(s); //writes to the console one line at a time.
+            }
+
+            Console.ReadKey(); //pausing at the end of the program
         }
     }
     
-    class BSTtree
+    class BSTtreeInterface
     {
 
     }
