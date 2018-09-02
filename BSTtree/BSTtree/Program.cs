@@ -29,7 +29,7 @@ namespace BSTtree
     
     class BSTtree //actual implementation of the Binary Tree, put this in another file.w
     {
-        private class BSTnode
+        private class BSTnode : ICloneable, IComparable<BSTnode>
         {
             public BSTnode left = null;
             public BSTnode right = null;
@@ -44,11 +44,27 @@ namespace BSTtree
                 right = null;
             }
  
-            public BSTnode(int input, ref BSTnode inputLeft, ref BSTnode inputRight)
+            public BSTnode(int input, BSTnode inputLeft, BSTnode inputRight)
             {
                 data = input;
                 left = inputLeft;
                 right = inputRight;
+            }
+
+            public object Clone()
+            {
+                BSTnode clonedLeft = null;
+                BSTnode clonedRight = null;
+                if (this.left != null) //Recusively calling clone on each child for a deep copy.
+                    clonedLeft = this.left.Clone() as BSTnode; //clone takes an object class, telling it that its taking a BSTnode which is inherits from object 
+                if (this.right != null)
+                    clonedRight = this.right.Clone() as BSTnode;
+                return new BSTnode(this.data, clonedLeft, clonedRight);
+            }
+
+            public int CompareTo(BSTnode other)
+            {
+                return this.data - other.data;
             }
 
             void setHeight(int inputHeight)
@@ -60,7 +76,7 @@ namespace BSTtree
 
         private BSTnode root = null; //creates an empty root node to start the tree.
 
-        private int insert(int input, ref BSTnode node)
+        private int Insert(int input, ref BSTnode node)
             {
             if (node == null)
                 node = new BSTnode(input); //trying to make a recursive function to insert into the tree.
