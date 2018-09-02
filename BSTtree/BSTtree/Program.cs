@@ -27,12 +27,7 @@ namespace BSTtree
         }
     }
     
-    class BSTtreeInterface //test for the interface class. add more to this.
-    {
-
-    }
-
-    class BSTtree : BSTtreeInterface //actual implementation of the Binary Tree, put this in another file.w
+    class BSTtree //actual implementation of the Binary Tree, put this in another file.w
     {
         private class BSTnode
         {
@@ -40,24 +35,23 @@ namespace BSTtree
             public BSTnode right = null;
             public int data = -1; //picked -1 arbritarily as being no data as its outside of the user input range.
             public int height = 0; //variable that stores the current height of the node
+            private int input;
 
-
-            //initializes class members from contrsuctor arguments
-            BSTnode(int input, BSTnode inputLeft = null, BSTnode inputRight = null)
+            public BSTnode(int input)
+            {
+                data = input;
+                left = null;
+                right = null;
+            }
+ 
+            public BSTnode(int input, ref BSTnode inputLeft, ref BSTnode inputRight)
             {
                 data = input;
                 left = inputLeft;
                 right = inputRight;
             }
 
-            BSTnode(int input)
-            {
-                data = input;
-                left = null;
-                right = null;
-            }
-
-            void setHeight(int inpu tHeight)
+            void setHeight(int inputHeight)
             {
                 if (height < inputHeight)
                     height = inputHeight;
@@ -66,10 +60,10 @@ namespace BSTtree
 
         private BSTnode root = null; //creates an empty root node to start the tree.
 
-        private int insert(int input, BSTnode node)
+        private int insert(int input, ref BSTnode node)
             {
             if (node == null)
-                node = new BSTnode(input, null,null); //trying to make a recursive function to insert into the tree.
+                node = new BSTnode(input); //trying to make a recursive function to insert into the tree.
                 return node.height;
             }
     }
