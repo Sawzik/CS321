@@ -11,7 +11,7 @@ namespace BSTtree
         public BSTnode left = null;
         public BSTnode right = null;
         public int data = -1; //picked -1 arbritarily as being no data as its outside of the user input range.
-        public int height = 0; //variable that stores the current height of the node
+        public int height = 0; //variable that stores the current height of the node in the tree
 
         public BSTnode(int input)
         {
@@ -44,7 +44,6 @@ namespace BSTtree
                 return -1;
             else if (this.data == other.data)
                 return 0;
-            //if (this.data > other.data)
             return 1;
         }
 

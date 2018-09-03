@@ -92,7 +92,7 @@ namespace BSTtree
 
         private ref BSTnode FindMax(ref BSTnode node)
         {
-            if (node.left == null) //reached the leftmost node
+            if (node.right == null) //reached the leftmost node
                 return ref node;
             return ref FindMax(ref node.right);
         }
@@ -140,8 +140,6 @@ namespace BSTtree
 
         private int Depth(int deep, ref BSTnode node)
         {
-            //if (node == null)
-            //    return deep - 1;
             if (node.right != null)
                 return Depth(deep + 1, ref node.right);
             if (node.left != null)
