@@ -11,7 +11,6 @@ namespace BSTtree
 
         private BSTnode root = null; //creates an empty root node to start the tree.
         private int nodes = 0;
-        private int depth = 0;
 
         //recursively calls itself until it finds where to add a new node. increases the height each time
         private int Insert(int input, ref BSTnode node)
@@ -28,9 +27,6 @@ namespace BSTtree
             else
                 node.SetHeight(Insert(input, ref node.right) + 1);
 
-            if (node.height > depth) //keeps track of the deepest node
-                depth = node.height;
-
             return node.height;
         }
 
@@ -42,18 +38,21 @@ namespace BSTtree
             {
                 newNode = node;
 
-                BSTnode min = FindMin(node.right);
+                ref BSTnode min = ref FindMin(ref node.right);
                 node.data = min.data; //finds the minimum node on the right subtree and copies its data into this node
                 Remove(node.data, ref min); //deletes the node that was brought up
 
                 return newNode;
             }
             else if (node.left == null) //one right child
+            {
                 newNode = node.right;
+            }
             else if (node.right == null) //one left child
                 newNode = node.left;
 
             node = null; //no children
+            nodes--;
 
             return newNode;
         }
@@ -72,29 +71,30 @@ namespace BSTtree
                     node = node.left;
                 else //two children
                 {
-                    BSTnode min = FindMin(node.right);
+                    BSTnode min = FindMin(ref node.right);
                     node.data = min.data; //finds the minimum node on the right subtree and copies its data into this node
                     Remove(node.data, ref min); //deletes the node that was brought up
                 }
+                nodes--;
             }
             else if (node.data < rmData)
-                Remove(rmData, ref node.left); //traverses left subtree
-            else
                 Remove(rmData, ref node.right); //traverses right subtree
+            else
+                Remove(rmData, ref node.left); //traverses left subtree
         }
 
-        private BSTnode FindMin(BSTnode node)
+        private ref BSTnode FindMin(ref BSTnode node)
         {
             if (node.left == null) //reached the leftmost node
-                return node;
-            return FindMin(node.left);
+                return ref node;
+            return ref FindMin(ref node.left);
         }
 
-        private BSTnode FindMax(BSTnode node)
+        private ref BSTnode FindMax(ref BSTnode node)
         {
             if (node.left == null) //reached the leftmost node
-                return node;
-            return FindMax(node.right);
+                return ref node;
+            return ref FindMax(ref node.right);
         }
 
         private BSTnode Find(int input, BSTnode node)
@@ -138,6 +138,17 @@ namespace BSTtree
             }
         }
 
+        private int Depth(int deep, ref BSTnode node)
+        {
+            //if (node == null)
+            //    return deep - 1;
+            if (node.right != null)
+                return Depth(deep + 1, ref node.right);
+            if (node.left != null)
+                return Depth(deep + 1, ref node.left);
+            return deep;
+        }
+
         ~BSTtree()
         {
             MakeEmpty(root);
@@ -145,12 +156,12 @@ namespace BSTtree
 
         public int FindMin()
         {
-          return FindMin(root).data;
+          return FindMin(ref root).data;
         }
 
         public int FindMax()
         {
-            return FindMax(root).data;
+            return FindMax(ref root).data;
         }
 
         public int Find(int input)
@@ -193,12 +204,16 @@ namespace BSTtree
 
         public int Depth()
         {
-            return this.depth;
+            if (nodes > 0)
+                return Depth(0, ref root);
+            else return 0;
         }
 
         public int TheoreticalMinDepth()
         {
-            return (int)Math.Log(nodes, 2); //Formula for best case binary tree is log base 2 of n in a perfectly balanced tree.
+            if (nodes > 0)
+                return (int)Math.Log(nodes, 2); //Formula for best case binary tree is log base 2 of n in a perfectly balanced tree.
+            return 0;
         }
 
     }
