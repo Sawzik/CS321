@@ -11,22 +11,24 @@ namespace BSTtree
         static void Main(string[] args)
         {
             BSTtree tree = new BSTtree();
-            Console.WriteLine("test input by typing numbers. no error detection");
 
+            Console.WriteLine("Enter a collection of numbers between 0 and 100. No error detection");
             string input = Console.ReadLine(); //reading input from user. Gets the whole line
             string[] parsedInput = input.Split(' ');
 
-            Console.WriteLine(input);
-
-            foreach (string s in parsedInput) 
+            foreach (string s in parsedInput) //inertion into tree
             {  
-                Console.WriteLine(s);
+                //Console.Write(s + ", "); //debug
                 tree.Insert(Int32.Parse(s));
             }
 
+            Console.Write("\n\nTree Contents: ");
             tree.PrintTree();
+            Console.WriteLine("\nTree statistics:\n\tNumber of nodes: " + tree.Count());
+            Console.WriteLine("\tNumber of levels: " + tree.Depth());
+            Console.WriteLine("\tTheoretical Minimum Depth: " + tree.TheoreticalMinDepth());
 
-            Console.ReadKey(); 
+            Console.ReadKey(); //pause
         }
     }
 }
