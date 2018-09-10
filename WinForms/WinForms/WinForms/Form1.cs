@@ -25,35 +25,36 @@ namespace WinForms
             {
                 data.Add(rand.Next(20000));
             }
-
-            //Dictionary
-            Dictionary<int, int> dict = new Dictionary<int, int>();                                                 //1    
-            foreach (int item in data)                                                                              //N *
+                                                                                                                    //Complexity:
+            //Dictionary                                                                                            //Time:         Storage:
+            Dictionary<int, int> dict = new Dictionary<int, int>();                                                 //1         
+            foreach (int item in data)                                                                              //N *           1
                 if (!dict.ContainsKey(item.GetHashCode()))                                                          //  1
-                    dict.Add(item.GetHashCode(), item);                                                             //  1
-            int dictNumber = dict.Count();                                                                          //1 = O(2 + 2N)
-
+                    dict.Add(item.GetHashCode(), item);                                                             //  1           N
+            int dictNumber = dict.Count();                                                                          //1             1
+                                                                                                                    //2 + 3N        2 + N
 
             //O(1) storage complexity
-            int oStorage = 0;           //number of dublicates in the list                                          //1
-            for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //1                        
-                for (int secondItem = firstItem + 1; secondItem < data.Count(); secondItem++)                       //1                
-                    if (data[firstItem] == data[secondItem]) //If we know there is a duplicate we dont have to check for more
+            int oStorage = 0;           //number of dublicates in the list                                          //1             1
+            for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //N *           1                        
+                for (int secondItem = firstItem + 1; secondItem < data.Count(); secondItem++)                       //  N *         1                
+                    if (data[firstItem] == data[secondItem])                                                        //    1
                     {
-                        oStorage++;
-                        break;
+                        oStorage++; //If we know there is a duplicate we dont have to check for more                //    1
+                        break;                                                                                      //    1
                     }                        
-            oStorage = data.Count() - oStorage; //subtracts the duplicates from the total number
-
+            oStorage = data.Count() - oStorage; //subtracts the duplicates from the total number                    //1
+                                                                                                                    //1 + 4N^2      3
 
             //Sorted O(1) storage and O(n) time complexity
             data.Sort();                                                                                            //Ignored
-            int sortedNumber = 0;                                                                                   //1 Storage     1 Time
-            for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //1 Storage     N Time
-            {                                                                                                       //                \/
+            int sortedNumber = 0;                                                                                   //1             1
+            for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //1             N
+            {                                                                                                       //              \/
                 while (firstItem != data.Count() - 1 && data[firstItem] == data[firstItem + 1]) firstItem++;        //              Part of N Time
-                sortedNumber++;                                                                                     //              1 Time
-            }
+                sortedNumber++;                                                                                     //              1
+            }                                                                                                       //2             1 + 2N
+            
 
             textBox1.AppendText(dictNumber.ToString() + "\t" + oStorage.ToString() + "\t" + sortedNumber.ToString());
         }
