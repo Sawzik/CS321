@@ -31,7 +31,7 @@ namespace WinForms
             foreach (int item in data)                                                                              //N *           1
                 if (!dict.ContainsKey(item.GetHashCode()))                                                          //  1
                     dict.Add(item.GetHashCode(), item);                                                             //  1           N
-            int dictNumber = dict.Count();                                                                          //1             1
+            int dictStorage = dict.Count();                                                                          //1             1
                                                                                                                     //2 + 3N        2 + N
 
             //O(1) storage complexity
@@ -48,15 +48,19 @@ namespace WinForms
 
             //Sorted O(1) storage and O(n) time complexity
             data.Sort();                                                                                            //Ignored
-            int sortedNumber = 0;                                                                                   //1             1
+            int sortedStorage = 0;                                                                                   //1             1
             for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //1             N
             {                                                                                                       //              \/
                 while (firstItem != data.Count() - 1 && data[firstItem] == data[firstItem + 1]) firstItem++;        //              Part of N Time
-                sortedNumber++;                                                                                     //              1
+                sortedStorage++;                                                                                     //              1
             }                                                                                                       //2             1 + 2N
-            
 
-            textBox1.AppendText(dictNumber.ToString() + "\t" + oStorage.ToString() + "\t" + sortedNumber.ToString());
+            StringBuilder textOutput = new StringBuilder();
+            textOutput.AppendLine("1. HashSet Method : " + dictStorage.ToString());
+            textOutput.AppendLine("\tPlaceholder explanation of time complexity of HashSet Function");
+            textOutput.AppendLine("2. O(1) Storage Method : " + oStorage.ToString());
+            textOutput.AppendLine("3. Sorted Method : " + sortedStorage.ToString());
+            textBox1.AppendText(textOutput.ToString());
         }
     }
 }
