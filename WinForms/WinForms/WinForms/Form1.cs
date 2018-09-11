@@ -21,10 +21,8 @@ namespace WinForms
         {
             Random rand = new Random();
             List<int> data = new List<int>();
-            for (int i = 0; i != 10000; i++)
-            {
-                data.Add(rand.Next(20000));
-            }
+            for (int i = 0; i != 10000; i++)            
+                data.Add(rand.Next(20000));            
                                                                                                                     //Complexity:
             //Dictionary                                                                                            //Time:         Storage:
             Dictionary<int, int> dict = new Dictionary<int, int>();                                                 //1         
@@ -35,7 +33,7 @@ namespace WinForms
                                                                                                                     //2 + 3N        2 + N
 
             //O(1) storage complexity
-            int oStorage = 0;           //number of dublicates in the list                                          //1             1
+            int oStorage = 0;   //number of dublicates in the list                                                  //1             1
             for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //N *           1                        
                 for (int secondItem = firstItem + 1; secondItem < data.Count(); secondItem++)                       //  N *         1                
                     if (data[firstItem] == data[secondItem])                                                        //    1
@@ -48,11 +46,11 @@ namespace WinForms
 
             //Sorted O(1) storage and O(n) time complexity
             data.Sort();                                                                                            //Ignored
-            int sortedStorage = 0;                                                                                   //1             1
+            int sortedStorage = 0;                                                                                  //1             1
             for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //1             N
             {                                                                                                       //              \/
                 while (firstItem != data.Count() - 1 && data[firstItem] == data[firstItem + 1]) firstItem++;        //              Part of N Time
-                sortedStorage++;                                                                                     //              1
+                sortedStorage++;                                                                                    //              1
             }                                                                                                       //2             1 + 2N
 
             StringBuilder textOutput = new StringBuilder();
