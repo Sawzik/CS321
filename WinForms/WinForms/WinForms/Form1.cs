@@ -27,10 +27,10 @@ namespace WinForms
             //Dictionary                                                                                            //Time:         Storage:
             Dictionary<int, int> dict = new Dictionary<int, int>();                                                 //1         
             foreach (int item in data)                                                                              //N *           1
-                if (!dict.ContainsKey(item.GetHashCode()))                                                          //  1
-                    dict.Add(item.GetHashCode(), item);                                                             //  1           N
-            int dictStorage = dict.Count();                                                                          //1             1
-                                                                                                                    //2 + 3N        2 + N
+                if (!dict.ContainsKey(item.GetHashCode()))                                                          //  2
+                    dict.Add(item.GetHashCode(), item);                                                             //  2           N
+            int dictStorage = dict.Count();                                                                         //2             1
+                                                                                                                    //3 + 3N        2 + N
 
             //O(1) storage complexity
             int oStorage = 0;   //number of dublicates in the list                                                  //1             1
@@ -55,7 +55,16 @@ namespace WinForms
 
             StringBuilder textOutput = new StringBuilder();
             textOutput.AppendLine("1. HashSet Method : " + dictStorage.ToString());
-            textOutput.AppendLine("\tPlaceholder explanation of time complexity of HashSet Function");
+            textOutput.AppendLine("\tMy method uses a foreach loop of time complexity O(n) that adds each unique element into the dictionary. ");
+            textOutput.AppendLine("\tEach iteration checks if the element is already in the dictionary by utilizing the ContainsKey() function, ");
+            textOutput.AppendLine("\twhich according to MSDN documentation, has a time complexity of O(1). If the element is not in the ");
+            textOutput.AppendLine("\tdictionary already then it is added to it with time complexity O(1). The total time complexity of the loop is n ");
+            textOutput.AppendLine("\ttimes the time complexity of each of the operations within it: O(1) for the assignment of the foreach loop's ");
+            textOutput.AppendLine("\tvariable with each iteration, O(1) to check if the dictionary has the element or not, and O(1) to add the item ");
+            textOutput.AppendLine("\tto the dictionary. This leaves the total time complexity for the loop as O(3n). There is also the a complexity ");
+            textOutput.AppendLine("\tof O(1) to initialize the dictionary object and a time complexity of O(2) to initialize a variable that stores the ");
+            textOutput.AppendLine("\tdictionary's Count() function. Adding this up gives a total time complexity of O(1 + 2 + n(1 + 1 + 1)) which ");
+            textOutput.AppendLine("\tsimplifies to O(3 + 3n). This function can be referred to as having O(n) time complexity.");
             textOutput.AppendLine("2. O(1) Storage Method : " + oStorage.ToString());
             textOutput.AppendLine("3. Sorted Method : " + sortedStorage.ToString());
             textBox1.AppendText(textOutput.ToString());
