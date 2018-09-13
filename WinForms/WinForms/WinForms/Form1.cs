@@ -26,31 +26,31 @@ namespace WinForms
                                                                                                                     //Complexity:
             //Dictionary                                                                                            //Time:         Storage:
             Dictionary<int, int> dict = new Dictionary<int, int>();                                                 //1         
-            foreach (int item in data)                                                                              //N *           1
-                if (!dict.ContainsKey(item.GetHashCode()))                                                          //  2
-                    dict.Add(item.GetHashCode(), item);                                                             //  2           N
+            foreach (int item in data)                                                                              //N*1          1
+                if (!dict.ContainsKey(item.GetHashCode()))                                                          //  1
+                    dict.Add(item.GetHashCode(), item);                                                             //  1           N
             int dictStorage = dict.Count();                                                                         //2             1
                                                                                                                     //3 + 3N        2 + N
 
             //O(1) storage complexity
             int oStorage = 0;   //number of dublicates in the list                                                  //1             1
-            for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //N *           1                        
-                for (int secondItem = firstItem + 1; secondItem < data.Count(); secondItem++)                       //  N *         1                
+            for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //N*1           1                        
+                for (int secondItem = firstItem + 1; secondItem < data.Count(); secondItem++)                       //  N*1         1                
                     if (data[firstItem] == data[secondItem])                                                        //    1
                     {
                         oStorage++; //If we know there is a duplicate we dont have to check for more                //    1
                         break;                                                                                      //    1
                     }                        
             oStorage = data.Count() - oStorage; //subtracts the duplicates from the total number                    //1
-                                                                                                                    //1 + 4N^2      3
+                                                                                                                    //2 + 4N^2      3
 
             //Sorted O(1) storage and O(n) time complexity
             data.Sort();                                                                                            //Ignored
             int sortedStorage = 0;                                                                                  //1             1
-            for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //1             N
+            for (int firstItem = 0; firstItem < data.Count(); firstItem++)                                          //1             N*
             {                                                                                                       //              \/
                 while (firstItem != data.Count() - 1 && data[firstItem] == data[firstItem + 1]) firstItem++;        //              Part of N Time
-                sortedStorage++;                                                                                    //              1
+                sortedStorage++;                                                                                    //                1
             }                                                                                                       //2             1 + 2N
 
             StringBuilder textOutput = new StringBuilder();
