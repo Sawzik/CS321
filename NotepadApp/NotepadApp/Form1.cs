@@ -17,9 +17,19 @@ namespace NotepadApp
             InitializeComponent();
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        private void loadFromFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.IO.StreamReader selectedFile = new System.IO.StreamReader(openFileDialog1.FileName);
+                LoadText(selectedFile);
+            }
+        }
 
+        private void LoadText(System.IO.StreamReader sr)
+        {
+            textBox1.Text = sr.ReadToEnd();
+            sr.Close();
         }
     }
 }
