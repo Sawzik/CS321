@@ -74,5 +74,10 @@ namespace NotepadApp
                         saveFile.Write(textBox1.Text.ToString()); //write to the file
             }
         }
+        
+        private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
+        {            
+            textBox1.WordWrap = wordWrapToolStripMenuItem.Checked;
+        }
     }
 }
