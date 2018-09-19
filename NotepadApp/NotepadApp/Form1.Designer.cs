@@ -85,12 +85,14 @@
             this.load50toolStripMenuItem.Name = "load50toolStripMenuItem";
             this.load50toolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.load50toolStripMenuItem.Text = "Load 50 Fibonacci...";
+            this.load50toolStripMenuItem.Click += new System.EventHandler(this.load50toolStripMenuItem_Click);
             // 
             // load100ToolStripMenuItem
             // 
             this.load100ToolStripMenuItem.Name = "load100ToolStripMenuItem";
             this.load100ToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.load100ToolStripMenuItem.Text = "Load 100 Fibonacci...";
+            this.load100ToolStripMenuItem.Click += new System.EventHandler(this.load100ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
