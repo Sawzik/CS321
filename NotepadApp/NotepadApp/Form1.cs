@@ -23,6 +23,7 @@ namespace NotepadApp
         //Load from file event handler
         private void loadFromFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //options for filetypes in the open file window
             openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog1.FilterIndex = 2;
 
@@ -55,6 +56,7 @@ namespace NotepadApp
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //options for filetypes in the save file window
             saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 2;
 
