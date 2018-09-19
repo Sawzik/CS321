@@ -38,6 +38,7 @@
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.load1000FibonacciToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,9 +49,10 @@
             this.textBox1.Location = new System.Drawing.Point(0, 24);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1.Size = new System.Drawing.Size(800, 426);
             this.textBox1.TabIndex = 0;
+            this.textBox1.WordWrap = false;
             // 
             // menuStrip1
             // 
@@ -68,6 +70,7 @@
             this.loadFromFileToolStripMenuItem,
             this.load50toolStripMenuItem,
             this.load100ToolStripMenuItem,
+            this.load1000FibonacciToolStripMenuItem,
             this.toolStripSeparator1,
             this.saveToFileToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -77,39 +80,46 @@
             // loadFromFileToolStripMenuItem
             // 
             this.loadFromFileToolStripMenuItem.Name = "loadFromFileToolStripMenuItem";
-            this.loadFromFileToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.loadFromFileToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.loadFromFileToolStripMenuItem.Text = "Load from file...";
             this.loadFromFileToolStripMenuItem.Click += new System.EventHandler(this.loadFromFileToolStripMenuItem_Click);
             // 
             // load50toolStripMenuItem
             // 
             this.load50toolStripMenuItem.Name = "load50toolStripMenuItem";
-            this.load50toolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.load50toolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.load50toolStripMenuItem.Text = "Load 50 Fibonacci...";
             this.load50toolStripMenuItem.Click += new System.EventHandler(this.load50toolStripMenuItem_Click);
             // 
             // load100ToolStripMenuItem
             // 
             this.load100ToolStripMenuItem.Name = "load100ToolStripMenuItem";
-            this.load100ToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.load100ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.load100ToolStripMenuItem.Text = "Load 100 Fibonacci...";
             this.load100ToolStripMenuItem.Click += new System.EventHandler(this.load100ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
             // 
             // saveToFileToolStripMenuItem
             // 
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
-            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.saveToFileToolStripMenuItem.Text = "Save to file...";
             this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // load1000FibonacciToolStripMenuItem
+            // 
+            this.load1000FibonacciToolStripMenuItem.Name = "load1000FibonacciToolStripMenuItem";
+            this.load1000FibonacciToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.load1000FibonacciToolStripMenuItem.Text = "Load 1000 Fibonacci...";
+            this.load1000FibonacciToolStripMenuItem.Click += new System.EventHandler(this.load1000FibonacciToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -140,6 +150,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem saveToFileToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem load1000FibonacciToolStripMenuItem;
     }
 }
 

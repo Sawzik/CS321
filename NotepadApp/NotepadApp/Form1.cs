@@ -54,6 +54,12 @@ namespace NotepadApp
             LoadText(firstHundred);
         }
 
+        private void load1000FibonacciToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FibonacciTextReader firstThousand = new FibonacciTextReader(1000);
+            LoadText(firstThousand);
+        }
+
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //options for filetypes in the save file window
