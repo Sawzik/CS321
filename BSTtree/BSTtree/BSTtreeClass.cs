@@ -10,18 +10,20 @@ using System.Threading.Tasks;
 namespace BSTtree
 {
     class BSTtree<T> : BinTree<T>
+        where T : System.IComparable
     {
 
-        private BSTnode root = null; //creates an empty root node to start the tree.
+        private BSTnode<T> root = null; //creates an empty root node to start the tree.
         private int nodes = 0;
 
         //recursively calls itself until it finds where to add a new node. increases the height each time
-        private int Insert(int input, ref BSTnode node)
+        private int Insert(T input, ref BSTnode<T> node)
         {
+
             if (node == null)
             {
                 nodes++; //keeps track of the number of nodes
-                node = new BSTnode(input);
+                node = new BSTnode<T>(input);
             }
             else if (input < node.data)
                 node.SetHeight(Insert(input, ref node.left) + 1);
@@ -33,17 +35,17 @@ namespace BSTtree
             return node.height;
         }
 
-        private BSTnode RemoveRoot(ref BSTnode node)
+        private BSTnode<T> RemoveRoot(ref BSTnode<T> node)
         {
-            BSTnode newNode = null;
+            BSTnode<T> newNode = null;
 
             if (node.left != null && node.right != null) //two children
             {
                 newNode = node;
 
-                ref BSTnode min = ref FindMin(ref node.right);
-                node.data = min.data; //finds the minimum node on the right subtree and copies its data into this node
-                Remove(node.data, ref min); //deletes the node that was brought up
+                ref BSTnode<T> min = ref FindMin(ref node.right);
+                node.Equals(min); //finds the minimum node on the right subtree and copies its data into this node
+                Remove(node, ref min); //deletes the node that was brought up
 
                 return newNode;
             }
