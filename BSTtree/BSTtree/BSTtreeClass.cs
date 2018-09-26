@@ -163,10 +163,13 @@ namespace BSTtree
 
         private int Depth(int currDeep, ref BSTnode<T> node)
         {
-            if (node.Height() < currDeep)
-                return currDeep;
-            Depth(node.Height(), ref node.right);
-            Depth(currDeep + 1, ref node.left);
+            if (node != null)
+            {
+                if (node.Height() < currDeep)
+                    return currDeep;
+                Depth(node.Height(), ref node.right);
+                Depth(currDeep + 1, ref node.left);
+            }
             return currDeep;
         }
 
@@ -216,13 +219,13 @@ namespace BSTtree
             PostOrder(ref root);
         }
 
-        public override void Insert<T>(T input) 
+        public override void Insert(T input) 
         {
             BSTnode<T> inputAsNode = new BSTnode<T>(input);
             Insert(ref inputAsNode, ref root);
         }
 
-        public override bool Contains<T>(T input)
+        public override bool Contains(T input)
         {
             BSTnode<T> inputAsNode = new BSTnode<T>(input);
             return Contains(ref inputAsNode, root);

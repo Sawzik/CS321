@@ -50,26 +50,42 @@ namespace BSTtree
 
         public static bool operator ==(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
+            if ((object)LeftNode == null && (object)rightNode == null)
+                return true;
+            else if ((object)LeftNode == null || (object)rightNode == null)
+                return false;
             return LeftNode.data.CompareTo(rightNode.data) == 0;
         }
         public static bool operator !=(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
+            if ((object)LeftNode == null && (object)rightNode == null)
+                return false;
+            else if ((object)LeftNode == null || (object)rightNode == null)
+                return true;
             return LeftNode.data.CompareTo(rightNode.data) != 0;
         }
         public static bool operator >=(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
+            if ((object)LeftNode == null || (object)rightNode == null)
+                return false;
             return LeftNode.data.CompareTo(rightNode.data) >= 0;
         }
         public static bool operator <=(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
+            if ((object)LeftNode == null || (object)rightNode == null)
+                return false;
             return LeftNode.data.CompareTo(rightNode.data) <= 0;
         }
         public static bool operator >(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
+            if ((object)LeftNode == null || (object)rightNode == null)
+                return false;
             return LeftNode.data.CompareTo(rightNode.data) > 0;
         }
         public static bool operator <(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
+            if ((object)LeftNode == null || (object)rightNode == null)
+                return false;
             return LeftNode.data.CompareTo(rightNode.data) < 0;
         }
 
