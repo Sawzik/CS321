@@ -11,8 +11,8 @@ namespace BSTtree
     {
         public BSTnode<T> left = null;
         public BSTnode<T> right = null;
-        private T data = new;
-        public int height = 0; //variable that stores the current height of the node in the tree
+        private T data;
+        private int height = 0; //variable that stores the current height of the node in the tree
 
         public BSTnode(T input)
         {
@@ -43,7 +43,7 @@ namespace BSTtree
         {
             if (data.CompareTo(other.data) < 0) //less than
                 return -1;
-            else if (data .CompareTo(other.data) == 0) //equal to
+            else if (data.CompareTo(other.data) == 0) //equal to
                 return 0;
             return 1; //greater than
         }
@@ -78,10 +78,30 @@ namespace BSTtree
             return LeftNode.data = rightNode.data;
         }
 
+        public override String ToString()
+        {
+            return data.ToString();
+        }
+
+        public T Value()
+        {
+            return data;
+        }
+
+        public int Height()
+        {
+            return height;
+        }
+
         public void SetHeight(int inputHeight)
         {
             if (height < inputHeight)
                 height = inputHeight;
+        }
+
+        public void ResetHeight(int inputHeight)
+        {
+            height = inputHeight;
         }
     }
 }
