@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace BSTtree
 {
     class BSTtree<T> : BinTree<T>
-        where T : System.IComparable<T>
+        where T : System.IComparable<T>, new()
     {
         private BSTnode<T> root = null; //creates an empty root node to start the tree.
         private int nodes = 0;        
@@ -191,12 +191,6 @@ namespace BSTtree
             return Find(ref inputAsNode, root).Value();
         }
 
-        public bool Contains(T input)
-        {
-            BSTnode<T> inputAsNode = new BSTnode<T>(input);
-            return Contains(ref inputAsNode, root);
-        }
-
         public bool IsEmpty()
         {
             return root == null;
@@ -222,10 +216,16 @@ namespace BSTtree
             PostOrder(ref root);
         }
 
-        public void Insert(T input)
+        public override void Insert<T>(T input) 
         {
             BSTnode<T> inputAsNode = new BSTnode<T>(input);
             Insert(ref inputAsNode, ref root);
+        }
+
+        public override bool Contains<T>(T input)
+        {
+            BSTnode<T> inputAsNode = new BSTnode<T>(input);
+            return Contains(ref inputAsNode, root);
         }
 
         public void Remove(T input)

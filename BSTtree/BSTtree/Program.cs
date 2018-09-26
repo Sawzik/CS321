@@ -10,7 +10,7 @@ namespace BSTtree
     {
         static void Main(string[] args)
         {
-            BSTtree tree = new BSTtree();
+            BSTtree<int> tree = new BSTtree<int>();
 
             Console.WriteLine("Enter a collection of numbers between 0 and 100. No error detection");
             string input = Console.ReadLine(); //reading input from user. Gets the whole line

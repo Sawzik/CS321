@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace BSTtree
 {
     class BSTnode<T> : ICloneable, IComparable<BSTnode<T>>
-        where T : System.IComparable<T>
+        where T : System.IComparable<T>, new()
     {
         public BSTnode<T> left = null;
         public BSTnode<T> right = null;
-        private T data;
+        private T data = new T();
         private int height = 0; //variable that stores the current height of the node in the tree
 
         public BSTnode(T input)
