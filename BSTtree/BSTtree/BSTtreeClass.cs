@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 //Interface test
 namespace BSTtree
 {
-    class BSTtree
+    class BSTtree<T> : BinTree<T>
     {
 
         private BSTnode root = null; //creates an empty root node to start the tree.
