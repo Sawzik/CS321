@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinTree.cs" />
     <Compile Include="BSTnodeClass.cs" />
     <Compile Include="BSTtreeClass.cs" />
     <Compile Include="Program.cs" />
