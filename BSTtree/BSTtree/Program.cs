@@ -27,7 +27,7 @@ namespace BSTtree
 
 
 
-            //Testing of other tree functions
+            /* Testing of other tree functions
             tree.Insert(2);
             tree.Insert(5);
             tree.Insert(7);
@@ -59,7 +59,7 @@ namespace BSTtree
             Console.WriteLine("\tNumber of levels: " + tree.Depth());
             Console.WriteLine("\tTheoretical Minimum Depth: " + tree.TheoreticalMinDepth());
             Console.WriteLine("\tContains '2': " + tree.Contains(2));
-
+            */
 
             Console.ReadKey(); //pause
         }
