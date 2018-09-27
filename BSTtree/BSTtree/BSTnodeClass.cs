@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Isaac Schultz 11583435
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,42 +52,46 @@ namespace BSTtree
 
         public static bool operator ==(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
-            if ((object)LeftNode == null && (object)rightNode == null)
+            if ((object)LeftNode == null && (object)rightNode == null) //both are null, so they are equal
                 return true;
-            else if ((object)LeftNode == null || (object)rightNode == null)
+            else if ((object)LeftNode == null || (object)rightNode == null) //if both arent null, but one is. then they are not equal
                 return false;
             return LeftNode.data.CompareTo(rightNode.data) == 0;
         }
         public static bool operator !=(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
-            if ((object)LeftNode == null && (object)rightNode == null)
+            if ((object)LeftNode == null && (object)rightNode == null) //both are null, so they are equal
                 return false;
-            else if ((object)LeftNode == null || (object)rightNode == null)
+            else if ((object)LeftNode == null || (object)rightNode == null) //if both arent null, but one is, then they are not equal
                 return true;
             return LeftNode.data.CompareTo(rightNode.data) != 0;
         }
         public static bool operator >=(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
-            if ((object)LeftNode == null || (object)rightNode == null)
-                return false;
+            if ((object)LeftNode == null && (object)rightNode == null) //both are null, so they are equal
+                return true;
+            else if ((object)LeftNode == null || (object)rightNode == null) //if both arent null, but one is. then they are not equal
+                throw new System.ArgumentNullException();
             return LeftNode.data.CompareTo(rightNode.data) >= 0;
         }
         public static bool operator <=(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
-            if ((object)LeftNode == null || (object)rightNode == null)
-                return false;
+            if ((object)LeftNode == null && (object)rightNode == null) //both are null, so they are equal
+                return true;
+            else if ((object)LeftNode == null || (object)rightNode == null) //if both arent null, but one is. then they are not equal
+                throw new System.ArgumentNullException();
             return LeftNode.data.CompareTo(rightNode.data) <= 0;
         }
         public static bool operator >(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
-            if ((object)LeftNode == null || (object)rightNode == null)
-                return false;
+            if ((object)LeftNode == null || (object)rightNode == null) //cannot compare something to null
+                throw new System.ArgumentNullException();
             return LeftNode.data.CompareTo(rightNode.data) > 0;
         }
         public static bool operator <(BSTnode<T> LeftNode, BSTnode<T> rightNode)
         {
-            if ((object)LeftNode == null || (object)rightNode == null)
-                return false;
+            if ((object)LeftNode == null || (object)rightNode == null) //cannot compare something to null
+                throw new System.ArgumentNullException();
             return LeftNode.data.CompareTo(rightNode.data) < 0;
         }
 

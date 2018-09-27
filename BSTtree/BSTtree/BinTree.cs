@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Isaac Schultz 11583435
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +11,10 @@ namespace BSTtree
     public abstract class BinTree<T>
         where T : System.IComparable<T>, new()
     {
-        public abstract void Insert(T val);
-        public abstract bool Contains(T val);
-        public abstract void InOrder();
-        public abstract void PreOrder();
-        public abstract void PostOrder();
+        public abstract void Insert(T val); //Inserts a alue of type T into the tree
+        public abstract bool Contains(T val); //returns true if a value is in the tree
+        public abstract void InOrder(); //prints the tree an inorder traversal
+        public abstract void PreOrder(); //prints the tree in a preorder traversal
+        public abstract void PostOrder(); //prints the tree in a postorder traversal
     }
 }

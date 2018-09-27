@@ -1,12 +1,12 @@
-﻿using System;
+﻿//Isaac Schultz 11583435
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 
-
-//Interface test
 namespace BSTtree
 {
     class BSTtree<T> : BinTree<T>
