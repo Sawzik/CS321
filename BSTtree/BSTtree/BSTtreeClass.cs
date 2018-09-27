@@ -1,5 +1,4 @@
 ﻿//Isaac Schultz 11583435
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,13 +59,13 @@ namespace BSTtree
             return newNode;
         }
 
-        private void Remove(ref BSTnode<T> rmData, ref BSTnode<T> node)
+        private bool Remove(ref BSTnode<T> rmData, ref BSTnode<T> node)
         {
             if (node == null) //data not found
-                return;
+                return false;
             if (rmData == node) //data found
             {
-                if (node.left == null && node.right == null) //no children                
+                if (node.left == null && node.right == null) //no children                              
                     node = null; //relying on the garbage collector to delete memory once there are no more references.                
                 else if (node.left == null) //one right child
                     node = node.right;
@@ -79,11 +78,12 @@ namespace BSTtree
                     Remove(ref node, ref min); //deletes the node that was brought up
                 }
                 nodes--;
+                return true;
             }
             else if (node < rmData)
-                Remove(ref rmData, ref node.right); //traverses right subtree
+                return Remove(ref rmData, ref node.right); //traverses right subtree
             else
-                Remove(ref rmData, ref node.left); //traverses left subtree
+                return Remove(ref rmData, ref node.left); //traverses left subtree
         }
 
         private ref BSTnode<T> FindMin(ref BSTnode<T> node)
@@ -102,16 +102,16 @@ namespace BSTtree
 
         private BSTnode<T> Find(ref BSTnode<T> input, BSTnode<T> node)
         {
-            if (node == null)
+            if (node == null) //not found
                 return null;
 
-            if (input == node)
+            if (input == node) //node found
                 return node;
 
-            if (input < node)
+            if (input < node) //check left subtree
                 return Find(ref input, node.left);
 
-            return Find(ref input, node.right);
+            return Find(ref input, node.right); //check right subtree
         }
 
         private bool Contains(ref BSTnode<T> input, BSTnode<T> node)
@@ -121,7 +121,7 @@ namespace BSTtree
             return true;
         }
 
-        void MakeEmpty(BSTnode<T> node)
+        void MakeEmpty(BSTnode<T> node) //recursive function that delet
         {
             if (node != null)
             {
@@ -131,7 +131,7 @@ namespace BSTtree
             }
         }
 
-        private void InOrder(ref BSTnode<T> node)
+        private void InOrder(ref BSTnode<T> node) //recusively outputs tree inorder traversal
         {
             if (node != null)
             {
@@ -141,7 +141,7 @@ namespace BSTtree
             }
         }
 
-        private void PreOrder(ref BSTnode<T> node)
+        private void PreOrder(ref BSTnode<T> node) //recusively outputs tree preorder traversal
         {
             if (node != null)
             {
@@ -151,7 +151,7 @@ namespace BSTtree
             }
         }
 
-        private void PostOrder(ref BSTnode<T> node)
+        private void PostOrder(ref BSTnode<T> node) //recusively outputs tree postorder traversal
         {
             if (node != null)
             {
@@ -161,7 +161,7 @@ namespace BSTtree
             }
         }
 
-        private int Depth(ref BSTnode<T> node)
+        private int Depth(ref BSTnode<T> node) //recursively checks for the node that is deepest in the tree.
         {
             if (node == null)
                 return 0;            
@@ -177,12 +177,12 @@ namespace BSTtree
             MakeEmpty(root);
         }
 
-        public T FindMin()
+        public override T FindMin()
         {
             return FindMin(ref root).Value();
         }
 
-        public T FindMax()
+        public override T FindMax()
         {
             return FindMax(ref root).Value();
         }
@@ -193,7 +193,7 @@ namespace BSTtree
             return Find(ref inputAsNode, root).Value();
         }
 
-        public bool IsEmpty()
+        public override bool IsEmpty()
         {
             return root == null;
         }
@@ -220,38 +220,40 @@ namespace BSTtree
 
         public override void Insert(T input) 
         {
-            BSTnode<T> inputAsNode = new BSTnode<T>(input);
+            BSTnode<T> inputAsNode = new BSTnode<T>(input); //blank node with input data. allows private function to compare nodes
             Insert(ref inputAsNode, ref root);
         }
 
         public override bool Contains(T input)
         {
-            BSTnode<T> inputAsNode = new BSTnode<T>(input);
+            BSTnode<T> inputAsNode = new BSTnode<T>(input); //blank node with input data. allows private function to compare nodes
             return Contains(ref inputAsNode, root);
         }
 
-        public void Remove(T input)
+        public override bool Remove(T input)
         {
-            BSTnode<T> inputAsNode = new BSTnode<T>(input);
-            if (root == inputAsNode)            
+            BSTnode<T> inputAsNode = new BSTnode<T>(input); //blank node with input data. allows private function to compare nodes
+            if (root == inputAsNode)
+            {
                 root = RemoveRoot(ref root);
-            else
-                Remove(ref inputAsNode, ref root);
+                return true;
+            }
+            return Remove(ref inputAsNode, ref root);            
         }
 
-        public int Count()
+        public override int Count()
         {
             return this.nodes;
         }
 
-        public int Depth()
+        public override int Depth()
         {
             if (nodes > 0)
                 return Depth(ref root) - 1; //depth returned will always be larger by 1            
             return 0;
         }
 
-        public int TheoreticalMinDepth()
+        public override int TheoreticalMinDepth()
         {
             if (nodes > 0)
                 return (int)Math.Log(nodes, 2); //Formula for best case binary tree is log base 2 of n in a perfectly balanced tree.
