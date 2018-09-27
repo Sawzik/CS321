@@ -161,16 +161,15 @@ namespace BSTtree
             }
         }
 
-        private int Depth(int currDeep, ref BSTnode<T> node)
+        private int Depth(ref BSTnode<T> node)
         {
-            if (node != null)
-            {
-                if (node.Height() < currDeep)
-                    return currDeep;
-                Depth(node.Height(), ref node.right);
-                Depth(currDeep + 1, ref node.left);
-            }
-            return currDeep;
+            if (node == null)
+                return 0;            
+            int leftDepth = Depth(ref node.left);
+            int rightDepth = Depth(ref node.right);
+            if (leftDepth > rightDepth)
+                return leftDepth + 1;   
+            return rightDepth + 1;                           
         }
 
         ~BSTtree()
@@ -248,8 +247,7 @@ namespace BSTtree
         public int Depth()
         {
             if (nodes > 0)
-                return Depth(0, ref root);
-            else
+                return Depth(ref root) - 1; //depth returned will always be larger by 1            
             return 0;
         }
 
