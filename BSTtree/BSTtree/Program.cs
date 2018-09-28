@@ -66,7 +66,6 @@ namespace BSTtree
             //Console.WriteLine("\tTheoretical Minimum Depth: " + tree.TheoreticalMinDepth());
             //Console.WriteLine("\tContains '2': " + tree.Contains(2));
 
-
             Console.ReadKey(); //pause
         }
     }
