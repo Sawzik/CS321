@@ -13,23 +13,34 @@ namespace BSTtree
         {
             BSTtree<int> tree = new BSTtree<int>();
 
-            Console.WriteLine("Enter a collection of numbers between 0 and 100. No error detection");
-            string input = Console.ReadLine(); //reading input from user. Gets the whole line
-            string[] parsedInput = input.Split(' ');
-            foreach (string s in parsedInput) //inertion into tree
-                tree.Insert(Int32.Parse(s));
+            //Console.WriteLine("Enter a collection of numbers between 0 and 100. No error detection");
+            //string input = Console.ReadLine(); //reading input from user. Gets the whole line
+            //string[] parsedInput = input.Split(' ');
+            //foreach (string s in parsedInput) //inertion into tree
+            //    tree.Insert(Int32.Parse(s));
 
-            Console.Write("\n\nTree Contents (inorder traversal): ");
-            tree.InOrder();
-            Console.Write("\n\nTree Contents (preorder traversal): ");
-            tree.PreOrder();
-            Console.Write("\n\nTree Contents (postorder traversal): ");
-            tree.PostOrder();
-            Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + tree.Count());
-            Console.WriteLine("\tNumber of levels: " + tree.Depth());
-            Console.WriteLine("\tTheoretical Minimum Depth: " + tree.TheoreticalMinDepth());
-            Console.WriteLine("\tContains '2': " + tree.Contains(2));
-            Console.WriteLine("\tContains '13': " + tree.Contains(13));
+            tree.Insert(40);
+            tree.Insert(30);
+            tree.Insert(45);
+            tree.Insert(50);
+            tree.Insert(55);
+            tree.Insert(60);
+            tree.Insert(70);
+            tree.Insert(80);
+
+
+            tree.HorizontalOrder();
+            //Console.Write("\n\nTree Contents (inorder traversal): ");
+            //tree.InOrder();
+            //Console.Write("\n\nTree Contents (preorder traversal): ");
+            //tree.PreOrder();
+            //Console.Write("\n\nTree Contents (postorder traversal): ");
+            //tree.PostOrder();
+            //Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + tree.Count());
+            //Console.WriteLine("\tNumber of levels: " + tree.Depth());
+            //Console.WriteLine("\tTheoretical Minimum Depth: " + tree.TheoreticalMinDepth());
+            //Console.WriteLine("\tContains '2': " + tree.Contains(2));
+            //Console.WriteLine("\tContains '13': " + tree.Contains(13));
 
 
 

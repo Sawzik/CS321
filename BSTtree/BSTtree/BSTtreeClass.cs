@@ -161,6 +161,30 @@ namespace BSTtree
             }
         }
 
+        //very slow and not optimized. but it prints the tree vertically which is very easy to read.
+        private void HorizontalOrder(ref BSTnode<T> node, int space)
+        {
+            // Base case 
+            if (node == null)
+                return;
+
+            // Increase distance between levels 
+            space += 10;
+
+            // Process right child first 
+            HorizontalOrder(ref node.right, space);
+
+            // Print current node after space 
+            // count 
+            Console.Write("\n");
+            for (int i = 10; i < space; i++)
+                Console.Write(" ");
+            Console.Write(node.ToString() + "\n");
+
+            // Process left child  
+            HorizontalOrder(ref node.left, space);
+        }
+
         private int Depth(ref BSTnode<T> node) //recursively checks for the node that is deepest in the tree.
         {
             if (node == null)
@@ -175,6 +199,11 @@ namespace BSTtree
         ~BSTtree()
         {
             MakeEmpty(root);
+        }
+
+        public void HorizontalOrder()
+        {
+            HorizontalOrder(ref root, 0);
         }
 
         public override T FindMin()

@@ -124,5 +124,16 @@ namespace BSTtree
         {
             height = inputHeight;
         }
+
+        public int BalanceFactor()
+        {
+            int leftHeight = -1;
+            int rightHeight = -1;
+            if (this.left != null)
+                leftHeight = this.left.Height();
+            if (this.right != null)
+                rightHeight = this.right.Height();
+            return (leftHeight - rightHeight);
+        }
     }
 }
