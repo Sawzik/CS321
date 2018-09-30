@@ -33,45 +33,43 @@ namespace BSTtree
             return node.Height();
         }
 
-        //helper function for balance
         private void Balance(ref BSTnode<T> node)
         {
             if (node.BalanceFactor() > 1)
-                Balance(ref node, true); // balance when it has more nodes on left than right.
-            if (node.BalanceFactor() < -1)
-                Balance(ref node, false);
-        }
-
-        private void Balance(ref BSTnode<T> node, bool nodesOnLeft)
-        {
-            if (nodesOnLeft)
             {
                 //left right
-                if (node.left.BalanceFactor() == -1) //if left node has 1 right node
+                if (node.left.BalanceFactor() < 0) //if left node has 1 right node
                 {
                     RotateLR(ref node);
+                    if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
+                        Console.Write("BALANCE ISSUE LR, ");
                 }
                 //left left
-                if (node.left.BalanceFactor() == 1) //if left node has 1 left node
+                if (node.left.BalanceFactor() >= 0) //if left node has 1 left node                
                 {
                     RotateLL(ref node);
+                    if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
+                        Console.Write("BALANCE ISSUE LL, ");
                 }
             }
-            else
+            else if (node.BalanceFactor() < -1)
             {
                 //right left
-                if (node.right.BalanceFactor() == 1) //if right node has 1 right node
+                if (node.right.BalanceFactor() > 0) //if right node has 1 right node
                 {
                     RotateRL(ref node);
-                    //RotateLL(ref node);
+                    if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
+                        Console.Write("BALANCE ISSUE RL, ");
                 }
                 //right right
-                if (node.right.BalanceFactor() == -1) //if right node has 1 left node
+                if (node.right.BalanceFactor() <= 0) //if right node has 1 left node
                 {
                     RotateRR(ref node);
-                    //RotateLR(ref node);
+                    if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
+                        Console.Write("BALANCE ISSUE RR, ");
                 }
             }
+            
         }
 
         private void RotateLR(ref BSTnode<T> node)
@@ -81,7 +79,7 @@ namespace BSTtree
             temp.right = node.left.left; //replaces old left-right with old left-left
             node.left.left = temp; //replaces left-left with old left
             resetHeights(ref node);
-            Console.WriteLine("left right");
+            //Console.WriteLine("left right");
         }
         private void RotateLL(ref BSTnode<T> node)
         {
@@ -90,7 +88,7 @@ namespace BSTtree
             temp.left = node.right; // replaces old left with old right
             node.right = temp; // replaces right with old top
             resetHeights(ref node);
-            Console.WriteLine("left left");
+            //Console.WriteLine("left left");
         }
         private void RotateRL(ref BSTnode<T> node)
         {
@@ -99,7 +97,7 @@ namespace BSTtree
             temp.left = node.right.right; // replaces old right-left with old right-right
             node.right.right = temp; //replaces right-right with old right
             resetHeights(ref node);
-            Console.WriteLine("right left");
+            //Console.WriteLine("right left");
         }
         private void RotateRR(ref BSTnode<T> node)
         {
@@ -108,7 +106,7 @@ namespace BSTtree
             temp.right = node.left; // replaces old right with old left
             node.left = temp; //replaces left with old top
             resetHeights(ref node);
-            Console.WriteLine("right right");
+            //Console.WriteLine("right right");
         }
 
 
@@ -268,7 +266,8 @@ namespace BSTtree
             //Print current node after space 
             for (int i = spaceIncrease; i < space; i++)
                 Console.Write(" ");
-            Console.Write(node.ToString() + ", " + node.BalanceFactor() + '\n');
+            //Console.Write(node.ToString() + ", " + node.BalanceFactor() + '\n');
+            Console.Write(node.BalanceFactor().ToString() + '\n');
 
             HorizontalOrder(ref node.left, space, spaceIncrease);
         }

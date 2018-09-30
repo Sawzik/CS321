@@ -21,20 +21,20 @@ namespace BSTtree
 
             Random rand = new Random();
             BSTtree<int> data = new BSTtree<int>();
-            for (int i = 0; i != 100; i++)
-                data.Insert(rand.Next(99));
-            data.HorizontalOrder(7);
-            Console.Write("\n\nTree Contents (inorder traversal): ");
-            data.InOrder();
-            Console.Write("\n\nTree Contents (preorder traversal): ");
-            data.PreOrder();
-            Console.Write("\n\nTree Contents (postorder traversal): ");
-            data.PostOrder();
-            Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + data.Count());
-            Console.WriteLine("\tNumber of levels: " + data.Depth());
-            Console.WriteLine("\tTheoretical Minimum Depth: " + data.TheoreticalMinDepth());
-            Console.WriteLine("\tContains '2': " + data.Contains(2));
-            Console.WriteLine("\tContains '13': " + data.Contains(13));
+            for (int i = 0; i != 1000; i++)
+                data.Insert(rand.Next(999));
+            //data.HorizontalOrder(2);
+            //Console.Write("\n\nTree Contents (inorder traversal): ");
+            //data.InOrder();
+            ////Console.Write("\n\nTree Contents (preorder traversal): ");
+            ////data.PreOrder();
+            ////Console.Write("\n\nTree Contents (postorder traversal): ");
+            ////data.PostOrder();
+            //Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + data.Count());
+            //Console.WriteLine("\tNumber of levels: " + data.Depth());
+            //Console.WriteLine("\tTheoretical Minimum Depth: " + data.TheoreticalMinDepth());
+            //Console.WriteLine("\tContains '2': " + data.Contains(2));
+            //Console.WriteLine("\tContains '13': " + data.Contains(13));
 
             //tree.Insert(30);
             //tree.Insert(40);
