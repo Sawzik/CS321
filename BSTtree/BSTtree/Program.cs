@@ -19,8 +19,8 @@ namespace BSTtree
             //foreach (string s in parsedInput) //inertion into tree
             //    tree.Insert(Int32.Parse(s));
 
-            tree.Insert(40);
             tree.Insert(30);
+            tree.Insert(40);
             tree.Insert(45);
             tree.Insert(50);
             tree.Insert(55);
@@ -28,7 +28,7 @@ namespace BSTtree
             tree.Insert(70);
             tree.Insert(80);
 
-
+            tree.PrintTree();
             tree.HorizontalOrder();
             //Console.Write("\n\nTree Contents (inorder traversal): ");
             //tree.InOrder();

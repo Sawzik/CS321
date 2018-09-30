@@ -27,8 +27,77 @@ namespace BSTtree
             else if (input == node) //if data is already in the tree
                 return -1;
             else
-                node.SetHeight(Insert(ref input, ref node.right) + 1);          
+                node.SetHeight(Insert(ref input, ref node.right) + 1);
 
+            //TODO      
+            if (node.BalanceFactor() > 1)
+                Balance(ref node, true); // balance when it has more nodes on left than right.
+            if (node.BalanceFactor() < -1)
+                Balance(ref node, false);
+
+            return node.Height();
+        }
+
+        private void Balance(ref BSTnode<T> node, bool nodesOnLeft)
+        {
+            if (nodesOnLeft)
+            {
+                //left right
+                if (node.left.BalanceFactor() == -1) //if left node has 1 right node
+                {
+                    BSTnode<T> temp = node.left;
+                    node.left = temp.right; //moves left-right node up
+                    temp.right = node.left.left; //replaces old left-right with old left-left
+                    node.left.left = temp; //replaces left-left with old left
+                    resetHeights(ref node);
+                    Console.WriteLine("left right");
+                }
+                //left left
+                if (node.left.BalanceFactor() == 1) //if left node has 1 left node
+                {
+                    BSTnode<T> temp = node;
+                    node = temp.left;  // moves left node up
+                    temp.left = node.right; // replaces old left with old right
+                    node.right = temp; // replaces right with old top
+                    resetHeights(ref node);
+                    Console.WriteLine("left left");
+                }
+            }
+            else
+            {
+                //right left
+                if (node.right.BalanceFactor() == 1) //if right node has 1 right node
+                {
+                    BSTnode<T> temp = node.right;
+                    node.right = temp.left; //moves right-left up
+                    temp.left = node.right.right; // replaces old right-left with old right-right
+                    node.right.right = temp; //replaces right-right with old right
+                    resetHeights(ref node);
+                    Console.WriteLine("right left");
+                }
+                //right right
+                if (node.right.BalanceFactor() == -1) //if right node has 1 left node
+                {
+                    BSTnode<T> temp = node;
+                    node = temp.right; //moves right node up
+                    temp.right = node.left; // replaces old right with old left
+                    node.left = temp; //replaces left with old top
+                    resetHeights(ref node);
+                    Console.WriteLine("right right");
+                }
+            }
+        }
+
+        private int resetHeights(ref BSTnode<T> node)
+        {
+            if (node == null)
+                return 0;
+            int left = resetHeights(ref node.left);
+            int right = resetHeights(ref node.right);
+            if (left > right)
+                node.ResetHeight(left + 1);
+            else
+                node.ResetHeight(right + 1);
             return node.Height();
         }
 
