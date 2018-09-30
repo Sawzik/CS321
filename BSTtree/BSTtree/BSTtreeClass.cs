@@ -29,13 +29,17 @@ namespace BSTtree
             else
                 node.SetHeight(Insert(ref input, ref node.right) + 1);
 
-            //TODO      
+            Balance(ref node);
+            return node.Height();
+        }
+
+        //helper function for balance
+        private void Balance(ref BSTnode<T> node)
+        {
             if (node.BalanceFactor() > 1)
                 Balance(ref node, true); // balance when it has more nodes on left than right.
             if (node.BalanceFactor() < -1)
                 Balance(ref node, false);
-
-            return node.Height();
         }
 
         private void Balance(ref BSTnode<T> node, bool nodesOnLeft)
@@ -45,22 +49,12 @@ namespace BSTtree
                 //left right
                 if (node.left.BalanceFactor() == -1) //if left node has 1 right node
                 {
-                    BSTnode<T> temp = node.left;
-                    node.left = temp.right; //moves left-right node up
-                    temp.right = node.left.left; //replaces old left-right with old left-left
-                    node.left.left = temp; //replaces left-left with old left
-                    resetHeights(ref node);
-                    Console.WriteLine("left right");
+                    RotateLR(ref node);
                 }
                 //left left
                 if (node.left.BalanceFactor() == 1) //if left node has 1 left node
                 {
-                    BSTnode<T> temp = node;
-                    node = temp.left;  // moves left node up
-                    temp.left = node.right; // replaces old left with old right
-                    node.right = temp; // replaces right with old top
-                    resetHeights(ref node);
-                    Console.WriteLine("left left");
+                    RotateLL(ref node);
                 }
             }
             else
@@ -68,25 +62,55 @@ namespace BSTtree
                 //right left
                 if (node.right.BalanceFactor() == 1) //if right node has 1 right node
                 {
-                    BSTnode<T> temp = node.right;
-                    node.right = temp.left; //moves right-left up
-                    temp.left = node.right.right; // replaces old right-left with old right-right
-                    node.right.right = temp; //replaces right-right with old right
-                    resetHeights(ref node);
-                    Console.WriteLine("right left");
+                    RotateRL(ref node);
+                    //RotateLL(ref node);
                 }
                 //right right
                 if (node.right.BalanceFactor() == -1) //if right node has 1 left node
                 {
-                    BSTnode<T> temp = node;
-                    node = temp.right; //moves right node up
-                    temp.right = node.left; // replaces old right with old left
-                    node.left = temp; //replaces left with old top
-                    resetHeights(ref node);
-                    Console.WriteLine("right right");
+                    RotateRR(ref node);
+                    //RotateLR(ref node);
                 }
             }
         }
+
+        private void RotateLR(ref BSTnode<T> node)
+        {
+            BSTnode<T> temp = node.left;
+            node.left = temp.right; //moves left-right node up
+            temp.right = node.left.left; //replaces old left-right with old left-left
+            node.left.left = temp; //replaces left-left with old left
+            resetHeights(ref node);
+            Console.WriteLine("left right");
+        }
+        private void RotateLL(ref BSTnode<T> node)
+        {
+            BSTnode<T> temp = node;
+            node = temp.left;  // moves left node up
+            temp.left = node.right; // replaces old left with old right
+            node.right = temp; // replaces right with old top
+            resetHeights(ref node);
+            Console.WriteLine("left left");
+        }
+        private void RotateRL(ref BSTnode<T> node)
+        {
+            BSTnode<T> temp = node.right;
+            node.right = temp.left; //moves right-left up
+            temp.left = node.right.right; // replaces old right-left with old right-right
+            node.right.right = temp; //replaces right-right with old right
+            resetHeights(ref node);
+            Console.WriteLine("right left");
+        }
+        private void RotateRR(ref BSTnode<T> node)
+        {
+            BSTnode<T> temp = node;
+            node = temp.right; //moves right node up
+            temp.right = node.left; // replaces old right with old left
+            node.left = temp; //replaces left with old top
+            resetHeights(ref node);
+            Console.WriteLine("right right");
+        }
+
 
         private int resetHeights(ref BSTnode<T> node)
         {
@@ -98,6 +122,8 @@ namespace BSTtree
                 node.ResetHeight(left + 1);
             else
                 node.ResetHeight(right + 1);
+
+            //Balance(ref node); //checks to see if there are any more balances needed to be done.
             return node.Height();
         }
 
@@ -230,28 +256,21 @@ namespace BSTtree
             }
         }
 
-        //very slow and not optimized. but it prints the tree vertically which is very easy to read.
-        private void HorizontalOrder(ref BSTnode<T> node, int space)
+        //very wide and not optimized. but it prints the tree vertically which is very easy to read.
+        private void HorizontalOrder(ref BSTnode<T> node, int space, int spaceIncrease)
         {
-            // Base case 
             if (node == null)
                 return;
 
-            // Increase distance between levels 
-            space += 10;
+            space += spaceIncrease; //Increase distance between levels 
+            HorizontalOrder(ref node.right, space, spaceIncrease);
 
-            // Process right child first 
-            HorizontalOrder(ref node.right, space);
-
-            // Print current node after space 
-            // count 
-            Console.Write("\n");
-            for (int i = 10; i < space; i++)
+            //Print current node after space 
+            for (int i = spaceIncrease; i < space; i++)
                 Console.Write(" ");
-            Console.Write(node.ToString() + "\n");
+            Console.Write(node.ToString() + ", " + node.BalanceFactor() + '\n');
 
-            // Process left child  
-            HorizontalOrder(ref node.left, space);
+            HorizontalOrder(ref node.left, space, spaceIncrease);
         }
 
         private int Depth(ref BSTnode<T> node) //recursively checks for the node that is deepest in the tree.
@@ -270,9 +289,9 @@ namespace BSTtree
             MakeEmpty(root);
         }
 
-        public void HorizontalOrder()
+        public void HorizontalOrder(int spaceBetweenData)
         {
-            HorizontalOrder(ref root, 0);
+            HorizontalOrder(ref root, 0, spaceBetweenData);
         }
 
         public override T FindMin()

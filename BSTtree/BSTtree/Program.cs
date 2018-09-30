@@ -19,17 +19,35 @@ namespace BSTtree
             //foreach (string s in parsedInput) //inertion into tree
             //    tree.Insert(Int32.Parse(s));
 
-            tree.Insert(30);
-            tree.Insert(40);
-            tree.Insert(45);
-            tree.Insert(50);
-            tree.Insert(55);
-            tree.Insert(60);
-            tree.Insert(70);
-            tree.Insert(80);
+            Random rand = new Random();
+            BSTtree<int> data = new BSTtree<int>();
+            for (int i = 0; i != 100; i++)
+                data.Insert(rand.Next(99));
+            data.HorizontalOrder(7);
+            Console.Write("\n\nTree Contents (inorder traversal): ");
+            data.InOrder();
+            Console.Write("\n\nTree Contents (preorder traversal): ");
+            data.PreOrder();
+            Console.Write("\n\nTree Contents (postorder traversal): ");
+            data.PostOrder();
+            Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + data.Count());
+            Console.WriteLine("\tNumber of levels: " + data.Depth());
+            Console.WriteLine("\tTheoretical Minimum Depth: " + data.TheoreticalMinDepth());
+            Console.WriteLine("\tContains '2': " + data.Contains(2));
+            Console.WriteLine("\tContains '13': " + data.Contains(13));
 
-            tree.PrintTree();
-            tree.HorizontalOrder();
+            //tree.Insert(30);
+            //tree.Insert(40);
+            //tree.Insert(45);
+            //tree.Insert(50);
+            //tree.Insert(55);
+            //tree.Insert(60);
+            //tree.Insert(70);
+            //tree.Insert(80);
+
+            //tree.PrintTree();
+            //tree.HorizontalOrder();
+
             //Console.Write("\n\nTree Contents (inorder traversal): ");
             //tree.InOrder();
             //Console.Write("\n\nTree Contents (preorder traversal): ");

@@ -130,9 +130,9 @@ namespace BSTtree
             int leftHeight = -1;
             int rightHeight = -1;
             if (this.left != null)
-                leftHeight = this.left.Height();
+                leftHeight = this.left.height;
             if (this.right != null)
-                rightHeight = this.right.Height();
+                rightHeight = this.right.height;
             return (leftHeight - rightHeight);
         }
     }
