@@ -36,10 +36,10 @@ namespace BSTtree
 
             #region random number test case
             Random rand = new Random();
-            BSTtree<int> data = new BSTtree<int>();
+            AVLtree<int> data = new AVLtree<int>();
             data.Insert(2);
             data.Insert(13);
-            for (int i = 0; i != 1024; i++)
+            for (int i = 0; i != 1024; i++) //inputs 2^10 random numbers
                 data.Insert(rand.Next(999));
             //Console.WriteLine();
             //data.HorizontalOrder(7); //prints a sideways tree. makes it very very nice to see what is going on.
@@ -54,7 +54,7 @@ namespace BSTtree
             Console.WriteLine("\tTheoretical Minimum Depth: " + data.TheoreticalMinDepth());
             Console.WriteLine("\tContains '2': " + data.Contains(2));
             Console.WriteLine("\tContains '13': " + data.Contains(13));
-            for (int i = 0; i != 128; i++)
+            for (int i = 0; i != 128; i++) //removes 2^7 random numbers
                 data.Remove(rand.Next(999));
             data.Remove(2);
             data.Remove(13);

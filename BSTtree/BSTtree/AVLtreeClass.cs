@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BSTtree
 {
-    class BSTtree<T> : BinTree<T>
+    class AVLtree<T> : BinTree<T>
         where T : System.IComparable<T>, new()
     {
         private BSTnode<T> root = null; //creates an empty root node to start the tree.
@@ -29,7 +29,70 @@ namespace BSTtree
             else
                 node.SetHeight(Insert(ref input, ref node.right) + 1);
 
+            Balance(ref node);
             return node.Height();
+        }
+
+        private void Balance(ref BSTnode<T> node)
+        {
+            int nodeBalance = node.BalanceFactor();
+            if (nodeBalance > 1)
+            {
+                //left right
+                if (node.left.BalanceFactor() < 0) //if left node has 1 right node
+                {
+                    RotateLR(ref node);
+                    RotateRR(ref node);
+                }
+                //right right
+                else //if left node has 1 left node                   
+                {
+                    RotateRR(ref node);
+                }
+            }
+            else if (nodeBalance < -1)
+            {
+                //right left
+                if (node.right.BalanceFactor() > 0) //if right node has 1 right node
+                {
+                    RotateRL(ref node);
+                    RotateLL(ref node);;
+                }
+                //left left
+                else //if right node has 1 left node
+                {
+                    RotateLL(ref node);
+                }
+            }
+        }
+
+        private void RotateLR(ref BSTnode<T> node)
+        {
+            BSTnode<T> temp = node.left;
+            node.left = temp.right; //moves left-right node up
+            temp.right = node.left.left; //replaces old left-right with old left-left
+            node.left.left = temp; //replaces left-left with old left
+        }
+        private void RotateRR(ref BSTnode<T> node)
+        {
+            BSTnode<T> temp = node;
+            node = temp.left;  // moves left node up
+            temp.left = node.right; // replaces old left with old right
+            node.right = temp; // replaces right with old top
+        }
+        private void RotateRL(ref BSTnode<T> node)
+        {
+            BSTnode<T> temp = node.right;
+            node.right = temp.left; //moves right-left up
+            temp.left = node.right.right; // replaces old right-left with old right-right
+            node.right.right = temp; //replaces right-right with old right
+        }
+        private void RotateLL(ref BSTnode<T> node)
+        {
+            BSTnode<T> temp = node;
+            node = temp.right; //moves right node up
+            temp.right = node.left; // replaces old right with old left
+            node.left = temp; //replaces left with old top
         }
 
         private BSTnode<T> RemoveRoot(ref BSTnode<T> node)
@@ -68,14 +131,22 @@ namespace BSTtree
                 if (node.left == null && node.right == null) //no children                              
                     node = null; //relying on the garbage collector to delete memory once there are no more references.                
                 else if (node.left == null) //one right child
+                {
                     node = node.right;
+                    Balance(ref node);
+                }
                 else if (node.right == null) //one left child
+                {
                     node = node.left;
+                    Balance(ref node);
+                }
                 else //two children
                 {
-                    BSTnode<T> min = FindMin(ref node.right);
+                    ref BSTnode<T> min = ref FindMin(ref node.right); //minimum will always have a max of one child
                     node.Equals(min); //finds the minimum node on the right subtree and copies its data into this node
+                    nodes++; //since we will remove one extra node that only has one child, we have to account for the extra remove call.
                     Remove(ref node, ref min); //deletes the node that was brought up
+                    Balance(ref node);
                 }
                 nodes--;
                 return true;
@@ -187,15 +258,15 @@ namespace BSTtree
         private int Depth(ref BSTnode<T> node) //recursively checks for the node that is deepest in the tree.
         {
             if (node == null)
-                return 0;
+                return 0;            
             int leftDepth = Depth(ref node.left);
             int rightDepth = Depth(ref node.right);
             if (leftDepth > rightDepth)
-                return leftDepth + 1;
-            return rightDepth + 1;
+                return leftDepth + 1;   
+            return rightDepth + 1;                           
         }
 
-        ~BSTtree()
+        ~AVLtree()
         {
             MakeEmpty(root);
         }
@@ -235,7 +306,7 @@ namespace BSTtree
 
         public override void InOrder()
         {
-            InOrder(ref root);
+            InOrder(ref root);        
         }
 
         public override void PreOrder()
@@ -248,7 +319,7 @@ namespace BSTtree
             PostOrder(ref root);
         }
 
-        public override void Insert(T input)
+        public override void Insert(T input) 
         {
             BSTnode<T> inputAsNode = new BSTnode<T>(input); //blank node with input data. allows private function to compare nodes
             Insert(ref inputAsNode, ref root);
@@ -268,7 +339,7 @@ namespace BSTtree
                 root = RemoveRoot(ref root);
                 return true;
             }
-            return Remove(ref inputAsNode, ref root);
+            return Remove(ref inputAsNode, ref root);            
         }
 
         public override int Count()
