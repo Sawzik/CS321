@@ -35,10 +35,29 @@ namespace BSTtree
             #region random number test case
             Random rand = new Random();
             BSTtree<int> data = new BSTtree<int>();
+            data.Insert(2);
+            data.Insert(13);
             for (int i = 0; i != 512; i++)
                 data.Insert(rand.Next(999));
             Console.WriteLine();
-            data.HorizontalOrder(2); //prints a sideways tree. makes it very very nice to see what is going on.
+            data.HorizontalOrder(7); //prints a sideways tree. makes it very very nice to see what is going on.
+            Console.Write("\n\nTree Contents (inorder traversal): ");
+            data.InOrder();
+            Console.Write("\n\nTree Contents (preorder traversal): ");
+            data.PreOrder();
+            Console.Write("\n\nTree Contents (postorder traversal): ");
+            data.PostOrder();
+            Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + data.Count());
+            Console.WriteLine("\tNumber of levels: " + data.Depth());
+            Console.WriteLine("\tTheoretical Minimum Depth: " + data.TheoreticalMinDepth());
+            Console.WriteLine("\tContains '2': " + data.Contains(2));
+            Console.WriteLine("\tContains '13': " + data.Contains(13));
+            for (int i = 0; i != 128; i++)
+                data.Remove(rand.Next(999));
+            data.Remove(2);
+            data.Remove(13);
+            Console.WriteLine();
+            data.HorizontalOrder(7); //prints a sideways tree. makes it very very nice to see what is going on.
             Console.Write("\n\nTree Contents (inorder traversal): ");
             data.InOrder();
             Console.Write("\n\nTree Contents (preorder traversal): ");

@@ -94,9 +94,9 @@ namespace BSTtree
             return LeftNode.data.CompareTo(rightNode.data) < 0;
         }
 
-        public T Equals(BSTnode<T> LeftNode, BSTnode<T> rightNode)
+        public T Equals(BSTnode<T> node)
         {
-            return LeftNode.data = rightNode.data;
+            return this.data = node.data;
         }
 
         public override String ToString()
@@ -140,13 +140,7 @@ namespace BSTtree
 
         public int BalanceFactor()
         {
-            int leftHeight = MaxHeight(ref this.left);
-            int rightHeight = MaxHeight(ref this.right);
-            //if (this.left != null)
-            //    leftHeight = this.left.height;
-            //if (this.right != null)
-            //    rightHeight = this.right.height;
-            return (leftHeight - rightHeight);
+            return (MaxHeight(ref this.left) - MaxHeight(ref this.right));
         }
     }
 }

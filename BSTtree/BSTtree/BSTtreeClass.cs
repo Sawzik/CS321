@@ -131,14 +131,22 @@ namespace BSTtree
                 if (node.left == null && node.right == null) //no children                              
                     node = null; //relying on the garbage collector to delete memory once there are no more references.                
                 else if (node.left == null) //one right child
+                {
                     node = node.right;
+                    Balance(ref node);
+                }
                 else if (node.right == null) //one left child
+                {
                     node = node.left;
+                    Balance(ref node);
+                }
                 else //two children
                 {
-                    BSTnode<T> min = FindMin(ref node.right);
+                    ref BSTnode<T> min = ref FindMin(ref node.right); //minimum will always have a max of one child
                     node.Equals(min); //finds the minimum node on the right subtree and copies its data into this node
+                    nodes++; //since we will remove one extra node that only has one child, we have to account for the extra remove call.
                     Remove(ref node, ref min); //deletes the node that was brought up
+                    Balance(ref node);
                 }
                 nodes--;
                 return true;
