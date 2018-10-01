@@ -37,51 +37,51 @@ namespace BSTtree
         {
             if (node.BalanceFactor() > 1)
             {
-                //left right
+                //right left
                 if (node.left.BalanceFactor() < 0) //if left node has 1 right node
                 {
-                    RotateLR(ref node);
+                    RotateRL(ref node);
                     if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
                         Console.Write("BALANCE ISSUE LR, ");
                 }
-                //left left
+                //right right
                 if (node.left.BalanceFactor() >= 0) //if left node has 1 left node                
                 {
-                    RotateLL(ref node);
+                    RotateRR(ref node);
                     if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
                         Console.Write("BALANCE ISSUE LL, ");
                 }
             }
             else if (node.BalanceFactor() < -1)
             {
-                //right left
+                //left right
                 if (node.right.BalanceFactor() > 0) //if right node has 1 right node
                 {
-                    RotateRL(ref node);
+                    RotateLR(ref node);
                     if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
                         Console.Write("BALANCE ISSUE RL, ");
                 }
-                //right right
+                //left left
                 if (node.right.BalanceFactor() <= 0) //if right node has 1 left node
                 {
-                    RotateRR(ref node);
+                    RotateLL(ref node);
                     if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
                         Console.Write("BALANCE ISSUE RR, ");
                 }
-            }
-            
+            }  
         }
 
-        private void RotateLR(ref BSTnode<T> node)
+        private void RotateRL(ref BSTnode<T> node)
         {
             BSTnode<T> temp = node.left;
             node.left = temp.right; //moves left-right node up
             temp.right = node.left.left; //replaces old left-right with old left-left
             node.left.left = temp; //replaces left-left with old left
             resetHeights(ref node);
+            //RotateLL(ref node);
             //Console.WriteLine("left right");
         }
-        private void RotateLL(ref BSTnode<T> node)
+        private void RotateRR(ref BSTnode<T> node)
         {
             BSTnode<T> temp = node;
             node = temp.left;  // moves left node up
@@ -90,16 +90,20 @@ namespace BSTtree
             resetHeights(ref node);
             //Console.WriteLine("left left");
         }
-        private void RotateRL(ref BSTnode<T> node)
+        private void RotateLR(ref BSTnode<T> node)
         {
             BSTnode<T> temp = node.right;
             node.right = temp.left; //moves right-left up
             temp.left = node.right.right; // replaces old right-left with old right-right
             node.right.right = temp; //replaces right-right with old right
+
             resetHeights(ref node);
+            //RotateRR(ref node);
+            //if (node.BalanceFactor() == -2)// || node.BalanceFactor() == -2)
+            //    Console.Write("BALANCE ISSUE RR, ");
             //Console.WriteLine("right left");
         }
-        private void RotateRR(ref BSTnode<T> node)
+        private void RotateLL(ref BSTnode<T> node)
         {
             BSTnode<T> temp = node;
             node = temp.right; //moves right node up
