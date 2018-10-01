@@ -12,25 +12,42 @@ namespace BSTtree
         static void Main(string[] args)
         {
             #region Homework Required input
-            BSTtree<int> tree = new BSTtree<int>();
+            BSTtree<int> BST = new BSTtree<int>();
+            AVLtree<int> AVL = new AVLtree<int>();
             Console.WriteLine("Enter a collection of numbers between 0 and 100. No error detection");
             string input = Console.ReadLine(); //reading input from user. Gets the whole line
             string[] parsedInput = input.Split(' ');
             foreach (string s in parsedInput) //inertion into tree
-                tree.Insert(Int32.Parse(s));
-            Console.Write("\n\nTree Contents (horizontal inorder traversal):\n\n");
-            tree.HorizontalOrder(7);
-            Console.Write("\n\nTree Contents (inorder traversal): ");
-            tree.InOrder();
-            Console.Write("\n\nTree Contents (preorder traversal): ");
-            tree.PreOrder();
-            Console.Write("\n\nTree Contents (postorder traversal): ");
-            tree.PostOrder();
-            Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + tree.Count());
-            Console.WriteLine("\tNumber of levels: " + tree.Depth());
-            Console.WriteLine("\tTheoretical Minimum Depth: " + tree.TheoreticalMinDepth());
-            Console.WriteLine("\tContains '2': " + tree.Contains(2));
-            Console.WriteLine("\tContains '13': " + tree.Contains(13));
+            {
+                AVL.Insert(Int32.Parse(s));
+                BST.Insert(Int32.Parse(s));
+            }
+            Console.Write("\n\nBSTTree Contents (horizontal inorder traversal):\n\n");
+            BST.HorizontalOrder(7);
+            Console.Write("\n\nBSTTree Contents (inorder traversal): ");
+            BST.InOrder();
+            Console.Write("\n\nBSTTree Contents (preorder traversal): ");
+            BST.PreOrder();
+            Console.Write("\n\nBSTTree Contents (postorder traversal): ");
+            BST.PostOrder();
+            Console.WriteLine("\n\nBSTTree statistics:\n\tNumber of nodes: " + BST.Count());
+            Console.WriteLine("\tNumber of levels in BST: " + BST.Depth());
+            Console.WriteLine("\tTheoretical Minimum Depth of BST: " + BST.TheoreticalMinDepth());
+            Console.WriteLine("\tContains '2' in BST: " + BST.Contains(2));
+            Console.WriteLine("\tContains '13' in BST: " + BST.Contains(13));
+            Console.Write("\n\nAVLTree Contents (horizontal inorder traversal):\n\n");
+            AVL.HorizontalOrder(7);
+            Console.Write("\n\nAVLTree Contents (inorder traversal): ");
+            AVL.InOrder();
+            Console.Write("\n\nAVLTree Contents (preorder traversal): ");
+            AVL.PreOrder();
+            Console.Write("\n\nAVLTree Contents (postorder traversal): ");
+            AVL.PostOrder();
+            Console.WriteLine("\n\nAVLTree statistics:\n\tNumber of nodes: " + AVL.Count());
+            Console.WriteLine("\tNumber of levels in AVL: " + AVL.Depth());
+            Console.WriteLine("\tTheoretical Minimum Depth of AVL: " + AVL.TheoreticalMinDepth());
+            Console.WriteLine("\tContains '2' in AVL: " + AVL.Contains(2));
+            Console.WriteLine("\tContains '13' in AVL: " + AVL.Contains(13));
             Console.ReadKey(); //pause
             #endregion
 
