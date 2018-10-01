@@ -35,57 +35,35 @@ namespace BSTtree
 
         private void Balance(ref BSTnode<T> node)
         {
-            if (node.BalanceFactor() > 1)
+            int nodeBalance = node.BalanceFactor();
+            if (nodeBalance > 1)
             {
                 //left right
                 if (node.left.BalanceFactor() < 0) //if left node has 1 right node
                 {
                     RotateLR(ref node);
                     RotateRR(ref node);
-                    ResetHeights(ref node);
-                    if (node.BalanceFactor() > 1 || node.BalanceFactor() < -1)
-                        Console.Write("BALANCE ISSUE LR, ");
                 }
                 //right right
-                else//if (node.left.BalanceFactor() > 0) //if left node has 1 left node                   
+                else //if left node has 1 left node                   
                 {
                     RotateRR(ref node);
-                    //node = RotateR(ref node);
-                    ResetHeights(ref node);
-                    if (node.BalanceFactor() > 1 || node.BalanceFactor() < -1)
-                        Console.Write("BALANCE ISSUE RR, ");
                 }
             }
-            else if (node.BalanceFactor() < -1)
+            else if (nodeBalance < -1)
             {
                 //right left
                 if (node.right.BalanceFactor() > 0) //if right node has 1 right node
                 {
                     RotateRL(ref node);
-                    RotateLL(ref node);
-                    ResetHeights(ref node);
-                    if (node.BalanceFactor() > 1 || node.BalanceFactor() < -1)
-                        Console.Write("BALANCE ISSUE RL, ");
+                    RotateLL(ref node);;
                 }
                 //left left
-                else//if (node.right.BalanceFactor() < 0) //if right node has 1 left node
+                else //if right node has 1 left node
                 {
                     RotateLL(ref node);
-                    ResetHeights(ref node);
-                    if (node.BalanceFactor() > 1 || node.BalanceFactor() < -1)
-                        Console.Write("BALANCE ISSUE LL, ");
                 }
             }
-        }
-
-        private BSTnode<T> RotateR(ref BSTnode<T> parent)
-        {
-            BSTnode<T> orphan = parent.left.right;
-            BSTnode<T> newParent = parent.left;
-            newParent.right = parent;
-            parent.left = orphan;
-            //parent.SetHeight();
-            return newParent;
         }
 
         private void RotateLR(ref BSTnode<T> node)
@@ -115,19 +93,6 @@ namespace BSTtree
             node = temp.right; //moves right node up
             temp.right = node.left; // replaces old right with old left
             node.left = temp; //replaces left with old top
-        }
-
-        private int ResetHeights(ref BSTnode<T> node)
-        {
-            if (node == null)
-                return 0;
-            int left = ResetHeights(ref node.left);
-            int right = ResetHeights(ref node.right);
-            if (left > right)
-                node.ResetHeight(left + 1);
-            else
-                node.ResetHeight(right + 1);
-            return node.Height();
         }
 
         private BSTnode<T> RemoveRoot(ref BSTnode<T> node)
@@ -260,21 +225,26 @@ namespace BSTtree
         }
 
         //very wide and not optimized. but it prints the tree vertically which is very easy to read.
-        private void HorizontalOrder(ref BSTnode<T> node, int space, int spaceIncrease)
+        //Helper function more for debugging purposes.
+        private int HorizontalOrder(ref BSTnode<T> node, int space, int spaceIncrease, int unbalancedTrees)
         {
             if (node == null)
-                return;
+                return 0;
 
+            int balance = node.BalanceFactor();
             space += spaceIncrease; //Increase distance between levels 
-            HorizontalOrder(ref node.right, space, spaceIncrease);
+            HorizontalOrder(ref node.right, space, spaceIncrease, unbalancedTrees);
 
             //Print current node after space 
             for (int i = spaceIncrease; i < space; i++)
                 Console.Write(" ");
-            //Console.Write(node.ToString() + ", " + node.BalanceFactor() + '\n');
-            Console.Write(node.BalanceFactor().ToString() + '\n');
+            Console.Write(node.ToString() + ", " + balance + '\n');
 
-            HorizontalOrder(ref node.left, space, spaceIncrease);
+            if (balance > 1 || balance < -1) //keeps track of any trees that arent balanced.
+                unbalancedTrees++;
+
+            HorizontalOrder(ref node.left, space, spaceIncrease, unbalancedTrees);
+            return unbalancedTrees;
         }
 
         private int Depth(ref BSTnode<T> node) //recursively checks for the node that is deepest in the tree.
@@ -293,10 +263,11 @@ namespace BSTtree
             MakeEmpty(root);
         }
 
+        //prints out the tree horizontally and displays the number of unbalanced trees.
         public void HorizontalOrder(int spaceBetweenData)
         {
-            ResetHeights(ref root);
-            HorizontalOrder(ref root, 0, spaceBetweenData);
+            int unbalancedTrees = HorizontalOrder(ref root, 0, spaceBetweenData, 0);
+            Console.WriteLine("\nUnbalanced Trees: " + unbalancedTrees);
         }
 
         public override T FindMin()
