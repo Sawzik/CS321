@@ -21,9 +21,10 @@ namespace BSTtree
 
             Random rand = new Random();
             BSTtree<int> data = new BSTtree<int>();
-            for (int i = 0; i != 1000; i++)
+            for (int i = 0; i != 100; i++)
                 data.Insert(rand.Next(999));
-            //data.HorizontalOrder(2);
+            Console.WriteLine();
+            data.HorizontalOrder(2);
             //Console.Write("\n\nTree Contents (inorder traversal): ");
             //data.InOrder();
             ////Console.Write("\n\nTree Contents (preorder traversal): ");

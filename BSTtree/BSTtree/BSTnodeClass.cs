@@ -127,8 +127,8 @@ namespace BSTtree
 
         public int BalanceFactor()
         {
-            int leftHeight = -1;
-            int rightHeight = -1;
+            int leftHeight = 0;
+            int rightHeight = 0;
             if (this.left != null)
                 leftHeight = this.left.height;
             if (this.right != null)

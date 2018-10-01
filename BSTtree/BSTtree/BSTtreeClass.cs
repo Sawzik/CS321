@@ -12,7 +12,7 @@ namespace BSTtree
         where T : System.IComparable<T>, new()
     {
         private BSTnode<T> root = null; //creates an empty root node to start the tree.
-        private int nodes = 0;        
+        private int nodes = 0;
 
         //recursively calls itself until it finds where to add a new node. increases the height each time
         private int Insert(ref BSTnode<T> input, ref BSTnode<T> node)
@@ -37,49 +37,63 @@ namespace BSTtree
         {
             if (node.BalanceFactor() > 1)
             {
-                //right left
+                //left right
                 if (node.left.BalanceFactor() < 0) //if left node has 1 right node
                 {
-                    RotateRL(ref node);
-                    if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
+                    RotateLR(ref node);
+                    RotateRR(ref node);
+                    ResetHeights(ref node);
+                    if (node.BalanceFactor() > 1 || node.BalanceFactor() < -1)
                         Console.Write("BALANCE ISSUE LR, ");
                 }
                 //right right
-                if (node.left.BalanceFactor() >= 0) //if left node has 1 left node                
+                else//if (node.left.BalanceFactor() > 0) //if left node has 1 left node                   
                 {
                     RotateRR(ref node);
-                    if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
-                        Console.Write("BALANCE ISSUE LL, ");
+                    //node = RotateR(ref node);
+                    ResetHeights(ref node);
+                    if (node.BalanceFactor() > 1 || node.BalanceFactor() < -1)
+                        Console.Write("BALANCE ISSUE RR, ");
                 }
             }
             else if (node.BalanceFactor() < -1)
             {
-                //left right
+                //right left
                 if (node.right.BalanceFactor() > 0) //if right node has 1 right node
                 {
-                    RotateLR(ref node);
-                    if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
+                    RotateRL(ref node);
+                    RotateLL(ref node);
+                    ResetHeights(ref node);
+                    if (node.BalanceFactor() > 1 || node.BalanceFactor() < -1)
                         Console.Write("BALANCE ISSUE RL, ");
                 }
                 //left left
-                if (node.right.BalanceFactor() <= 0) //if right node has 1 left node
+                else//if (node.right.BalanceFactor() < 0) //if right node has 1 left node
                 {
                     RotateLL(ref node);
-                    if (node.BalanceFactor() == 2 || node.BalanceFactor() == -2)
-                        Console.Write("BALANCE ISSUE RR, ");
+                    ResetHeights(ref node);
+                    if (node.BalanceFactor() > 1 || node.BalanceFactor() < -1)
+                        Console.Write("BALANCE ISSUE LL, ");
                 }
-            }  
+            }
         }
 
-        private void RotateRL(ref BSTnode<T> node)
+        private BSTnode<T> RotateR(ref BSTnode<T> parent)
+        {
+            BSTnode<T> orphan = parent.left.right;
+            BSTnode<T> newParent = parent.left;
+            newParent.right = parent;
+            parent.left = orphan;
+            //parent.SetHeight();
+            return newParent;
+        }
+
+        private void RotateLR(ref BSTnode<T> node)
         {
             BSTnode<T> temp = node.left;
             node.left = temp.right; //moves left-right node up
             temp.right = node.left.left; //replaces old left-right with old left-left
             node.left.left = temp; //replaces left-left with old left
-            resetHeights(ref node);
-            //RotateLL(ref node);
-            //Console.WriteLine("left right");
         }
         private void RotateRR(ref BSTnode<T> node)
         {
@@ -87,21 +101,13 @@ namespace BSTtree
             node = temp.left;  // moves left node up
             temp.left = node.right; // replaces old left with old right
             node.right = temp; // replaces right with old top
-            resetHeights(ref node);
-            //Console.WriteLine("left left");
         }
-        private void RotateLR(ref BSTnode<T> node)
+        private void RotateRL(ref BSTnode<T> node)
         {
             BSTnode<T> temp = node.right;
             node.right = temp.left; //moves right-left up
             temp.left = node.right.right; // replaces old right-left with old right-right
             node.right.right = temp; //replaces right-right with old right
-
-            resetHeights(ref node);
-            //RotateRR(ref node);
-            //if (node.BalanceFactor() == -2)// || node.BalanceFactor() == -2)
-            //    Console.Write("BALANCE ISSUE RR, ");
-            //Console.WriteLine("right left");
         }
         private void RotateLL(ref BSTnode<T> node)
         {
@@ -109,23 +115,18 @@ namespace BSTtree
             node = temp.right; //moves right node up
             temp.right = node.left; // replaces old right with old left
             node.left = temp; //replaces left with old top
-            resetHeights(ref node);
-            //Console.WriteLine("right right");
         }
 
-
-        private int resetHeights(ref BSTnode<T> node)
+        private int ResetHeights(ref BSTnode<T> node)
         {
             if (node == null)
                 return 0;
-            int left = resetHeights(ref node.left);
-            int right = resetHeights(ref node.right);
+            int left = ResetHeights(ref node.left);
+            int right = ResetHeights(ref node.right);
             if (left > right)
                 node.ResetHeight(left + 1);
             else
                 node.ResetHeight(right + 1);
-
-            //Balance(ref node); //checks to see if there are any more balances needed to be done.
             return node.Height();
         }
 
@@ -294,6 +295,7 @@ namespace BSTtree
 
         public void HorizontalOrder(int spaceBetweenData)
         {
+            ResetHeights(ref root);
             HorizontalOrder(ref root, 0, spaceBetweenData);
         }
 
