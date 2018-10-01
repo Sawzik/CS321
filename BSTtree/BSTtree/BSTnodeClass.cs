@@ -125,14 +125,27 @@ namespace BSTtree
             height = inputHeight;
         }
 
+        private int MaxHeight(ref BSTnode<T> node)
+        {
+            if (node == null)
+                return 0;
+            int left = MaxHeight(ref node.left);
+            int right = MaxHeight(ref node.right);
+            if (left > right)
+                node.ResetHeight(left + 1);
+            else
+                node.ResetHeight(right + 1);
+            return node.Height();
+        }
+
         public int BalanceFactor()
         {
-            int leftHeight = 0;
-            int rightHeight = 0;
-            if (this.left != null)
-                leftHeight = this.left.height;
-            if (this.right != null)
-                rightHeight = this.right.height;
+            int leftHeight = MaxHeight(ref this.left);
+            int rightHeight = MaxHeight(ref this.right);
+            //if (this.left != null)
+            //    leftHeight = this.left.height;
+            //if (this.right != null)
+            //    rightHeight = this.right.height;
             return (leftHeight - rightHeight);
         }
     }
