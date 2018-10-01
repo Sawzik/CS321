@@ -275,7 +275,7 @@ namespace BSTtree
         public void HorizontalOrder(int spaceBetweenData)
         {
             int unbalancedTrees = HorizontalOrder(ref root, 0, spaceBetweenData, 0);
-            Console.WriteLine("\nUnbalanced Trees: " + unbalancedTrees);
+            Console.WriteLine("\n\tUnbalanced Trees: " + unbalancedTrees);
         }
 
         public override T FindMin()
