@@ -51,43 +51,44 @@ namespace BSTtree
             Console.ReadKey(); //pause
             #endregion
 
+            //shows off the efficiency as the number of nodes gets really really big
             #region random number test case
-            Random rand = new Random();
-            AVLtree<int> data = new AVLtree<int>();
-            data.Insert(2);
-            data.Insert(13);
-            for (int i = 0; i != 1024; i++) //inputs 2^10 random numbers
-                data.Insert(rand.Next(999));
-            //Console.WriteLine();
-            //data.HorizontalOrder(7); //prints a sideways tree. makes it very very nice to see what is going on.
-            Console.Write("\n\nTree Contents (inorder traversal): ");
-            data.InOrder();
-            //Console.Write("\n\nTree Contents (preorder traversal): ");
-            //data.PreOrder();
-            //Console.Write("\n\nTree Contents (postorder traversal): ");
-            //data.PostOrder();
-            Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + data.Count());
-            Console.WriteLine("\tNumber of levels: " + data.Depth());
-            Console.WriteLine("\tTheoretical Minimum Depth: " + data.TheoreticalMinDepth());
-            Console.WriteLine("\tContains '2': " + data.Contains(2));
-            Console.WriteLine("\tContains '13': " + data.Contains(13));
-            for (int i = 0; i != 128; i++) //removes 2^7 random numbers
-                data.Remove(rand.Next(999));
-            data.Remove(2);
-            data.Remove(13);
-            //Console.WriteLine();
-            //data.HorizontalOrder(7); //prints a sideways tree. makes it very very nice to see what is going on.
-            Console.Write("\n\nTree Contents (inorder traversal): ");
-            data.InOrder();
-            //Console.Write("\n\nTree Contents (preorder traversal): ");
-            //data.PreOrder();
-            //Console.Write("\n\nTree Contents (postorder traversal): ");
-            //data.PostOrder();
-            Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + data.Count());
-            Console.WriteLine("\tNumber of levels: " + data.Depth());
-            Console.WriteLine("\tTheoretical Minimum Depth: " + data.TheoreticalMinDepth());
-            Console.WriteLine("\tContains '2': " + data.Contains(2));
-            Console.WriteLine("\tContains '13': " + data.Contains(13));
+            //Random rand = new Random();
+            //AVLtree<int> data = new AVLtree<int>();
+            //data.Insert(2);
+            //data.Insert(13);
+            //for (int i = 0; i != 1024; i++) //inputs 2^10 random numbers
+            //    data.Insert(rand.Next(999));
+            ////Console.WriteLine();
+            ////data.HorizontalOrder(7); //prints a sideways tree. makes it very very nice to see what is going on.
+            //Console.Write("\n\nTree Contents (inorder traversal): ");
+            //data.InOrder();
+            ////Console.Write("\n\nTree Contents (preorder traversal): ");
+            ////data.PreOrder();
+            ////Console.Write("\n\nTree Contents (postorder traversal): ");
+            ////data.PostOrder();
+            //Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + data.Count());
+            //Console.WriteLine("\tNumber of levels: " + data.Depth());
+            //Console.WriteLine("\tTheoretical Minimum Depth: " + data.TheoreticalMinDepth());
+            //Console.WriteLine("\tContains '2': " + data.Contains(2));
+            //Console.WriteLine("\tContains '13': " + data.Contains(13));
+            //for (int i = 0; i != 128; i++) //removes 2^7 random numbers
+            //    data.Remove(rand.Next(999));
+            //data.Remove(2);
+            //data.Remove(13);
+            ////Console.WriteLine();
+            ////data.HorizontalOrder(7); //prints a sideways tree. makes it very very nice to see what is going on.
+            //Console.Write("\n\nTree Contents (inorder traversal): ");
+            //data.InOrder();
+            ////Console.Write("\n\nTree Contents (preorder traversal): ");
+            ////data.PreOrder();
+            ////Console.Write("\n\nTree Contents (postorder traversal): ");
+            ////data.PostOrder();
+            //Console.WriteLine("\n\nTree statistics:\n\tNumber of nodes: " + data.Count());
+            //Console.WriteLine("\tNumber of levels: " + data.Depth());
+            //Console.WriteLine("\tTheoretical Minimum Depth: " + data.TheoreticalMinDepth());
+            //Console.WriteLine("\tContains '2': " + data.Contains(2));
+            //Console.WriteLine("\tContains '13': " + data.Contains(13));
             #endregion
 
             Console.ReadKey(); //pause
