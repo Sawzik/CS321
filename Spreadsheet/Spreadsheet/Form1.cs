@@ -15,6 +15,12 @@ namespace Spreadsheet
         public Form1()
         {
             InitializeComponent();
+            for (char i = 'A'; i != 'Z'; i++)
+            {
+                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
+                column.HeaderText = i.ToString();
+                dataGridView1.Columns.Add(column);
+            }
         }
     }
 }
