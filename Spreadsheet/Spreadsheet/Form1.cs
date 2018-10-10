@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Isaac Schultz 11583435
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,10 +13,12 @@ namespace Spreadsheet
 {
     public partial class Form1 : Form
     {
+        private Spreadsheet sheet;
+
         public Form1()
         {
             InitializeComponent();
-            for (char i = 'A'; i != 'Z'; i++)
+            for (char i = 'A'; i != ('Z' + 1); i++) //counts up to Z
             {
                 DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
                 column.HeaderText = i.ToString();

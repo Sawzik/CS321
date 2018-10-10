@@ -1,5 +1,4 @@
 ﻿//Isaac Schultz 11583435
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

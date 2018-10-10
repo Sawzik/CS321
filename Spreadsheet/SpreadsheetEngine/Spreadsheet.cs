@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Isaac Schultz 11583435
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,18 +16,17 @@ namespace CptS321
 
             public void SetValue(string value)
             {
-                cellText = value;
+                cellText = value; //cellText from abstract cell class
             }
         }
+
         private int columnCount;
         private int rowCount;
         public event PropertyChangedEventHandler CellPropertyChanged;
         public int ColumnCount { get { return columnCount; } }
         public int RowCount { get { return rowCount; } }
 
-
         private SpreadsheetCell[,] cells;
-
         public Spreadsheet(int columns, int rows)
         {
             columnCount = columns;
@@ -43,12 +43,13 @@ namespace CptS321
                 }
             }
         }
-
+       
         public Cell GetCell(int column, int row)
         {
             return cells[column, row];
         }
 
+        //same as normal GetCell, but can parse strings
         public Cell GetCell(string strCoords)
         {
             int column = strCoords[0] - 'A'; //subtacts an ascii A from the first part of the coordinate to get a number from 0 o 26.
