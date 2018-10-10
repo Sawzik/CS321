@@ -11,49 +11,49 @@ namespace CptS321
 {
     public abstract class Cell : INotifyPropertyChanged
     {
-        protected int cRowIndex;
-        protected int cColumnIndex;
-        protected string cText;
-        protected string cValue;
+        protected int cellColumn;
+        protected int cellRow;
+        protected string cellData;
+        protected string cellParsed;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Cell(int column, int row)
         {
-            cColumnIndex = row;
-            cRowIndex = column;
+            cellColumn = row;
+            cellRow = column;
         }
 
         public int RowIndex
         {
-            get { return cRowIndex; }            
+            get { return cellRow; }            
         }
         public int ColumnIndex
         {
-            get { return cColumnIndex; }        
+            get { return cellColumn; }        
         }
         public string Value
         {
-            get { return cValue; }
+            get { return cellParsed; }
         }
 
         public string Text
         {
-            get { return cText; }
+            get { return cellData; }
             set
             {
-                if (value != cText)
+                if (value != cellData)
                 {
-                    cText = value;
-                    //OnPropertyChanged("text"); //event that the text was changed.
+                    cellData = value;
+                    OnPropertyChanged("text"); //event that the text was changed.
                 }
             }
         }
 
-        protected void OnPropertChanged(string name)
+        protected void OnPropertyChanged(string name)
         {
-            //if (ProperyChanged != null)
-            //    PropertyChanged(this, new PropertyChangedEventArgs(name));
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
     }
 }
