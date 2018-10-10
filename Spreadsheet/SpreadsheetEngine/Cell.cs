@@ -11,31 +11,40 @@ namespace CptS321
 {
     public abstract class Cell : INotifyPropertyChanged
     {
-        protected int cRowIndex;
-        protected int cColumnIndex;
-        protected string cText;
-        protected string cValue;
+        protected int cellColumnIndex;
+        protected int cellRowndex;
+        protected string cellText;
+        protected string cellParsedValue;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Cell(int column, int row)
         {
-            cColumnIndex = row;
-            cRowIndex = column;
+            cellColumnIndex = row;
+            cellRowndex = column;
         }
 
-        public int RowIndex { get { return cRowIndex; } } //property interfaces
-        public int ColumnIndex { get { return cColumnIndex; } }
-        public string Value { get { return cValue; } }
+        public int RowIndex
+        {
+            get { return cellRowndex; }            
+        }
+        public int ColumnIndex
+        {
+            get { return cellColumnIndex; }        
+        }
+        public string Value
+        {
+            get { return cellParsedValue; }
+        }
 
         public string Text
         {
-            get { return cText; }
+            get { return cellText; }
             set
             {
-                if (value != cText)
+                if (value != cellText)
                 {
-                    cText = value;
+                    cellText = value;
                     OnPropertyChanged("text"); //event that the text was changed.
                 }
             }
