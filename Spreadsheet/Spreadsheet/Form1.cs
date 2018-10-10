@@ -24,15 +24,18 @@ namespace SpreadsheetForm
         private void Form1_Load(object sender, EventArgs e)
         {
             sheet = new Spreadsheet(26, 50);
-            sheet.CellPropertyChanged += Sheet_CellPropertyChanged; //adds listener to sheets event handler
+            sheet.CellPropertyChanged += Sheet_CellPropertyChanged; //subscribes to the sheets event handler
             MakeCells();
-            sheet.GetCell(1, 1).Text = "This is a test";
+            //sheet.GetCell(1, 1).Text = "This is a test";
+            dataGridView1.Rows[1].Cells[1].Value = "This is a test";
+            DemoCells();
         }
 
         private void Sheet_CellPropertyChanged(object sender, EventArgs e)
         {
             Cell cell = (Cell)sender; //casts sender as a cell
-            dataGridView1[cell.RowIndex, cell.ColumnIndex].Value = cell.Value; //updates the dataGridView's cells with the cells new value.
+            //dataGridView1.Rows[cell.RowIndex].Cells[1].Value = cell.Value; //updates the dataGridView's cells with the cells new value.
+            dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value; //updates the dataGridView's cells with the cells new value.
         }
 
         private void MakeCells()
@@ -51,6 +54,18 @@ namespace SpreadsheetForm
             dataGridView1.RowHeadersWidth = 50; //makes header big enough to see the numbers
         }
 
+        private void DemoCells()
+        {
+            Random rand = new Random();
+            for (int i = 0; i < 25; i++)
+            {
+                sheet.GetCell(rand.Next(25), rand.Next(50)).Text = "Random String";
+            }
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DemoCells();
+        }
     }
 }

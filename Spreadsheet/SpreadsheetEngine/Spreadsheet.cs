@@ -16,7 +16,7 @@ namespace CptS321
 
             public void SetValue(string value)
             {
-                cellText = value; //cellText from abstract cell class
+                cellParsedValue = value; //cellText from abstract cell class
             }
         }
 
@@ -46,6 +46,8 @@ namespace CptS321
        
         public Cell GetCell(int column, int row)
         {
+            if (column > columnCount || row > rowCount)
+                throw new IndexOutOfRangeException("GetCell");
             return cells[column, row];
         }
 
@@ -54,6 +56,9 @@ namespace CptS321
         {
             int column = strCoords[0] - 'A'; //subtacts an ascii A from the first part of the coordinate to get a number from 0 o 26.
             int row = Int32.Parse(strCoords.Substring(1)) - 1; //Removes the letter from the string and converts it to an int. Subtracts 1 because array indexes start at 0, not 1.
+
+            if (column > columnCount || row > rowCount)
+                throw new IndexOutOfRangeException("GetCell");
             return cells[column, row]; //returns that cell at the parsed location.
         }
 

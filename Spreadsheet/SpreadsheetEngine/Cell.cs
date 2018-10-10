@@ -11,7 +11,7 @@ namespace CptS321
     public abstract class Cell : INotifyPropertyChanged
     {
         protected int cellColumnIndex;
-        protected int cellRowndex;
+        protected int cellRowIndex;
         protected string cellText;
         protected string cellParsedValue;
 
@@ -19,13 +19,13 @@ namespace CptS321
 
         public Cell(int column, int row)
         {
-            cellColumnIndex = row;
-            cellRowndex = column;
+            cellColumnIndex = column;
+            cellRowIndex = row;
         }
 
         public int RowIndex
         {
-            get { return cellRowndex; }            
+            get { return cellRowIndex; }            
         }
         public int ColumnIndex
         {
