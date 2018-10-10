@@ -24,18 +24,9 @@ namespace CptS321
             cRowIndex = column;
         }
 
-        public int RowIndex
-        {
-            get { return cRowIndex; }            
-        }
-        public int ColumnIndex
-        {
-            get { return cColumnIndex; }        
-        }
-        public string Value
-        {
-            get { return cValue; }
-        }
+        public int RowIndex { get { return cRowIndex; } } //property interfaces
+        public int ColumnIndex { get { return cColumnIndex; } }
+        public string Value { get { return cValue; } }
 
         public string Text
         {
@@ -45,15 +36,15 @@ namespace CptS321
                 if (value != cText)
                 {
                     cText = value;
-                    //OnPropertyChanged("text"); //event that the text was changed.
+                    OnPropertyChanged("text"); //event that the text was changed.
                 }
             }
         }
 
-        protected void OnPropertChanged(string name)
+        protected void OnPropertyChanged(string name)
         {
-            //if (ProperyChanged != null)
-            //    PropertyChanged(this, new PropertyChangedEventArgs(name));
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
     }
 }
