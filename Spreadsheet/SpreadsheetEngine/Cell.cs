@@ -26,7 +26,34 @@ namespace CptS321
 
         public int RowIndex
         {
+            get { return cRowIndex; }            
+        }
+        public int ColumnIndex
+        {
+            get { return cColumnIndex; }        
+        }
+        public string Value
+        {
+            get { return cValue; }
+        }
 
+        public string Text
+        {
+            get { return cText; }
+            set
+            {
+                if (value != cText)
+                {
+                    cText = value;
+                    //OnPropertyChanged("text"); //event that the text was changed.
+                }
+            }
+        }
+
+        protected void OnPropertChanged(string name)
+        {
+            //if (ProperyChanged != null)
+            //    PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
     }
 }
