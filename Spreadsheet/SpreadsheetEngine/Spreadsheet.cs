@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace CptS321
 {
-    class Spreadsheet
+    public class Spreadsheet
     {
         private class SpreadsheetCell : Cell
         {

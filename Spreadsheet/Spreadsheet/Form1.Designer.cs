@@ -1,4 +1,4 @@
-﻿namespace Spreadsheet
+﻿namespace SpreadsheetForm
 {
     partial class Form1
     {

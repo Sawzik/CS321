@@ -8,8 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CptS321;
 
-namespace Spreadsheet
+namespace SpreadsheetForm
 {
     public partial class Form1 : Form
     {
@@ -18,12 +19,7 @@ namespace Spreadsheet
         public Form1()
         {
             InitializeComponent();
-            for (char i = 'A'; i != ('Z' + 1); i++) //counts up to Z
-            {
-                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
-                column.HeaderText = i.ToString();
-                dataGridView1.Columns.Add(column);
-            }
+
         }
     }
 }
