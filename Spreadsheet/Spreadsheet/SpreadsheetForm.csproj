@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{619C7074-97EA-4CE8-98C6-31816A0130C9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Spreadsheet</RootNamespace>
+    <RootNamespace>SpreadsheetForm</RootNamespace>
     <AssemblyName>Spreadsheet</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
