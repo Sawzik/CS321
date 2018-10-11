@@ -36,6 +36,8 @@ namespace SpreadsheetForm
             Cell cell = (Cell)sender; //casts sender as a cell
             //dataGridView1.Rows[cell.RowIndex].Cells[1].Value = cell.Value; //updates the dataGridView's cells with the cells new value.
             dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value; //updates the dataGridView's cells with the cells new value.
+            //string test = (string)dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value;
+           // Console.Write(test);
         }
 
         private void MakeCells()
@@ -57,12 +59,12 @@ namespace SpreadsheetForm
         private void DemoCells()
         {
             Random rand = new Random();
-            for (int i = 0; i < 25; i++)            
+            for (int i = 0; i < 25; i++)
                 sheet.GetCell(rand.Next(25), rand.Next(50)).Text = "Random String";
-            for(int i = 1; i < 50; i++)
-                sheet.GetCell(2, i).Text = "This is cell B" + i.ToString();
-            for (int i = 1; i < 50; i++)
-                sheet.GetCell(2, i).Text = "=B" + i.ToString();
+            for (int i = 0; i < 50; i++)
+                sheet.GetCell(1, i).Text = "This is cell B" + (i+1).ToString();
+            for (int i = 0; i < 50; i++)
+                sheet.GetCell(2, i).Text = "=B" + (i + 1).ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
