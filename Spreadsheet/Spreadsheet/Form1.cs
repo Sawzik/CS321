@@ -23,47 +23,47 @@ namespace SpreadsheetForm
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            sheet = new Spreadsheet(26, 50);
+            sheet = new Spreadsheet(26, 50); //makes a 50 by 26 spreadsheet
             sheet.CellPropertyChanged += Sheet_CellPropertyChanged; //subscribes to the sheets event handler
             MakeCells();
-            //sheet.GetCell(1, 1).Text = "This is a test";
-            dataGridView1.Rows[1].Cells[1].Value = "This is a test";
-            //DemoCells();
         }
 
         private void Sheet_CellPropertyChanged(object sender, EventArgs e)
         {
             Cell cell = (Cell)sender; //casts sender as a cell
-            //dataGridView1.Rows[cell.RowIndex].Cells[1].Value = cell.Value; //updates the dataGridView's cells with the cells new value.
             dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value; //updates the dataGridView's cells with the cells new value.
-            //string test = (string)dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value;
-           // Console.Write(test);
         }
 
         private void MakeCells()
         {
             for (char i = 'A'; i < 'Z' + 1 ; i++) //counts up to Z
             {
-                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
-                column.HeaderText = i.ToString();
-                dataGridView1.Columns.Add(column);
+                DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn(); //makes a column TextBox
+                column.HeaderText = i.ToString(); //sets the column header to the letter in its position
+                dataGridView1.Columns.Add(column); //adds the column into the dataGridView
             }
             for (int i = 0; i < 50; i++) //counts up to Z
             {
-                dataGridView1.Rows.Add();
-                dataGridView1.Rows[i].HeaderCell.Value = ((i + 1).ToString());
+                dataGridView1.Rows.Add(); //adds a row
+                dataGridView1.Rows[i].HeaderCell.Value = ((i + 1).ToString()); //then sets its header to the number of that row
             }
             dataGridView1.RowHeadersWidth = 50; //makes header big enough to see the numbers
         }
 
+        //demo to show that changing values in the spreadsheet changes them in the dataGridView
         private void DemoCells()
         {
+            //randomly puts "random string" in 50 cells
             Random rand = new Random();
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < 50; i++)
                 sheet.GetCell(rand.Next(25), rand.Next(50)).Text = "Random String";
-            for (int i = 0; i < 50; i++)
+
+            //fills all the cells in column B to "This is cell B#"
+            for (int i = 0; i < sheet.RowCount; i++)
                 sheet.GetCell(1, i).Text = "This is cell B" + (i+1).ToString();
-            for (int i = 0; i < 50; i++)
+
+            //fills all the cells in column C# to what is in B#
+            for (int i = 0; i < sheet.RowCount; i++)
                 sheet.GetCell(2, i).Text = "=B" + (i + 1).ToString();
         }
 

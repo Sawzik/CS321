@@ -21,10 +21,10 @@ namespace CptS321
         }
 
         private int columnCount;
-        private int rowCount;
-        public event PropertyChangedEventHandler CellPropertyChanged;
+        private int rowCount;        
         public int ColumnCount { get { return columnCount; } }
         public int RowCount { get { return rowCount; } }
+        public event PropertyChangedEventHandler CellPropertyChanged; //event that signals when a cell has changed
 
         private SpreadsheetCell[,] cells;
         public Spreadsheet(int columns, int rows)
@@ -33,7 +33,6 @@ namespace CptS321
             rowCount = rows;
 
             cells = new SpreadsheetCell[columns, rows]; //allocating memory
-
             for (int i = 0; i < columns; i++)
             {
                 for (int j = 0; j < rows; j++)
@@ -43,7 +42,8 @@ namespace CptS321
                 }
             }
         }
-       
+        
+        //gets a cell at a position in the spreadsheet
         public Cell GetCell(int column, int row)
         {
             if (column > columnCount || row > rowCount)
@@ -75,8 +75,7 @@ namespace CptS321
             var cell = (SpreadsheetCell)sender; //casts the sending object as a SpreadsheetCell
             cell.SetValue(CalculateValue(cell.Text)); //updates cell value if it needs to be
 
-            if (CellPropertyChanged != null) //only calls event if the property is actually changed.
-                CellPropertyChanged(sender, e);
+            CellPropertyChanged?.Invoke(sender, e); //fancy way to only call if CellPropertyChanged isnt null
         }
     }
 }

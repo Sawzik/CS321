@@ -15,35 +15,28 @@ namespace CptS321
         protected string cellText;
         protected string cellParsedValue;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged; //event to handle when a property of a cell changes
 
+        //constructor that sets column and row indexes.
         public Cell(int column, int row)
         {
             cellColumnIndex = column;
             cellRowIndex = row;
         }
 
-        public int RowIndex
-        {
-            get { return cellRowIndex; }            
-        }
-        public int ColumnIndex
-        {
-            get { return cellColumnIndex; }        
-        }
-        public string Value
-        {
-            get { return cellParsedValue; }
-        }
+        //getters of cell properties.
+        public int RowIndex { get { return cellRowIndex; } }
+        public int ColumnIndex { get { return cellColumnIndex; } }
+        public string Value { get { return cellParsedValue; } }
 
         public string Text
         {
             get { return cellText; }
             set
             {
-                if (value != cellText)
+                if (value != cellText) //if the value being set is different than what is already in the cell.
                 {
-                    cellText = value;
+                    cellText = value; //change the value
                     OnPropertyChanged("text"); //event that the text was changed.
                 }
             }
@@ -51,8 +44,7 @@ namespace CptS321
 
         protected void OnPropertyChanged(string name)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); //fancy way of only using PropertyChanged if it isn't null
         }
     }
 }
