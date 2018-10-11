@@ -28,7 +28,7 @@ namespace SpreadsheetForm
             MakeCells();
             //sheet.GetCell(1, 1).Text = "This is a test";
             dataGridView1.Rows[1].Cells[1].Value = "This is a test";
-            DemoCells();
+            //DemoCells();
         }
 
         private void Sheet_CellPropertyChanged(object sender, EventArgs e)
@@ -57,10 +57,12 @@ namespace SpreadsheetForm
         private void DemoCells()
         {
             Random rand = new Random();
-            for (int i = 0; i < 25; i++)
-            {
+            for (int i = 0; i < 25; i++)            
                 sheet.GetCell(rand.Next(25), rand.Next(50)).Text = "Random String";
-            }
+            for(int i = 1; i < 50; i++)
+                sheet.GetCell(2, i).Text = "This is cell B" + i.ToString();
+            for (int i = 1; i < 50; i++)
+                sheet.GetCell(2, i).Text = "=B" + i.ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
