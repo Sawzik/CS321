@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace CptS321
 {
-    class ExpTree
+    public class ExpTree
     {
-        ExpTree(string expression)
-        {
+        
 
+        public ExpTree(string expression)
+        {
+            Regex StringParser = new Regex(@"(?<Variable>\w+)[+-/*]");
         }
 
-        void SetVar(string varName, double varValue)
+        public void SetVar(string varName, double varValue)
         {
 
         }
