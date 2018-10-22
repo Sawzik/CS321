@@ -66,7 +66,7 @@ namespace CptS321
 
         public VariableNode(ref ExpNode leftNode, ref ExpNode rightNode) : base(ref leftNode, ref rightNode) { } //uses the base cell class constructor.
 
-        public VariableNode(ref ExpNode leftNode, ref ExpNode rightNode, double numValInput = 0, string varInput = "NoData")
+        public VariableNode(ref ExpNode leftNode, ref ExpNode rightNode, string varInput = "NoData", double numValInput = 0)
         {
             left = leftNode;
             right = rightNode;
@@ -74,7 +74,7 @@ namespace CptS321
             variable = varInput;
         }
 
-        public VariableNode(double numValInput = 0, string varInput = "NoData")
+        public VariableNode(string varInput = "NoData", double numValInput = 0)
         {
             left = null;
             right = null;

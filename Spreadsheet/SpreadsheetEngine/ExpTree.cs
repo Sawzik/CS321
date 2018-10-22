@@ -13,40 +13,53 @@ namespace CptS321
 
         public ExpTree(string expression)
         {
-            Regex varRegex = new Regex(@"[/\*-+]?(?<var>\w+\z?)");
+            Regex varRegex = new Regex(@"(?<var>\w+\z?)");
             Regex opRegex = new Regex(@"(?<op>\-|\+|/|\*)");
 
-            MatchCollection variables = varRegex.Matches(expression);
-            MatchCollection operators = opRegex.Matches(expression);
+            Match variables = varRegex.Match(expression);
+            Match operators = opRegex.Match(expression);
 
-            Console.WriteLine("{0} variables found in: {1}", variables.Count, expression);
-            foreach (Match match in variables)
+
+            while (operators.Success)
             {
-                Console.WriteLine("\t'{0}' at '{1}'\n", match.Value, match.Index);
-                double number;
-                bool isDouble = double.TryParse(match.Value, out number);
-                if (isDouble)
-                {
-                    NumericalNode varNode = new NumericalNode(number);
-                }
+                Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.Value, variables.Index, variables.Index + variables.Length);
+                Console.WriteLine("Operator {0} at index [{1}, {2}]", operators.Value, operators.Index, operators.Index + operators.Length);
+                Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.NextMatch().Value, variables.NextMatch().Index, variables.NextMatch().Index + variables.NextMatch().Length);
                 
-            }
+                ExpNode leftNode = makeDataNode(variables.Value);
+                ExpNode rightNode = makeDataNode(variables.NextMatch().Value);
+                OperatorNode opNode = new OperatorNode(ref leftNode, ref rightNode, operators.Value[0]);
 
-            Console.WriteLine("{0} operators found in: {1}", operators.Count, expression);
-            foreach (Match match in operators)
+                operators = operators.NextMatch();
+                variables = variables.NextMatch().NextMatch();
+            }
+            
+        }
+
+        private ExpNode makeDataNode(string operand)
+        {
+            double number;
+            bool isDouble = double.TryParse(operand, out number);
+            if (isDouble)
             {
-                Console.WriteLine("\t'{0}' at '{1}'\n", match.Value, match.Index);
+                NumericalNode numNode = new NumericalNode(number);
+                return numNode;
+            }
+            else
+            {
+                VariableNode varNode = new VariableNode(operand);
+                return varNode;
             }
         }
 
-        private void ConstructTree()
+        private void ConstructTree(ref ExpNode currRoot)
         {
 
         }
 
         public void SetVar(string varName, double varValue)
         {
-            VariableNode search = new VariableNode(varValue, varName);
+            VariableNode search = new VariableNode(varName, varValue);
             SetVarNode(ref search, ref root);
         }
 
