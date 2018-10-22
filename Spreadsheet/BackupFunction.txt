@@ -1,0 +1,31 @@
+Regex varRegex = new Regex(@"[/\*-+]?(?<var>\w+\z?)");
+            Regex opRegex = new Regex(@"(?<op>\-|\+|/|\*)");
+
+            MatchCollection variables = varRegex.Matches(expression);
+            MatchCollection operators = opRegex.Matches(expression);
+
+            Console.WriteLine("{0} matches found in:\n\t{1}",
+                          variables.Count,
+                          expression);
+            Console.WriteLine("{0} matches found in:\n\t{1}",
+                          operators.Count,
+                          expression);
+
+            //foreach (Match match in variables)
+            //{
+            //    GroupCollection groups = match.Groups;
+
+            //    Console.WriteLine("'{0}'\n", groups["var"].Value);
+            //}
+
+            foreach (Match match in variables)
+            {
+                Console.WriteLine("'{0}'\n", match.Value);
+            }
+
+            foreach (Match match in operators)
+            {
+                GroupCollection groups = match.Groups;
+
+                Console.WriteLine("'{0}'\n", groups["op"].Value);
+            }

@@ -11,6 +11,12 @@ namespace CptS321
         protected ExpNode left;
         protected ExpNode right;
 
+        public ExpNode()
+        {
+            left = null;
+            right = null;
+        }
+
         public ExpNode(ref ExpNode leftNode, ref ExpNode rightNode)
         {
             left = leftNode;
@@ -92,9 +98,15 @@ namespace CptS321
                 switch(Operator)
                 {
                     case '-':
+                        return this.left.Eval() - this.right.Eval();
+                    case '+':
                         return this.left.Eval() + this.right.Eval();
+                    case '/':
+                        return this.left.Eval() / this.right.Eval();
+                    case '*':
+                        return this.left.Eval() * this.right.Eval();
                 }
-            
+            return 0.0; 
         }
     }
 }
