@@ -9,11 +9,10 @@ namespace CptS321
 {
     public class ExpTree
     {
-        
 
         public ExpTree(string expression)
         {
-            Regex StringParser = new Regex(@"(?<Variable>\w+)[+-/*]");
+            Regex StringParser = new Regex(@"(\w+)[+-/*]");
         }
 
         public void SetVar(string varName, double varValue)
