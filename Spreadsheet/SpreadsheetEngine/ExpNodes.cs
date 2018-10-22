@@ -8,8 +8,8 @@ namespace CptS321
 {
     public abstract class ExpNode
     {
-        ExpNode left;
-        ExpNode right;
+        protected ExpNode left;
+        protected ExpNode right;
 
         public ExpNode(ref ExpNode leftNode, ref ExpNode rightNode)
         {
@@ -28,6 +28,8 @@ namespace CptS321
             set { right = value; }
             get { return right; }
         }
+
+        public abstract double Eval();
     }
 
     public class NumericalNode : ExpNode
@@ -40,6 +42,11 @@ namespace CptS321
         {
             set { numericalValue = value; }
             get { return numericalValue; }
+        }
+
+        public override double Eval()
+        {
+            return numericalValue;
         }
     }
 
@@ -61,6 +68,11 @@ namespace CptS321
             set { variable = value; }
             get { return variable; }
         }
+
+        public override double Eval()
+        {
+            return numericalValue;
+        }
     }
 
     public class OperatorNode : ExpNode
@@ -73,6 +85,16 @@ namespace CptS321
         {
             set { operation = value; }
             get { return operation; }
+        }
+
+        public override double Eval()
+        {
+                switch(Operator)
+                {
+                    case '-':
+                        return this.left.Eval() + this.right.Eval();
+                }
+            
         }
     }
 }
