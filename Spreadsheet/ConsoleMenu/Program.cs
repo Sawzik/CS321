@@ -12,7 +12,10 @@ namespace ConsoleMenu
     {
         static void Main(string[] args)
         {
-            ExpTree tree = new ExpTree("A1-A2-B4-memes");
+            ConsoleInterface Despacito = new ConsoleInterface();
+
+            int outnumber;
+            Console.WriteLine(Int32.TryParse("1A", out outnumber));
 
             Console.ReadKey();
         }

@@ -23,18 +23,10 @@ namespace CptS321
             right = rightNode;
         }
 
-        public ExpNode LeftNode
-        {
-            set { left = value; }
-            get { return left; }
-        }
-
-        public ExpNode RightNode
-        {
-            set { right = value; }
-            get { return right; }
-        }
-
+        public ref ExpNode GetLeftNode() { return ref left; }
+        public ref ExpNode GetRightNode() { return ref right; }
+        public void SetLeftNode(ref ExpNode node) { left = node; }       
+        public void SetRightNode(ref ExpNode node) { right = node; }
         public abstract double Eval();
     }
 
@@ -44,16 +36,27 @@ namespace CptS321
 
         public NumericalNode(ref ExpNode leftNode, ref ExpNode rightNode) : base(ref leftNode, ref rightNode) { } //uses the base cell class constructor.
 
+        public NumericalNode(ref ExpNode leftNode, ref ExpNode rightNode, double numValInput)
+        {
+            left = leftNode;
+            right = rightNode;
+            numericalValue = numValInput;
+        }
+
+        public NumericalNode(double numValInput)
+        {
+            left = null;
+            right = null;
+            numericalValue = numValInput;
+        }
+
         public double Value
         {
             set { numericalValue = value; }
             get { return numericalValue; }
         }
 
-        public override double Eval()
-        {
-            return numericalValue;
-        }
+        public override double Eval() { return numericalValue; }
     }
 
     public class VariableNode : ExpNode
@@ -62,6 +65,22 @@ namespace CptS321
         string variable;
 
         public VariableNode(ref ExpNode leftNode, ref ExpNode rightNode) : base(ref leftNode, ref rightNode) { } //uses the base cell class constructor.
+
+        public VariableNode(ref ExpNode leftNode, ref ExpNode rightNode, double numValInput = 0, string varInput = "NoData")
+        {
+            left = leftNode;
+            right = rightNode;
+            numericalValue = numValInput;
+            variable = varInput;
+        }
+
+        public VariableNode(double numValInput = 0, string varInput = "NoData")
+        {
+            left = null;
+            right = null;
+            numericalValue = numValInput;
+            variable = varInput;
+        }
 
         public double Value
         {
@@ -75,9 +94,13 @@ namespace CptS321
             get { return variable; }
         }
 
-        public override double Eval()
+        public override double Eval() { return numericalValue; }
+
+        public void CopyNode(VariableNode copyNode)
         {
-            return numericalValue;
+            this.SetLeftNode(ref copyNode.GetLeftNode());
+            this.SetRightNode(ref copyNode.GetRightNode());
+            this.numericalValue = copyNode.numericalValue;
         }
     }
 
@@ -86,6 +109,20 @@ namespace CptS321
         char operation;
 
         public OperatorNode(ref ExpNode leftNode, ref ExpNode rightNode) : base(ref leftNode, ref rightNode) { } //uses the base cell class constructor.
+
+        public OperatorNode(ref ExpNode leftNode, ref ExpNode rightNode, char opInput = '!')
+        {
+            left = leftNode;
+            right = rightNode;
+            operation = opInput;
+        }
+
+        public OperatorNode(char opInput)
+        {
+            left = null;
+            right = null;
+            operation = opInput;
+        }
 
         public char Operator
         {
