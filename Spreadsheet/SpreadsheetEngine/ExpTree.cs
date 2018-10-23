@@ -9,7 +9,7 @@ namespace CptS321
 {
     public class ExpTree
     {
-        ExpNode root;
+        ExpNode root = null;
 
         public ExpTree(string expression)
         {
@@ -19,15 +19,26 @@ namespace CptS321
             Match variables = varRegex.Match(expression);
             Match operators = opRegex.Match(expression);
 
-            if (operators.Success) //assuming user input is correct. If there is an operator, it will call constructTree
+            if (operators.Success) //assuming user input is correct. If there is an operator
             {
-                Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.Value, variables.Index, variables.Index + variables.Length);
-                Console.WriteLine("Operator {0} at index [{1}, {2}]", operators.Value, operators.Index, operators.Index + operators.Length);
-                Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.NextMatch().Value, variables.NextMatch().Index, variables.NextMatch().Index + variables.NextMatch().Length);
+                ExpNode node = root; //saves root in currRoot
+                do
+                {
+                    ExpNode leftNode = MakeDataNode(variables.Value);
+                    if (operators.Success) // if there are more operators that need to be loaded
+                    {
+                        root = new OperatorNode(ref leftNode, operators.Value[0]);
+                        root = (root as OperatorNode).Right();
+                    }
+                    else //when there are no more operations to load
+                    {
+                        root = MakeDataNode(variables.Value);
+                    }
+                    operators = operators.NextMatch();
+                    variables = variables.NextMatch();
+                } while (variables.Success);
 
-                ExpNode firstLeftNode = MakeDataNode(variables.Value);
-                variables = variables.NextMatch();
-                ConstructTree(ref root, ref firstLeftNode, ref variables, ref operators);
+                Console.WriteLine("memes");
             }
             else
             {
@@ -37,25 +48,22 @@ namespace CptS321
 
         private void ConstructTree(ref ExpNode currRoot, ref ExpNode leftSideNode, ref Match variables, ref Match operators)
         {
-           
-            if (operators.NextMatch().Success) // if there are more operators that need to be loaded
-            {
-                currRoot = new OperatorNode(ref leftSideNode, operators.Value[0]);
-                currRoot = (currRoot as OperatorNode).Right();
-                Console.WriteLine();
-            }
-            //else //when there are no more operations to load
-            //{
-            //    ExpNode rightNode = MakeDataNode(variables.Value);
-            //    OperatorNode opNode = new OperatorNode(ref leftSideNode, ref rightNode, operators.Value[0]);
-            //    currRoot = opNode;
-            //}
 
+            ExpNode leftNode = MakeDataNode(variables.Value);
+            if (operators.Success) // if there are more operators that need to be loaded
+            {
+                root = new OperatorNode(ref leftNode, operators.Value[0]);
+                //root = (root as OperatorNode).Right();
+            }
+            else //when there are no more operations to load
+            {
+                root = MakeDataNode(variables.Value);
+            }
             operators = operators.NextMatch();
             variables = variables.NextMatch();
-            leftSideNode = MakeDataNode(variables.Value);
+
             if (variables.Success)
-                ConstructTree(ref currRoot, ref leftSideNode, ref variables, ref operators);
+                ConstructTree(ref (currRoot as OperatorNode).Right(), ref leftSideNode, ref variables, ref operators);
         }
 
         private ExpNode MakeDataNode(string operand)
