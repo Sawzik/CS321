@@ -19,24 +19,46 @@ namespace CptS321
             Match variables = varRegex.Match(expression);
             Match operators = opRegex.Match(expression);
 
-
-            while (operators.Success)
+            if (operators.Success) //assuming user input is correct. If there is an operator, it will call constructTree
             {
                 Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.Value, variables.Index, variables.Index + variables.Length);
                 Console.WriteLine("Operator {0} at index [{1}, {2}]", operators.Value, operators.Index, operators.Index + operators.Length);
                 Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.NextMatch().Value, variables.NextMatch().Index, variables.NextMatch().Index + variables.NextMatch().Length);
-                
-                ExpNode leftNode = makeDataNode(variables.Value);
-                ExpNode rightNode = makeDataNode(variables.NextMatch().Value);
-                OperatorNode opNode = new OperatorNode(ref leftNode, ref rightNode, operators.Value[0]);
 
-                operators = operators.NextMatch();
-                variables = variables.NextMatch().NextMatch();
+                ExpNode firstLeftNode = MakeDataNode(variables.Value);
+                variables = variables.NextMatch();
+                ConstructTree(ref root, ref firstLeftNode, ref variables, ref operators);
             }
-            
+            else
+            {
+                root = MakeDataNode(variables.Value); //sets the root to a single variable/numerical Node
+            }
         }
 
-        private ExpNode makeDataNode(string operand)
+        private void ConstructTree(ref ExpNode currRoot, ref ExpNode leftSideNode, ref Match variables, ref Match operators)
+        {
+           
+            if (operators.NextMatch().Success) // if there are more operators that need to be loaded
+            {
+                currRoot = new OperatorNode(ref leftSideNode, operators.Value[0]);
+                currRoot = (currRoot as OperatorNode).Right();
+                Console.WriteLine();
+            }
+            //else //when there are no more operations to load
+            //{
+            //    ExpNode rightNode = MakeDataNode(variables.Value);
+            //    OperatorNode opNode = new OperatorNode(ref leftSideNode, ref rightNode, operators.Value[0]);
+            //    currRoot = opNode;
+            //}
+
+            operators = operators.NextMatch();
+            variables = variables.NextMatch();
+            leftSideNode = MakeDataNode(variables.Value);
+            if (variables.Success)
+                ConstructTree(ref currRoot, ref leftSideNode, ref variables, ref operators);
+        }
+
+        private ExpNode MakeDataNode(string operand)
         {
             double number;
             bool isDouble = double.TryParse(operand, out number);
@@ -52,28 +74,24 @@ namespace CptS321
             }
         }
 
-        private void ConstructTree(ref ExpNode currRoot)
-        {
+        //public void SetVar(string varName, double varValue)
+        //{
+        //    VariableNode search = new VariableNode(varName, varValue);
+        //    if (root as VariableNode != null)
+        //        SetVarNode(ref search, ref root as OperatorNode);
+        //}
 
-        }
+        //private void SetVarNode(ref VariableNode input, ref OperatorNode node)
+        //{
+        //    if (VariableNodeCompare(input, node.Left()))
+        //    {
+        //        ref VariableNode nodeAsVar = ref node as VariableNode;
+        //        nodeAsVar.CopyNode(input);
+        //    }
 
-        public void SetVar(string varName, double varValue)
-        {
-            VariableNode search = new VariableNode(varName, varValue);
-            SetVarNode(ref search, ref root);
-        }
-
-        private void SetVarNode(ref VariableNode input, ref ExpNode node)
-        {
-            if (VariableNodeCompare(input, node))
-            {
-                VariableNode nodeAsVar = node as VariableNode;
-                nodeAsVar.CopyNode(input);
-            }
-
-            SetVarNode(ref input, ref node.GetLeftNode() ); //check left subtree
-            SetVarNode(ref input, ref node.GetRightNode() ); //check right subtree
-        }
+        //    SetVarNode(ref input, ref node.Left() ); //check left subtree
+        //    SetVarNode(ref input, ref node.Right() ); //check right subtree
+        //}
 
         public bool VariableNodeCompare(ExpNode inputLeftNode, ExpNode inputRightNode)
         {

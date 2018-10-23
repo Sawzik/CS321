@@ -14,8 +14,8 @@ namespace ConsoleMenu
         {
             ConsoleInterface Despacito = new ConsoleInterface();
 
-            int outnumber;
-            Console.WriteLine(Int32.TryParse("1A", out outnumber));
+            //int outnumber;
+            //Console.WriteLine(Int32.TryParse("1A", out outnumber));
 
             Console.ReadKey();
         }
