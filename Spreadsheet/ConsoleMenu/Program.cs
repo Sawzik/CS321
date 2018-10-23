@@ -39,17 +39,17 @@ namespace ConsoleMenu
                             string userInputVariable = Console.ReadLine();
                             Console.Write("Enter variable value: ");
                             string userInputValue = Console.ReadLine();
-                            double parsedDouble;
-                            bool isDouble = double.TryParse(userInputValue, out parsedDouble);
-                            if (isDouble)
-                                tree.SetVar(userInputVariable, number);
+                            double parsedDouble; //used to store the value of the double
+                            bool isDouble = double.TryParse(userInputValue, out parsedDouble); //stores the user input as a double if it is a double
+                            if (isDouble) //if the value inputted was a double
+                                tree.SetVar(userInputVariable, number); //set the variable to that double
                             break;
                         case 3:
                             Console.WriteLine(tree.Eval());
                             break;
                     }
                 }
-            } while (number != 4);
+            } while (number != 4); //runs until 4 is typed in and then falls out to main.
         }
     }
 }

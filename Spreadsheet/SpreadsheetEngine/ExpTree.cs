@@ -10,12 +10,12 @@ namespace CptS321
     public class ExpTree
     {
         ExpNode root = null;
-        string StringExpression;
+        string StringExpression; //used to sabe the expression for display purposes. Can just use a tree traversal later.
 
         public ExpTree(string expression)
         {
-            StringExpression = expression; //saves the expression for display purposes. Can just use a tree traversal later.
-            root = ConstructTree(expression);
+            StringExpression = expression; //saves the expression for display purposes
+            root = ConstructTree(expression); //constructs the tree at the root
         }
 
         private ExpNode ConstructTree(string expression)
@@ -48,18 +48,19 @@ namespace CptS321
             return MakeDataNode(var.Value);
         }
 
+        //simple function that turns a string into a Data node.
         private ExpNode MakeDataNode(string operand)
         {
             double number;
-            bool isDouble = double.TryParse(operand, out number);
+            bool isDouble = double.TryParse(operand, out number); //only stores the operand in number if it is actually a double
             if (isDouble)
             {
-                NumericalNode numNode = new NumericalNode(number);
+                NumericalNode numNode = new NumericalNode(number); //makes a Numerical node with the operand's value
                 return numNode;
             }
             else
             {
-                VariableNode varNode = new VariableNode(operand);
+                VariableNode varNode = new VariableNode(operand); //makes a variable node with the operands variable name. 
                 return varNode;
             }
         }
@@ -67,9 +68,9 @@ namespace CptS321
         public void SetVar(string varName, double varValue)
         {
             VariableNode search = new VariableNode(varName, varValue); //creating a node so that it is easier to compare between nodes. This node stores the value of the new variable
-            if (root as OperatorNode != null) //if the root is an operator node
+            if (root as OperatorNode != null) //if root is an operator node
                 SetVarNode(ref search, root as OperatorNode);
-            else if (VariableNodeCompare(search, root))
+            else if (VariableNodeCompare(search, root)) //if root is a Variable node and has the same variable name
             {
                 (root as VariableNode).Value = varValue; //sets the root value to the new variable
             }
@@ -77,11 +78,11 @@ namespace CptS321
 
         private void SetVarNode(ref VariableNode input, OperatorNode node)
         {
-            if (VariableNodeCompare(input, node.left))
+            if (VariableNodeCompare(input, node.left)) //if the left node is a Variable node and has the same variable name
             {
                 (node.left as VariableNode).Value = input.Value;
             }
-            else if (VariableNodeCompare(input, node.right))
+            else if (VariableNodeCompare(input, node.right)) //if the right node is a Variable node and has the same variable name
             {
                 (node.right as VariableNode).Value = input.Value;
             }

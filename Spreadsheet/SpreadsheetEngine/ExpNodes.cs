@@ -15,18 +15,18 @@ namespace CptS321
     {
         double numericalValue;
 
-        public NumericalNode(double numValInput)
+        public NumericalNode(double numValInput) //constructor for a NumericalNode.
         {
-            numericalValue = numValInput;
+            numericalValue = numValInput; //initializes numericalValue
         }
 
-        public double Value
+        public double Value //getter/setter for numericalValue
         {
             set { numericalValue = value; }
             get { return numericalValue; }
         }
 
-        public override double Eval() { return numericalValue; }
+        public override double Eval() { return numericalValue; } //evaluation of a numerical node is just it's value
     }
 
     public class VariableNode : ExpNode
@@ -34,74 +34,74 @@ namespace CptS321
         double numericalValue;
         string variable;
 
-        public VariableNode(string varInput = "NoData", double numValInput = 0)
+        public VariableNode(string varInput = "NoData", double numValInput = 0) //constructor for the variablenode with defaults if no data is specified
         {
             numericalValue = numValInput;
             variable = varInput;
         }
 
-        public double Value
+        public double Value //getter/setter for numericalValue
         {
             set { numericalValue = value; }
             get { return numericalValue; }
         }
 
-        public string Variable
+        public string Variable //getter/setter for Variable
         {
             set { variable = value; }
             get { return variable; }
         }
 
-        public override double Eval() { return numericalValue; }
+        public override double Eval() { return numericalValue; } //evaluation of a variable node is just it's value
     }
 
     public class OperatorNode : ExpNode
     {
-        public ExpNode left;
+        public ExpNode left; //this is the only kind of node that can have children
         public ExpNode right;
         char operation;
 
-        public OperatorNode(ref ExpNode leftNode, ref ExpNode rightNode, char opInput = '!')
+        public OperatorNode(ref ExpNode leftNode, ref ExpNode rightNode, char opInput = '!') //extended constructor with all fields
         {
             left = leftNode;
             right = rightNode;
             operation = opInput;
         }
 
-        public OperatorNode(ref ExpNode leftNode, char opInput = '!')
+        public OperatorNode(ref ExpNode leftNode, char opInput = '!') // constructor used in factory. Deals with the left node only
         {
             left = leftNode;
             right = null;
             operation = opInput;
         }
 
-        public OperatorNode(char opInput = '!')
+        public OperatorNode(char opInput = '!') // constructor for a node with no children
         {
             left = null;
             right = null;
             operation = opInput;
         }
 
-        public char Operator
+        public char Operator //getter/setter for the operator
         {
             set { operation = value; }
             get { return operation; }
         }
 
-        public override double Eval()
+        public override double Eval() //OperatorNodes need to hand evalutaion based on their operator
         {
-                switch(Operator)
-                {
-                    case '-':
-                        return this.left.Eval() - this.right.Eval();
-                    case '+':
-                        return this.left.Eval() + this.right.Eval();
-                    case '/':
-                        return this.left.Eval() / this.right.Eval();
-                    case '*':
-                        return this.left.Eval() * this.right.Eval();
-                }
-            return 0.0; 
+            switch (Operator)
+            {
+                case '-':
+                    return this.left.Eval() - this.right.Eval(); //traverses left and right subtrees, calling the eval function and returning their operation.
+                case '+':
+                    return this.left.Eval() + this.right.Eval();
+                case '/':
+                    return this.left.Eval() / this.right.Eval();
+                case '*':
+                    return this.left.Eval() * this.right.Eval();
+            }
+            return 0.0; //return value for a non specified operator.
         }
     }
 }
