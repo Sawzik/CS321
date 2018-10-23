@@ -14,23 +14,8 @@ namespace CptS321
 
         public ExpTree(string expression)
         {
-            StringExpression = expression;
-            Regex varRegex = new Regex(@"(?<var>\w+\z?)");
-            Regex opRegex = new Regex(@"(?<op>\-|\+|/|\*)");
-
-            MatchCollection variables = varRegex.Matches(expression);
-            MatchCollection operators = opRegex.Matches(expression);
-
-
-            if (operators.Count > 0) //assuming user input is correct. If there is an operator
-            {
-                root = ConstructTree(expression);
-            }
-            else
-            {
-                root = MakeDataNode(variables[0].Value); //sets the root to a single variable/numerical Node
-            }
-            Console.WriteLine("MEMES");
+            StringExpression = expression; //saves the expression for display purposes. Can just use a tree traversal later.
+            root = ConstructTree(expression);
         }
 
         private ExpNode ConstructTree(string expression)
@@ -53,7 +38,7 @@ namespace CptS321
                     }
                 }
             }
-            return MakeDataNode(var.Value);
+            return MakeDataNode(var.Value); //if there is no operators, then this must be a variable or value.
         }
 
         private ExpNode ConstructNode(string expression)
@@ -62,20 +47,6 @@ namespace CptS321
             Match var = varRegex.Match(expression);
             return MakeDataNode(var.Value);
         }
-
-        //private void ConstructTree(ref ExpNode currNode, Match variables, Match operators)
-        //{
-        //    if (operators.Success) // if there are more operators that need to be loaded
-        //    {
-        //        currNode = new OperatorNode(operators.Value[0]);
-        //        ConstructTree(ref (currNode as OperatorNode).Right(), variables.NextMatch(), operators.NextMatch());
-        //        (currNode as OperatorNode).Left() = MakeDataNode(variables.Value); // Assinging left node to the current Valriable match
-        //    }
-        //    else //when there are no more operations to load
-        //    {
-        //        currNode = MakeDataNode(variables.Value);
-        //    }
-        //}
 
         private ExpNode MakeDataNode(string operand)
         {
@@ -93,34 +64,46 @@ namespace CptS321
             }
         }
 
-        //public void SetVar(string varName, double varValue)
-        //{
-        //    VariableNode search = new VariableNode(varName, varValue);
-        //    if (root as VariableNode != null)
-        //        SetVarNode(ref search, ref (root as OperatorNode));
-        //}
+        public void SetVar(string varName, double varValue)
+        {
+            VariableNode search = new VariableNode(varName, varValue); //creating a node so that it is easier to compare between nodes. This node stores the value of the new variable
+            if (root as OperatorNode != null) //if the root is an operator node
+                SetVarNode(ref search, root as OperatorNode);
+            else if (VariableNodeCompare(search, root))
+            {
+                (root as VariableNode).Value = varValue; //sets the root value to the new variable
+            }
+        }
 
-        //private void SetVarNode(ref VariableNode input, ref OperatorNode node)
-        //{
-        //    if (VariableNodeCompare(input, node.Left()))
-        //    {
-        //        ref VariableNode nodeAsVar = ref node as VariableNode;
-        //        nodeAsVar.CopyNode(input);
-        //    }
+        private void SetVarNode(ref VariableNode input, OperatorNode node)
+        {
+            if (VariableNodeCompare(input, node.left))
+            {
+                (node.left as VariableNode).Value = input.Value;
+            }
+            else if (VariableNodeCompare(input, node.right))
+            {
+                (node.right as VariableNode).Value = input.Value;
+            }
+            else
+            {
+                if (node.right as OperatorNode != null) //if the right side node is an operator node
+                    SetVarNode(ref input, node.right as OperatorNode); //check right subtree
+                if (node.left as OperatorNode != null) //if the right side node is an operator node
+                    SetVarNode(ref input, node.left as OperatorNode); //check right subtree
+            }
+        }
 
-        //    SetVarNode(ref input, ref node.Left()); //check left subtree
-        //    SetVarNode(ref input, ref node.Right()); //check right subtree
-        //}
-
-        public string ToString()
+        public override string ToString()
         {
             return StringExpression;
         }
 
-        public bool VariableNodeCompare(ExpNode inputLeftNode, ExpNode inputRightNode)
+        //returns true only if both nodes are VariableNodes and the names of the variables are the same.
+        public bool VariableNodeCompare(ExpNode inputLeftNode, ExpNode inputRightNode) 
         {
-            VariableNode leftNodeAsVar = (VariableNode)inputLeftNode;
-            VariableNode righttNodeAsVar = (VariableNode)inputRightNode;
+            VariableNode leftNodeAsVar = inputLeftNode as VariableNode;
+            VariableNode righttNodeAsVar = inputRightNode as VariableNode;
             if (leftNodeAsVar == null || righttNodeAsVar == null) //both are null, so they are not both variableNodes, and are not equal
                 return false;
             if (leftNodeAsVar.Variable == righttNodeAsVar.Variable) //variables match the same string

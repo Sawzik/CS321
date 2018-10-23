@@ -12,12 +12,14 @@ namespace ConsoleMenu
     {
         static void Main(string[] args)
         {
-            ExpTree tree = new ExpTree("100-10-20"); //default starting value of our Expression tree.
+            ExpTree tree = new ExpTree("A+B+3"); //default starting value of our Expression tree.
             int number = 0;
 
+            tree.SetVar("A", 2); //setting some example values to the variables
+            tree.SetVar("B", 5);
             do
             {
-                Console.WriteLine("Menu: (current expression: {0})", tree.ToString());
+                Console.WriteLine("Menu: (current expression: {0})", tree.ToString()); //menu
                 Console.WriteLine("\t1 = Enter a new expression");
                 Console.WriteLine("\t2 = Set a variable value");
                 Console.WriteLine("\t3 = Evaluate tree");
@@ -30,14 +32,17 @@ namespace ConsoleMenu
                         case 1:
                             Console.Write("Enter new expression: ");
                             string userInput = Console.ReadLine();
-                            tree = new ExpTree(userInput);
+                            tree = new ExpTree(userInput); //makes a new tree with the new expression
                             break;
                         case 2:
                             Console.Write("Enter variable name: ");
                             string userInputVariable = Console.ReadLine();
                             Console.Write("Enter variable value: ");
                             string userInputValue = Console.ReadLine();
-                            //tree.SetVar(userInputVariable, userInputValue);
+                            double parsedDouble;
+                            bool isDouble = double.TryParse(userInputValue, out parsedDouble);
+                            if (isDouble)
+                                tree.SetVar(userInputVariable, number);
                             break;
                         case 3:
                             Console.WriteLine(tree.Eval());
