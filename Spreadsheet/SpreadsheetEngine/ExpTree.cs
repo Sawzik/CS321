@@ -10,9 +10,11 @@ namespace CptS321
     public class ExpTree
     {
         ExpNode root = null;
+        string StringExpression;
 
         public ExpTree(string expression)
         {
+            StringExpression = expression;
             Regex varRegex = new Regex(@"(?<var>\w+\z?)");
             Regex opRegex = new Regex(@"(?<op>\-|\+|/|\*)");
 
@@ -21,49 +23,33 @@ namespace CptS321
 
             if (operators.Success) //assuming user input is correct. If there is an operator
             {
-                ExpNode node = root; //saves root in currRoot
-                do
-                {
-                    ExpNode leftNode = MakeDataNode(variables.Value);
-                    if (operators.Success) // if there are more operators that need to be loaded
-                    {
-                        root = new OperatorNode(ref leftNode, operators.Value[0]);
-                        root = (root as OperatorNode).Right();
-                    }
-                    else //when there are no more operations to load
-                    {
-                        root = MakeDataNode(variables.Value);
-                    }
-                    operators = operators.NextMatch();
-                    variables = variables.NextMatch();
-                } while (variables.Success);
-
-                Console.WriteLine("memes");
+                ExpNode firstLeftNode = MakeDataNode(variables.Value); //creating the first left side node
+                ConstructTree(ref root, ref firstLeftNode, ref variables, ref operators);
             }
             else
             {
                 root = MakeDataNode(variables.Value); //sets the root to a single variable/numerical Node
             }
+            Console.WriteLine("MEMES");
         }
 
-        private void ConstructTree(ref ExpNode currRoot, ref ExpNode leftSideNode, ref Match variables, ref Match operators)
-        {
-
-            ExpNode leftNode = MakeDataNode(variables.Value);
+        private void ConstructTree(ref ExpNode currRoot, ref ExpNode nextNode, ref Match variables, ref Match operators)
+        {                   
             if (operators.Success) // if there are more operators that need to be loaded
             {
-                root = new OperatorNode(ref leftNode, operators.Value[0]);
-                //root = (root as OperatorNode).Right();
+                currRoot = new OperatorNode(ref nextNode, operators.Value[0]);
             }
             else //when there are no more operations to load
             {
-                root = MakeDataNode(variables.Value);
+                currRoot = nextNode; //MakeDataNode(variables.Value);
             }
-            operators = operators.NextMatch();
+
+            operators = operators.NextMatch(); //iterating matches
             variables = variables.NextMatch();
 
+            nextNode = MakeDataNode(variables.Value); //setting up next node
             if (variables.Success)
-                ConstructTree(ref (currRoot as OperatorNode).Right(), ref leftSideNode, ref variables, ref operators);
+                ConstructTree(ref (currRoot as OperatorNode).Right(), ref nextNode, ref variables, ref operators);
         }
 
         private ExpNode MakeDataNode(string operand)
@@ -86,7 +72,7 @@ namespace CptS321
         //{
         //    VariableNode search = new VariableNode(varName, varValue);
         //    if (root as VariableNode != null)
-        //        SetVarNode(ref search, ref root as OperatorNode);
+        //        SetVarNode(ref search, ref (root as OperatorNode));
         //}
 
         //private void SetVarNode(ref VariableNode input, ref OperatorNode node)
@@ -97,9 +83,14 @@ namespace CptS321
         //        nodeAsVar.CopyNode(input);
         //    }
 
-        //    SetVarNode(ref input, ref node.Left() ); //check left subtree
-        //    SetVarNode(ref input, ref node.Right() ); //check right subtree
+        //    SetVarNode(ref input, ref node.Left()); //check left subtree
+        //    SetVarNode(ref input, ref node.Right()); //check right subtree
         //}
+
+        public string ToString()
+        {
+            return StringExpression;
+        }
 
         public bool VariableNodeCompare(ExpNode inputLeftNode, ExpNode inputRightNode)
         {
