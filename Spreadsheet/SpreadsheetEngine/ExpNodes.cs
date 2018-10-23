@@ -11,11 +11,11 @@ namespace CptS321
         public abstract double Eval();
     }
 
-    public class NumericalNode : ExpNode
+    public class ValNode : ExpNode
     {
         double numericalValue;
 
-        public NumericalNode(double numValInput) //constructor for a NumericalNode.
+        public ValNode(double numValInput) //constructor for a NumericalNode.
         {
             numericalValue = numValInput; //initializes numericalValue
         }
@@ -29,12 +29,12 @@ namespace CptS321
         public override double Eval() { return numericalValue; } //evaluation of a numerical node is just it's value
     }
 
-    public class VariableNode : ExpNode
+    public class VarNode : ExpNode
     {
         double numericalValue;
         string variable;
 
-        public VariableNode(string varInput = "NoData", double numValInput = 0) //constructor for the variablenode with defaults if no data is specified
+        public VarNode(string varInput = "NoData", double numValInput = 0) //constructor for the variablenode with defaults if no data is specified
         {
             numericalValue = numValInput;
             variable = varInput;
@@ -55,27 +55,27 @@ namespace CptS321
         public override double Eval() { return numericalValue; } //evaluation of a variable node is just it's value
     }
 
-    public class OperatorNode : ExpNode
+    public class OpNode : ExpNode
     {
         public ExpNode left; //this is the only kind of node that can have children
         public ExpNode right;
         char operation;
 
-        public OperatorNode(ref ExpNode leftNode, ref ExpNode rightNode, char opInput = '!') //extended constructor with all fields
+        public OpNode(ref ExpNode leftNode, ref ExpNode rightNode, char opInput = '!') //extended constructor with all fields
         {
             left = leftNode;
             right = rightNode;
             operation = opInput;
         }
 
-        public OperatorNode(ref ExpNode leftNode, char opInput = '!') // constructor used in factory. Deals with the left node only
+        public OpNode(ref ExpNode leftNode, char opInput = '!') // constructor used in factory. Deals with the left node only
         {
             left = leftNode;
             right = null;
             operation = opInput;
         }
 
-        public OperatorNode(char opInput = '!') // constructor for a node with no children
+        public OpNode(char opInput = '!') // constructor for a node with no children
         {
             left = null;
             right = null;
