@@ -57,8 +57,8 @@ namespace CptS321
 
     public class OperatorNode : ExpNode
     {
-        ExpNode left;
-        ExpNode right;
+        public ExpNode left;
+        public ExpNode right;
         char operation;
 
         public OperatorNode(ref ExpNode leftNode, ref ExpNode rightNode, char opInput = '!')
@@ -75,8 +75,12 @@ namespace CptS321
             operation = opInput;
         }
 
-        public ref ExpNode Left() { return ref left; }
-        public ref ExpNode Right() { return ref right; }
+        public OperatorNode(char opInput = '!')
+        {
+            left = null;
+            right = null;
+            operation = opInput;
+        }
 
         public char Operator
         {
