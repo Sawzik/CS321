@@ -80,3 +80,13 @@ Regex varRegex = new Regex(@"[/\*-+]?(?<var>\w+\z?)");
             if (leftNodeAsVar.Variable == righttNodeAsVar.Variable) //variables match the same string
                 return false;
             return true; //if the nodes do not contain the same string.
+			
+			
+			
+			
+			
+			
+			
+			Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.Value, variables.Index, variables.Index + variables.Length);
+            Console.WriteLine("Operator {0} at index [{1}, {2}]", operators.Value, operators.Index, operators.Index + operators.Length);
+            Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.NextMatch().Value, variables.NextMatch().Index, variables.NextMatch().Index + variables.NextMatch().Length);
