@@ -101,6 +101,10 @@ namespace CptS321
                 case '*':
                     return this.left.Eval() * this.right.Eval();
             }
+
+            if (Operator == '!')
+                throw new InvalidOperationException("Unititialized Operator Node.");
+
             return 0.0; //return value for a non specified operator.
         }
     }
