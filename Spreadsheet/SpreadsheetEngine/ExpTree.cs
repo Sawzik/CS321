@@ -21,7 +21,7 @@ namespace CptS321
         private ExpNode ConstructTree(string expression)
         {
             Regex opRegex = new Regex(@"[-+\*/]"); //matches if there is an operator anywhere in the string
-            Regex varRegex = new Regex(@"\w+\z"); //matches the last alphanumeric characters in the string
+            Regex varRegex = new Regex(@"[\w\.]+\z"); //matches the last alphanumeric characters in the string
             Match op = opRegex.Match(expression);
             Match var = varRegex.Match(expression);
 
@@ -41,6 +41,7 @@ namespace CptS321
             return MakeDataNode(var.Value); //if there is no operators, then this must be a variable or value.
         }
 
+        //Unused function
         private ExpNode ConstructNode(string expression)
         {
             Regex varRegex = new Regex(@"\w+\z"); //matches the last alphanumeric characters in the string
