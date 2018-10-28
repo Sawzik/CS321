@@ -42,7 +42,7 @@ namespace ConsoleMenu
                             double parsedDouble; //used to store the value of the double
                             bool isDouble = double.TryParse(userInputValue, out parsedDouble); //stores the user input as a double if it is a double
                             if (isDouble) //if the value inputted was a double
-                                tree.SetVar(userInputVariable, number); //set the variable to that double
+                                tree.SetVar(userInputVariable, parsedDouble); //set the variable to that double
                             break;
                         case 3:
                             Console.WriteLine(tree.Eval());
