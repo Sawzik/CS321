@@ -12,12 +12,44 @@ namespace CptS321
         ExpNode root = null;
         string StringExpression; //used to sabe the expression for display purposes. Can just use a tree traversal later.
 
+        public class Token
+        {
+            public string symbol { get; } // read only data.
+            public int precedence { get; }
+            public bool leftAssociative { get; }
+
+            public Token(string inputSymbol, int inputPrecedence, bool inputLeftAssociative)
+            {
+                symbol = inputSymbol;
+                precedence = inputPrecedence;
+                leftAssociative = inputLeftAssociative;
+            }
+        }
+
+        // Dictionary that contains a list of all the operators supported by the ExpTree and their precedence
+        private static readonly Dictionary<string, Token> operators = new Token[]
+        {
+            new Token("*", 3, false),
+            new Token("/", 3, true),
+            new Token("+", 2, false),
+            new Token("-", 2, true)
+        }.ToDictionary(op => op.symbol);
+
         public ExpTree(string expression)
         {
             StringExpression = expression; //saves the expression for display purposes
             root = ConstructTree(expression); //constructs the tree at the root
         }
 
+        public void ShuntingYard(string expression)
+        {
+            Regex opRegex = new Regex(@"[-+\*/]"); //matches if there is an operator
+            string[] tokens = opRegex.Split(expression); // Splits the expression up into individual tokens separated by operators.
+            foreach (string str in tokens)
+                Console.WriteLine(str);
+        }
+
+        // Lame non Shunting Yard algorithm
         private ExpNode ConstructTree(string expression)
         {
             Regex opRegex = new Regex(@"[-+\*/]"); //matches if there is an operator anywhere in the string

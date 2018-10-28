@@ -13,6 +13,7 @@ namespace ConsoleMenu
         static void Main(string[] args)
         {
             ExpTree tree = new ExpTree("A+B+3"); //default starting value of our Expression tree.
+            tree.ShuntingYard("A+B+3");
             int number = 0;
 
             tree.SetVar("A", 2); //setting some example values to the variables
