@@ -78,5 +78,17 @@ namespace CptS321.Tests
 
             Assert.AreEqual(testTree.Eval(), Value1 * Value2);
         }
+
+        [TestMethod()]
+        public void EvalMultipleOpNodesTest()
+        {
+            double Value1 = 1326857.19;
+            double Value2 = 38497.509;
+            double Value3 = 89314871.9874;
+
+            ExpTree testTree = new ExpTree(Value1.ToString() + '+' + Value2.ToString() + '+' + Value3.ToString());
+
+            Assert.AreEqual(testTree.Eval(), Value1 + Value2 + Value3);
+        }
     }
 }

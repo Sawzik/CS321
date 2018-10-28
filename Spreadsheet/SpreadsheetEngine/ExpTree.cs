@@ -29,7 +29,7 @@ namespace CptS321
             {
                 for (int i = expression.Length - 1; i >= 0; i--)
                 {
-                    if (expression[i] == '-' || expression[i] == '+' || expression[i] == '/' || expression[i] == '*')
+                    if (opRegex.Match(expression[i].ToString()).Success) // If the character is an operator
                     {
                         OpNode newNode = new OpNode(expression[i]);
                         newNode.left = ConstructTree(expression.Substring(0, i)); //calls construct node on the current string up until just before the operator
