@@ -12,13 +12,13 @@ namespace CptS321
         ExpNode root = null;
         string StringExpression; //used to sabe the expression for display purposes. Can just use a tree traversal later.
 
-        public class Token
+        public class OperatorToken
         {
             private string symbol;
             int precedence;
             bool rightAssociative;
 
-            public Token(string inputSymbol, int inputPrecedence, bool inputRightAssociative)
+            public OperatorToken(string inputSymbol, int inputPrecedence, bool inputRightAssociative)
             {
                 symbol = inputSymbol;
                 precedence = inputPrecedence;
@@ -31,12 +31,12 @@ namespace CptS321
         }
 
         // Dictionary that contains a list of all the operators supported by the ExpTree and their precedence
-        private static readonly Dictionary<string, Token> operators = new Dictionary<string, Token>
+        private static readonly Dictionary<string, OperatorToken> operators = new Dictionary<string, OperatorToken>
         {
-            {"*", new Token("*", 3, false) },
-            {"/", new Token("/", 3, false) },
-            {"+", new Token("+", 2, false) },
-            {"-", new Token("-", 2, false) }
+            {"*", new OperatorToken("*", 3, false) },
+            {"/", new OperatorToken("/", 3, false) },
+            {"+", new OperatorToken("+", 2, false) },
+            {"-", new OperatorToken("-", 2, false) }
         };
 
         public ExpTree(string expression)
@@ -80,9 +80,9 @@ namespace CptS321
             List<string> postFix = new List<string>();
             foreach (string tok in tokens)
             {
-                if (operators.TryGetValue(tok, out Token op1))
+                if (operators.TryGetValue(tok, out OperatorToken op1))
                 {
-                    while (stack.Count > 0 && operators.TryGetValue(stack.Peek(), out Token op2))
+                    while (stack.Count > 0 && operators.TryGetValue(stack.Peek(), out OperatorToken op2))
                     {
                         int c = op1.Precedence.CompareTo(op2.Precedence);
                         if (c < 0 || !op1.RightAssociative && c <= 0)                        
@@ -119,7 +119,7 @@ namespace CptS321
             Stack<ExpNode> stack = new Stack<ExpNode>();
             foreach (string tok in expression)
             {
-                if (operators.TryGetValue(tok, out Token op)) //if the token is an operator
+                if (operators.TryGetValue(tok, out OperatorToken op)) //if the token is an operator
                 {
                     ExpNode newrightNode = stack.Pop(); //grabs the right and left nodes from the stack
                     ExpNode newLeftNode = stack.Pop();
