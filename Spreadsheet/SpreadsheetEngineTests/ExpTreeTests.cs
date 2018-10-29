@@ -94,5 +94,21 @@ namespace CptS321.Tests
 
             Assert.AreEqual(testTree.Eval(), expectedOutput);
         }
+
+        [TestMethod()]
+        public void EvalMultipleOpNodes_WithParenthesisTest()
+        {
+            double[] Values = { 1326857.19, 38497.509, 89314871.9874, 879.4, 484, 3, 4579.7777, 7453, 8794 };
+
+            ExpTree testTree = new ExpTree(Values[0].ToString() + "-(" + Values[1].ToString() + '+' + Values[2].ToString() + '+'
+                                         + Values[3].ToString() + '-' + Values[4].ToString() + ")/" + Values[5].ToString() + "+("
+                                         + Values[6].ToString() + '+' + Values[7].ToString() + ")*" + Values[8].ToString());
+
+            double expectedOutput = Values[0] -(Values[1] + Values[2] +
+                                    Values[3] - Values[4])/ Values[5] +(
+                                    Values[6] + Values[7])* Values[8];
+
+            Assert.AreEqual(testTree.Eval(), expectedOutput);
+        }
     }
 }
