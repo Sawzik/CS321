@@ -119,32 +119,35 @@ namespace CptS321
                 if (!operators.ContainsKey(top)) throw new ArgumentException("No matching right parenthesis");
                 postFix.Push(top);
             }
-            //bool pendingOperand = false;
-            //while (postFix.Count > 0)
-            //{
-            //    if (operators.TryGetValue(postFix.Peek(), out Token operatorToken1))
-            //    {
-            //        stack.Push(postFix.Pop());
-            //        pendingOperand = true;
-            //    }
-            //    else if ()
-            //}
-
-            //for each token in the reversed postfix expression:
-            //    if token is an operator:
-            //        push token onto the operator stack
-            //        pending_operand ← False
-            //    else if token is an operand:
-            //        operand ← token
-            //        if pending_operand is True:
-            //            while the operand stack is not empty:
-            //                operand_1 ← pop from the operand stack
-            //                operator ← pop from the operator stack
-            //                operand ← evaluate operator with operand_1 and operand
-            //        push operand onto the operand stack
-            //        pending_operand ← True
-            //result ← pop from the operand stack
+            tokens = new List<string>(); // makes a new list that will be used to store the expression in postfix notation
+            while (postFix.Count > 0)
+            {
+                string top = postFix.Pop();
+                if (top != "(" && top != ")") // if it is not a parenthesis
+                    tokens.Insert(0, top);
+            }
+            foreach (string str in tokens)
+                Console.WriteLine(str);
         }
+
+        //// Lame non Shunting Yard algorithm
+        //private ExpNode ConstructTreeFromTokens(List<string> expression)
+        //{
+        //    if (op.Success) // if there is an operator
+        //    {
+        //        for (int i = expression.Length - 1; i >= 0; i--)
+        //        {
+        //            if (opRegex.Match(expression[i].ToString()).Success) // If the character is an operator
+        //            {
+        //                OpNode newNode = new OpNode(expression[i]);
+        //                newNode.left = ConstructTree(expression.Substring(0, i)); //calls construct node on the current string up until just before the operator
+        //                newNode.right = ConstructTree(expression.Substring(i + 1)); //calls construct node on the current string after the operator
+        //                return newNode;
+        //            }
+        //        }
+        //    }
+        //    return MakeDataNode(var.Value); //if there is no operators, then this must be a variable or value.
+        //}
 
         // Lame non Shunting Yard algorithm
         private ExpNode ConstructTree(string expression)
