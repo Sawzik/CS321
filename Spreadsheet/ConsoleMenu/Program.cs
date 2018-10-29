@@ -12,9 +12,9 @@ namespace ConsoleMenu
     {
         static void Main(string[] args)
         {
-            ExpTree tree = new ExpTree("A+B+3-(Memes-ASS)"); //default starting value of our Expression tree.
-            int number = 0;
+            ExpTree tree = new ExpTree("A+B+3-(E3-54)"); //default starting value of our Expression tree.
 
+            int number = 0;
             tree.SetVar("A", 2); //setting some example values to the variables
             tree.SetVar("B", 5);
             do
@@ -39,8 +39,7 @@ namespace ConsoleMenu
                             string userInputVariable = Console.ReadLine();
                             Console.Write("Enter variable value: ");
                             string userInputValue = Console.ReadLine();
-                            double parsedDouble; //used to store the value of the double
-                            bool isDouble = double.TryParse(userInputValue, out parsedDouble); //stores the user input as a double if it is a double
+                            bool isDouble = double.TryParse(userInputValue, out double parsedDouble); //stores the user input as a double if it is a double
                             if (isDouble) //if the value inputted was a double
                                 tree.SetVar(userInputVariable, parsedDouble); //set the variable to that double
                             break;

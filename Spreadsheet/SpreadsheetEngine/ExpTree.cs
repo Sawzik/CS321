@@ -119,10 +119,31 @@ namespace CptS321
                 if (!operators.ContainsKey(top)) throw new ArgumentException("No matching right parenthesis");
                 postFix.Push(top);
             }
-            while (postFix.Count > 0)
-            {
-                Console.WriteLine(postFix.Pop());
-            }
+            //bool pendingOperand = false;
+            //while (postFix.Count > 0)
+            //{
+            //    if (operators.TryGetValue(postFix.Peek(), out Token operatorToken1))
+            //    {
+            //        stack.Push(postFix.Pop());
+            //        pendingOperand = true;
+            //    }
+            //    else if ()
+            //}
+
+            //for each token in the reversed postfix expression:
+            //    if token is an operator:
+            //        push token onto the operator stack
+            //        pending_operand ← False
+            //    else if token is an operand:
+            //        operand ← token
+            //        if pending_operand is True:
+            //            while the operand stack is not empty:
+            //                operand_1 ← pop from the operand stack
+            //                operator ← pop from the operator stack
+            //                operand ← evaluate operator with operand_1 and operand
+            //        push operand onto the operand stack
+            //        pending_operand ← True
+            //result ← pop from the operand stack
         }
 
         // Lame non Shunting Yard algorithm
