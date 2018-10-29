@@ -14,9 +14,9 @@ namespace CptS321
 
         public class Token
         {
-            public string symbol { get; } // read only data.
-            public int precedence { get; }
-            public bool leftAssociative { get; }
+            private string symbol;
+            int precedence;
+            bool leftAssociative;
 
             public Token(string inputSymbol, int inputPrecedence, bool inputLeftAssociative)
             {
@@ -24,16 +24,20 @@ namespace CptS321
                 precedence = inputPrecedence;
                 leftAssociative = inputLeftAssociative;
             }
+
+            public string Symbol { get { return this.symbol; } }
+            public int Precedence { get { return this.precedence; } }
+            public bool LeftAssociative { get { return this.leftAssociative; } }
         }
 
         // Dictionary that contains a list of all the operators supported by the ExpTree and their precedence
-        private static readonly Dictionary<string, Token> operators = new Token[]
+        private static readonly Dictionary<string, Token> operators = new Dictionary<string, Token>
         {
-            new Token("*", 3, false),
-            new Token("/", 3, true),
-            new Token("+", 2, false),
-            new Token("-", 2, true)
-        }.ToDictionary(op => op.symbol);
+            {"*", new Token("*", 3, false) },
+            {"/", new Token("/", 3, true) },
+            {"+", new Token("+", 2, false) },
+            {"-", new Token("-", 2, true) }
+        };
 
         public ExpTree(string expression)
         {
@@ -41,12 +45,50 @@ namespace CptS321
             root = ConstructTree(expression); //constructs the tree at the root
         }
 
+        public static List<Token> SplitIntoTokens(string source, string regexPattern)
+        {
+            List<Token> splitString = new List<Token>();
+            MatchCollection matches = Regex.Matches(source, regexPattern, RegexOptions.IgnorePatternWhitespace);
+            int currIndex = 0; // a counter to keep track of where we are in the string.
+            if (matches.Count < 1) //if there are no matches then we dont need to split.
+            {
+                Token newToken = new Token(source, 1, false);
+                splitString.Add(newToken); //puts the single token in the list
+            }
+            else
+            {
+                foreach (Match match in matches)
+                {
+                    if (match.Index > currIndex) // when the current match IS the regexPattern
+                    {
+                        Token newOperatorToken = new Token(source.Substring(currIndex, match.Index - currIndex), 1, false);
+                        splitString.Add(newOperatorToken); //adds the matched part of the string as Token of the list.
+                    }
+                    //creates a token that contains that substring. has precedence 1 since it is a value
+                    Token newToken = new Token(match.Value, operators[match.Value].Precedence, false);
+                    splitString.Add(newToken); // adds the non matched part of the string into the list
+                    currIndex = match.Index + match.Length; //Update the current index to the end of the matched string.
+                }
+                if (currIndex < source.Length) // if there is an unmatched string at the end of the source string
+                {
+                    //creates a token that contains that substring. has precedence 1 since it is a value
+                    Token newToken = new Token(source.Substring(currIndex), 1, false);
+                    splitString.Add(newToken);
+                }
+            }
+            return splitString;
+        }
+
         public void ShuntingYard(string expression)
         {
-            Regex opRegex = new Regex(@"[-+\*/]"); //matches if there is an operator
-            string[] tokens = opRegex.Split(expression); // Splits the expression up into individual tokens separated by operators.
-            foreach (string str in tokens)
-                Console.WriteLine(str);
+            // Splits the expression up into individual tokens separated by operators.
+            List<Token> tokens = SplitIntoTokens(expression, @"[-+\*/]"); 
+            foreach (Token tok in tokens)
+                Console.WriteLine(tok.Symbol + tok.Precedence); //debug to print the tokens.
+            foreach (Token tok in tokens)
+            {               
+                //if (operators[token] =)
+            }
         }
 
         // Lame non Shunting Yard algorithm
