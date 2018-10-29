@@ -42,9 +42,7 @@ namespace CptS321
         public ExpTree(string expression)
         {
             StringExpression = expression; //saves the expression for display purposes
-            List<string> aa = ShuntingYard(expression);
-            root = ConstructTree(expression); //constructs the tree at the root
-            Console.WriteLine("df");
+            root = ConstructTreeFromTokens(ShuntingYard(expression));
         }
 
         public static List<string> Split(string source, string regexPattern)
@@ -122,15 +120,19 @@ namespace CptS321
             Stack<ExpNode> stack = new Stack<ExpNode>();
             foreach (string tok in expression)
             {
-                if (operators.TryGetValue(tok, out Token op1)) //operator
+                if (operators.TryGetValue(tok, out Token op)) //if the token is an operator
                 {
-
+                    ExpNode newrightNode = stack.Pop(); //grabs the right and left nodes from the stack
+                    ExpNode newLeftNode = stack.Pop();
+                    ExpNode newOpNode = new OpNode(ref newLeftNode, ref newrightNode, op.Symbol[0]); // Creates an OpNode with the nodes we just popped off the stack.
+                    stack.Push(newOpNode); // Adds the new operator node to the stack.
                 }
                 else //operand
                 {
                     stack.Push(MakeDataNode(tok)); //push the operand node on to the stack
                 }
-            }
+            } //when there are no more tokens. There should only be one node on the stack.
+            return stack.Pop(); // returns the root node of the tree.
         }
 
         // Lame non Shunting Yard algorithm
