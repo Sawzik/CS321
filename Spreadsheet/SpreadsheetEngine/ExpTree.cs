@@ -16,27 +16,29 @@ namespace CptS321
         {
             private string symbol;
             int precedence;
-            bool leftAssociative;
+            bool rightAssociative;
 
-            public Token(string inputSymbol, int inputPrecedence, bool inputLeftAssociative)
+            public Token(string inputSymbol, int inputPrecedence, bool inputRightAssociative)
             {
                 symbol = inputSymbol;
                 precedence = inputPrecedence;
-                leftAssociative = inputLeftAssociative;
+                rightAssociative = inputRightAssociative;
             }
 
             public string Symbol { get { return this.symbol; } }
             public int Precedence { get { return this.precedence; } }
-            public bool LeftAssociative { get { return this.leftAssociative; } }
+            public bool RightAssociative { get { return this.rightAssociative; } }
         }
 
         // Dictionary that contains a list of all the operators supported by the ExpTree and their precedence
         private static readonly Dictionary<string, Token> operators = new Dictionary<string, Token>
         {
+            {"(", new Token("(", 4, false) },
+            {")", new Token(")", 4, false) },
             {"*", new Token("*", 3, false) },
-            {"/", new Token("/", 3, true) },
+            {"/", new Token("/", 3, false) },
             {"+", new Token("+", 2, false) },
-            {"-", new Token("-", 2, true) }
+            {"-", new Token("-", 2, false) }
         };
 
         public ExpTree(string expression)
@@ -79,15 +81,63 @@ namespace CptS321
             return splitString;
         }
 
+        public static List<string> Split(string source, string regexPattern)
+        {
+            List<string> splitString = new List<string>();
+            MatchCollection matches = Regex.Matches(source, regexPattern, RegexOptions.IgnorePatternWhitespace);
+            int currIndex = 0; // a counter to keep track of where we are in the string.
+            if (matches.Count < 1) //if there are no matches then we dont need to split.
+            {
+                splitString.Add(source); //puts the single token in the list
+            }
+            else
+            {
+                foreach (Match match in matches)
+                {
+                    if (match.Index > currIndex) // when the current match IS the regexPattern
+                    {
+                        splitString.Add(source.Substring(currIndex, match.Index - currIndex)); //adds the matched part of the string as Token of the list.
+                    }
+                    splitString.Add(match.Value); // adds the non matched part of the string into the list
+                    currIndex = match.Index + match.Length; //Update the current index to the end of the matched string.
+                }
+                if (currIndex < source.Length) // if there is an unmatched string at the end of the source string
+                {
+                    //creates a token that contains that substring.
+                    splitString.Add(source.Substring(currIndex));
+                }
+            }
+            return splitString;
+        }
+
+
         public void ShuntingYard(string expression)
         {
-            // Splits the expression up into individual tokens separated by operators.
-            List<Token> tokens = SplitIntoTokens(expression, @"[-+\*/]"); 
+            List<Token> tokens = SplitIntoTokens(expression, @"[-+\*/\(\)]"); // Splits the expression up into individual tokens
+            Stack<Token> stack = new Stack<Token>();
+            Stack<Token> postFix = new Stack<Token>();
+            foreach (Token tok in tokens) //debug to print the tokens.
+                Console.WriteLine(tok.Symbol + tok.Precedence); 
             foreach (Token tok in tokens)
-                Console.WriteLine(tok.Symbol + tok.Precedence); //debug to print the tokens.
-            foreach (Token tok in tokens)
-            {               
-                //if (operators[token] =)
+            {
+                if (tok.Precedence == 1) //if the token is a value. values have precedence 1.                
+                    postFix.Push(tok); //push it to the output in postFix notation
+                else if (operators.ContainsKey(tok.Symbol))// when the token is an operator.
+                {
+                    while (stack.Count > 0 && operators.ContainsKey(stack.Peek().Symbol))
+                    {
+                        int comparePrecedence = tok.Precedence - stack.Peek().Precedence;
+                        if (comparePrecedence < 0 || !stack.Peek().RightAssociative && comparePrecedence <= 0)
+                            postFix.Push(stack.Pop());
+                        else
+                            break;
+                    }
+                    stack.Push(tok);
+                }
+                else if (false)
+                {
+
+                }
             }
         }
 
