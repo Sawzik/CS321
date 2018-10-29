@@ -90,3 +90,58 @@ Regex varRegex = new Regex(@"[/\*-+]?(?<var>\w+\z?)");
 			Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.Value, variables.Index, variables.Index + variables.Length);
             Console.WriteLine("Operator {0} at index [{1}, {2}]", operators.Value, operators.Index, operators.Index + operators.Length);
             Console.WriteLine("\t'{0}' at index [{1}, {2}]", variables.NextMatch().Value, variables.NextMatch().Index, variables.NextMatch().Index + variables.NextMatch().Length);
+			
+			
+			
+			
+			
+			
+		public static string ToPostfix(string expression)
+        {
+            List<string> tokens = Split(expression, @"[-+\*/\(\)]");
+            var stack = new Stack<string>();
+            var output = new List<string>();
+            foreach (string token in tokens)
+            {
+                if (int.TryParse(token, out _))
+                {
+                    output.Add(token);
+                }
+                else if (operators.TryGetValue(token, out var op1))
+                {
+                    while (stack.Count > 0 && operators.TryGetValue(stack.Peek(), out var op2))
+                    {
+                        int c = op1.Precedence.CompareTo(op2.Precedence);
+                        if (c < 0 || !op1.RightAssociative && c <= 0)
+                        {
+                            output.Add(stack.Pop());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    stack.Push(token);
+                }
+                else if (token == "(")
+                {
+                    stack.Push(token);
+                }
+                else if (token == ")")
+                {
+                    string top = "";
+                    while (stack.Count > 0 && (top = stack.Pop()) != "(")
+                    {
+                        output.Add(top);
+                    }
+                    if (top != "(") throw new ArgumentException("No matching left parenthesis.");
+                }
+            }
+            while (stack.Count > 0)
+            {
+                var top = stack.Pop();
+                if (!operators.ContainsKey(top)) throw new ArgumentException("No matching right parenthesis.");
+                output.Add(top);
+            }
+            return string.Join(" ", output);          
+        }

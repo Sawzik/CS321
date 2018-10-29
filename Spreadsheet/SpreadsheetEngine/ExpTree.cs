@@ -33,8 +33,6 @@ namespace CptS321
         // Dictionary that contains a list of all the operators supported by the ExpTree and their precedence
         private static readonly Dictionary<string, Token> operators = new Dictionary<string, Token>
         {
-            {"(", new Token("(", 4, false) },
-            {")", new Token(")", 4, false) },
             {"*", new Token("*", 3, false) },
             {"/", new Token("/", 3, false) },
             {"+", new Token("+", 2, false) },
@@ -46,6 +44,7 @@ namespace CptS321
             StringExpression = expression; //saves the expression for display purposes
             root = ConstructTree(expression); //constructs the tree at the root
             ShuntingYard(expression);
+            //ToPostfix(expression);
         }
 
         public static List<string> Split(string source, string regexPattern)
@@ -80,74 +79,43 @@ namespace CptS321
         {
             List<string> tokens = Split(expression, @"[-+\*/\(\)]"); // Splits the expression up into individual tokens
             Stack<string> stack = new Stack<string>();
-            Stack<string> postFix = new Stack<string>();
+            List<string> postFix = new List<string>();
             foreach (string tok in tokens)
             {
-                Match token = Regex.Match(tok, @"[-+\*/]");
-                if (!token.Success) //if the token is a value               
-                    postFix.Push(tok); //push it to the output in postFix notation
-                else if (operators.TryGetValue(tok, out Token operatorToken1))// when the token is an operator.
+                if (operators.TryGetValue(tok, out var op1))
                 {
-                    while (stack.Count > 0 && operators.TryGetValue(tok, out Token operatorToken2))
+                    while (stack.Count > 0 && operators.TryGetValue(stack.Peek(), out var op2))
                     {
-                        int comparePrecedence = operatorToken1.Precedence - operatorToken2.Precedence;
-                        if (comparePrecedence < 0 || !operatorToken1.RightAssociative && comparePrecedence <= 0)
-                            postFix.Push(stack.Pop());
-                        else
-                            break;
+                        int c = op1.Precedence.CompareTo(op2.Precedence);
+                        if (c < 0 || !op1.RightAssociative && c <= 0)                        
+                            postFix.Add(stack.Pop());                        
+                        else                        
+                            break;                        
                     }
                     stack.Push(tok);
                 }
-                else if (tok == "(")
-                {
-                    stack.Push(tok);
-                }
+                else if (tok == "(")                
+                    stack.Push(tok);               
                 else if (tok == ")")
                 {
                     string top = "";
-                    while ( stack.Count > 0 && (top = stack.Pop()) != "(")
-                    {
-                        postFix.Push(top);
-                    }
+                    while (stack.Count > 0 && (top = stack.Pop()) != "(")                    
+                        postFix.Add(top);                    
                     if (top != "(")
                         throw new ArgumentException("No matching left parenthesis.");
                 }
+                else
+                    postFix.Add(tok); //push it to the output in postFix notation
             }
             while (stack.Count > 0)
             {
                 string top = stack.Pop();
                 if (!operators.ContainsKey(top)) throw new ArgumentException("No matching right parenthesis");
-                postFix.Push(top);
+                postFix.Add(top);
             }
-            tokens = new List<string>(); // makes a new list that will be used to store the expression in postfix notation
-            while (postFix.Count > 0)
-            {
-                string top = postFix.Pop();
-                if (top != "(" && top != ")") // if it is not a parenthesis
-                    tokens.Insert(0, top);
-            }
-            foreach (string str in tokens)
+            foreach (string str in postFix)
                 Console.WriteLine(str);
         }
-
-        //// Lame non Shunting Yard algorithm
-        //private ExpNode ConstructTreeFromTokens(List<string> expression)
-        //{
-        //    if (op.Success) // if there is an operator
-        //    {
-        //        for (int i = expression.Length - 1; i >= 0; i--)
-        //        {
-        //            if (opRegex.Match(expression[i].ToString()).Success) // If the character is an operator
-        //            {
-        //                OpNode newNode = new OpNode(expression[i]);
-        //                newNode.left = ConstructTree(expression.Substring(0, i)); //calls construct node on the current string up until just before the operator
-        //                newNode.right = ConstructTree(expression.Substring(i + 1)); //calls construct node on the current string after the operator
-        //                return newNode;
-        //            }
-        //        }
-        //    }
-        //    return MakeDataNode(var.Value); //if there is no operators, then this must be a variable or value.
-        //}
 
         // Lame non Shunting Yard algorithm
         private ExpNode ConstructTree(string expression)
@@ -171,14 +139,6 @@ namespace CptS321
                 }
             }
             return MakeDataNode(var.Value); //if there is no operators, then this must be a variable or value.
-        }
-
-        //Unused function
-        private ExpNode ConstructNode(string expression)
-        {
-            Regex varRegex = new Regex(@"\w+\z"); //matches the last alphanumeric characters in the string
-            Match var = varRegex.Match(expression);
-            return MakeDataNode(var.Value);
         }
 
         //simple function that turns a string into a Data node.
