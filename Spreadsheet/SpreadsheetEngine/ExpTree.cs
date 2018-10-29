@@ -42,9 +42,9 @@ namespace CptS321
         public ExpTree(string expression)
         {
             StringExpression = expression; //saves the expression for display purposes
+            List<string> aa = ShuntingYard(expression);
             root = ConstructTree(expression); //constructs the tree at the root
-            ShuntingYard(expression);
-            //ToPostfix(expression);
+            Console.WriteLine("df");
         }
 
         public static List<string> Split(string source, string regexPattern)
@@ -75,16 +75,16 @@ namespace CptS321
             return splitString;
         }
 
-        public void ShuntingYard(string expression)
+        public List<string> ShuntingYard(string expression)
         {
             List<string> tokens = Split(expression, @"[-+\*/\(\)]"); // Splits the expression up into individual tokens
             Stack<string> stack = new Stack<string>();
             List<string> postFix = new List<string>();
             foreach (string tok in tokens)
             {
-                if (operators.TryGetValue(tok, out var op1))
+                if (operators.TryGetValue(tok, out Token op1))
                 {
-                    while (stack.Count > 0 && operators.TryGetValue(stack.Peek(), out var op2))
+                    while (stack.Count > 0 && operators.TryGetValue(stack.Peek(), out Token op2))
                     {
                         int c = op1.Precedence.CompareTo(op2.Precedence);
                         if (c < 0 || !op1.RightAssociative && c <= 0)                        
@@ -113,8 +113,24 @@ namespace CptS321
                 if (!operators.ContainsKey(top)) throw new ArgumentException("No matching right parenthesis");
                 postFix.Add(top);
             }
-            foreach (string str in postFix)
-                Console.WriteLine(str);
+            return postFix;
+        }
+
+        //https://www.geeksforgeeks.org/expression-tree/
+        private ExpNode ConstructTreeFromTokens(List<string> expression)
+        {
+            Stack<ExpNode> stack = new Stack<ExpNode>();
+            foreach (string tok in expression)
+            {
+                if (operators.TryGetValue(tok, out Token op1)) //operator
+                {
+
+                }
+                else //operand
+                {
+                    stack.Push(MakeDataNode(tok)); //push the operand node on to the stack
+                }
+            }
         }
 
         // Lame non Shunting Yard algorithm
