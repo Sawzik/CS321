@@ -81,8 +81,6 @@ namespace CptS321
             List<string> tokens = Split(expression, @"[-+\*/\(\)]"); // Splits the expression up into individual tokens
             Stack<string> stack = new Stack<string>();
             Stack<string> postFix = new Stack<string>();
-            //foreach (string tok in tokens) //debug to print the tokens.
-            //    Console.WriteLine(tok);
             foreach (string tok in tokens)
             {
                 Match token = Regex.Match(tok, @"[-+\*/]");
