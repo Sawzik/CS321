@@ -45,6 +45,7 @@ namespace CptS321
         {
             StringExpression = expression; //saves the expression for display purposes
             root = ConstructTree(expression); //constructs the tree at the root
+            ShuntingYard(expression);
         }
 
         public static List<Token> SplitIntoTokens(string source, string regexPattern)
@@ -103,7 +104,6 @@ namespace CptS321
                 }
                 if (currIndex < source.Length) // if there is an unmatched string at the end of the source string
                 {
-                    //creates a token that contains that substring.
                     splitString.Add(source.Substring(currIndex));
                 }
             }
@@ -115,11 +115,11 @@ namespace CptS321
             List<string> tokens = Split(expression, @"[-+\*/\(\)]"); // Splits the expression up into individual tokens
             Stack<string> stack = new Stack<string>();
             Stack<string> postFix = new Stack<string>();
-            foreach (string tok in tokens) //debug to print the tokens.
-                Console.WriteLine(tok);
+            //foreach (string tok in tokens) //debug to print the tokens.
+            //    Console.WriteLine(tok);
             foreach (string tok in tokens)
             {
-                Match token = Regex.Match(expression, @"[-+\*/]");
+                Match token = Regex.Match(tok, @"[-+\*/]");
                 if (!token.Success) //if the token is a value               
                     postFix.Push(tok); //push it to the output in postFix notation
                 else if (operators.TryGetValue(tok, out Token operatorToken1))// when the token is an operator.
@@ -154,7 +154,11 @@ namespace CptS321
                 string top = stack.Pop();
                 if (!operators.ContainsKey(top)) throw new ArgumentException("No matching right parenthesis");
                 postFix.Push(top);
-            }           
+            }
+            while (postFix.Count > 0)
+            {
+                Console.WriteLine(postFix.Pop());
+            }
         }
 
         public void ShuntingYardToken(string expression)
