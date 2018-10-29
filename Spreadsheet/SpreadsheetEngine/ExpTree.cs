@@ -110,10 +110,58 @@ namespace CptS321
             return splitString;
         }
 
-
         public void ShuntingYard(string expression)
         {
+            List<string> tokens = Split(expression, @"[-+\*/\(\)]"); // Splits the expression up into individual tokens
+            Stack<string> stack = new Stack<string>();
+            Stack<string> postFix = new Stack<string>();
+            foreach (string tok in tokens) //debug to print the tokens.
+                Console.WriteLine(tok);
+            foreach (string tok in tokens)
+            {
+                Match token = Regex.Match(expression, @"[-+\*/]");
+                if (!token.Success) //if the token is a value               
+                    postFix.Push(tok); //push it to the output in postFix notation
+                else if (operators.TryGetValue(tok, out Token operatorToken1))// when the token is an operator.
+                {
+                    while (stack.Count > 0 && operators.TryGetValue(tok, out Token operatorToken2))
+                    {
+                        int comparePrecedence = operatorToken1.Precedence - operatorToken2.Precedence;
+                        if (comparePrecedence < 0 || !operatorToken1.RightAssociative && comparePrecedence <= 0)
+                            postFix.Push(stack.Pop());
+                        else
+                            break;
+                    }
+                    stack.Push(tok);
+                }
+                else if (tok == "(")
+                {
+                    stack.Push(tok);
+                }
+                else if (tok == ")")
+                {
+                    string top = "";
+                    while ( stack.Count > 0 && (top = stack.Pop()) != "(")
+                    {
+                        postFix.Push(top);
+                    }
+                    if (top != "(")
+                        throw new ArgumentException("No matching left parenthesis.");
+                }
+            }
+            while (stack.Count > 0)
+            {
+                string top = stack.Pop();
+                if (!operators.ContainsKey(top)) throw new ArgumentException("No matching right parenthesis");
+                postFix.Push(top);
+            }           
+        }
+
+        public void ShuntingYardToken(string expression)
+        {
             List<Token> tokens = SplitIntoTokens(expression, @"[-+\*/\(\)]"); // Splits the expression up into individual tokens
+            if (tokens.Count < 2)   //if there is only one value and nothing else
+                return;
             Stack<Token> stack = new Stack<Token>();
             Stack<Token> postFix = new Stack<Token>();
             foreach (Token tok in tokens) //debug to print the tokens.
