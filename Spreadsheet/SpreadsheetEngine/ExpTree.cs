@@ -41,7 +41,7 @@ namespace CptS321
 
         public ExpTree(string expression)
         {
-            StringExpression = expression; //saves the expression for display purposes
+            StringExpression = expression; //saves the expression for easy display purposes
             root = ConstructTreeFromTokens(ShuntingYard(expression));
         }
 
@@ -113,8 +113,7 @@ namespace CptS321
             }
             return postFix;
         }
-
-        //https://www.geeksforgeeks.org/expression-tree/
+        
         private ExpNode ConstructTreeFromTokens(List<string> expression)
         {
             Stack<ExpNode> stack = new Stack<ExpNode>();
@@ -135,30 +134,6 @@ namespace CptS321
             return stack.Pop(); // returns the root node of the tree.
         }
 
-        // Lame non Shunting Yard algorithm
-        private ExpNode ConstructTree(string expression)
-        {
-            Regex opRegex = new Regex(@"[-+\*/]"); //matches if there is an operator anywhere in the string
-            Regex varRegex = new Regex(@"[\w\.]+\z"); //matches the last alphanumeric characters in the string
-            Match op = opRegex.Match(expression);
-            Match var = varRegex.Match(expression);
-
-            if (op.Success) // if there is an operator
-            {
-                for (int i = expression.Length - 1; i >= 0; i--)
-                {
-                    if (opRegex.Match(expression[i].ToString()).Success) // If the character is an operator
-                    {
-                        OpNode newNode = new OpNode(expression[i]);
-                        newNode.left = ConstructTree(expression.Substring(0, i)); //calls construct node on the current string up until just before the operator
-                        newNode.right = ConstructTree(expression.Substring(i + 1)); //calls construct node on the current string after the operator
-                        return newNode;
-                    }
-                }
-            }
-            return MakeDataNode(var.Value); //if there is no operators, then this must be a variable or value.
-        }
-
         //simple function that turns a string into a Data node.
         private ExpNode MakeDataNode(string operand)
         {
@@ -176,6 +151,7 @@ namespace CptS321
             }
         }
 
+        // public facing interface to set a variable node.
         public void SetVar(string varName, double varValue)
         {
             VarNode search = new VarNode(varName, varValue); //creating a node so that it is easier to compare between nodes. This node stores the value of the new variable
@@ -187,6 +163,7 @@ namespace CptS321
             }
         }
 
+        // recursive function to set a variable node.
         private void SetVarNode(ref VarNode input, OpNode node)
         {
             if (VariableNodeCompare(input, node.left)) //if the left node is a Variable node and has the same variable name
@@ -205,7 +182,7 @@ namespace CptS321
                     SetVarNode(ref input, node.left as OpNode); //check right subtree
             }
         }
-
+       
         public override string ToString()
         {
             return StringExpression;
