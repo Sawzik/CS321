@@ -47,6 +47,7 @@ namespace CptS321
 
         public static List<string> Split(string source, string regexPattern)
         {
+            source = Regex.Replace(source, @"\s+", ""); //removes all whitespace
             List<string> splitString = new List<string>();
             MatchCollection matches = Regex.Matches(source, regexPattern, RegexOptions.IgnorePatternWhitespace);
             int currIndex = 0; // a counter to keep track of where we are in the string.
