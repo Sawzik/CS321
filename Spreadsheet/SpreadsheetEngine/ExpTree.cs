@@ -47,6 +47,7 @@ namespace CptS321
 
         public static List<string> Split(string source, string regexPattern)
         {
+            source = Regex.Replace(source, @"\s+", ""); //removes all whitespace
             List<string> splitString = new List<string>();
             MatchCollection matches = Regex.Matches(source, regexPattern, RegexOptions.IgnorePatternWhitespace);
             int currIndex = 0; // a counter to keep track of where we are in the string.
@@ -80,44 +81,47 @@ namespace CptS321
             List<string> postFix = new List<string>();
             foreach (string tok in tokens)
             {
-                if (operators.TryGetValue(tok, out OperatorToken op1))
+                if (operators.TryGetValue(tok, out OperatorToken op1)) //if the token is an operator
                 {
-                    while (stack.Count > 0 && operators.TryGetValue(stack.Peek(), out OperatorToken op2))
+                    while (stack.Count > 0 && operators.TryGetValue(stack.Peek(), out OperatorToken op2)) //while there are operators on the stack.
                     {
-                        int c = op1.Precedence.CompareTo(op2.Precedence);
-                        if (c < 0 || !op1.RightAssociative && c <= 0)                        
-                            postFix.Add(stack.Pop());                        
+                        int c = op1.Precedence.CompareTo(op2.Precedence); //comparing op1's precedence to op2
+                        if (c < 0 || !op1.RightAssociative && c <= 0)    //(if op2 is more precedent or op1 isnt right associative) and op2 has equal or higher precedence than op1.            
+                            postFix.Add(stack.Pop());   //pops operator off the stack and on to postfix                     
                         else                        
                             break;                        
                     }
-                    stack.Push(tok);
+                    stack.Push(tok); //push the operator on to the stack
                 }
-                else if (tok == "(")                
+                else if (tok == "(") //if the token is an open parenthesis push it to the stack
                     stack.Push(tok);               
                 else if (tok == ")")
                 {
-                    string top = "";
-                    while (stack.Count > 0 && (top = stack.Pop()) != "(")                    
-                        postFix.Add(top);                    
+                    string top = ""; //initializing
+                    while (stack.Count > 0 && (top = stack.Pop()) != "(") // while there are operators on the stack, pop the stack and do what is below if it isnt a (
+                        postFix.Add(top); //move the operator off the stack and is in postFix notation
                     if (top != "(")
                         throw new ArgumentException("No matching left parenthesis.");
                 }
                 else
                     postFix.Add(tok); //push it to the output in postFix notation
             }
-            while (stack.Count > 0)
+            //clearing the stack after running out of tokens
+            while (stack.Count > 0) // while there are operators on the stack
             {
-                string top = stack.Pop();
-                if (!operators.ContainsKey(top)) throw new ArgumentException("No matching right parenthesis");
-                postFix.Add(top);
+                string top = stack.Pop(); //pop the stack
+                if (!operators.ContainsKey(top)) //if the stack had a non-operator. This should only happen if there wasnt a right parenthesis. 
+                    throw new ArgumentException("No matching right parenthesis");
+                postFix.Add(top); // Move the operator to the postfix notation.
             }
-            return postFix;
+            return postFix; //return the List, now in postfix notation.
         }
         
-        private ExpNode ConstructTreeFromTokens(List<string> expression)
+        // Factory for ExpNodes to create an expression tree.
+        private ExpNode ConstructTreeFromTokens(List<string> expressionInPostfixNotation)
         {
             Stack<ExpNode> stack = new Stack<ExpNode>();
-            foreach (string tok in expression)
+            foreach (string tok in expressionInPostfixNotation)
             {
                 if (operators.TryGetValue(tok, out OperatorToken op)) //if the token is an operator
                 {
@@ -126,10 +130,9 @@ namespace CptS321
                     ExpNode newOpNode = new OpNode(ref newLeftNode, ref newrightNode, op.Symbol[0]); // Creates an OpNode with the nodes we just popped off the stack.
                     stack.Push(newOpNode); // Adds the new operator node to the stack.
                 }
-                else //operand
-                {
-                    stack.Push(MakeDataNode(tok)); //push the operand node on to the stack
-                }
+                else // if the token is an operand                
+                    stack.Push(MakeDataNode(tok)); //push the operand node on to the stack      
+                
             } //when there are no more tokens. There should only be one node on the stack.
             return stack.Pop(); // returns the root node of the tree.
         }
