@@ -10,15 +10,6 @@ namespace CptS321
 {
     public class Spreadsheet
     {
-        private class SpreadsheetCell : Cell
-        {
-            public SpreadsheetCell(int column, int row) : base(column, row) { } //uses the base cell class constructor.
-
-            public void SetValue(string value)
-            {
-                cellParsedValue = value; //cellText from abstract cell class
-            }
-        }
 
         private int columnCount;
         private int rowCount;        
@@ -64,11 +55,14 @@ namespace CptS321
 
         private string CalculateValue(string text)
         {
-            if (text[0] != '=') //when it isnt a calculated cell.
-                return text;
-            string calculatedString = text.Substring(1); //removes the first character of the string, which is =
+            if (text.Length > 0)
+            {
+                if (text[0] != '=') //when it isnt a calculated cell.
+                    return text;
+                text = text.Substring(1); //removes the first character of the string, which is =
+            }
 
-            return GetCell(calculatedString).Value; //returns the value of the cell that is being referenced.
+            return GetCell(text).Value; //returns the value of the cell that is being referenced.
         }
 
         private void Spreadsheet_PropertyChanged(object sender, PropertyChangedEventArgs e)

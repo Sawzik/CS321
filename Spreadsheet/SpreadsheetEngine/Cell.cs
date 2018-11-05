@@ -37,7 +37,7 @@ namespace CptS321
             {
                 if (value != cellText) //if the value being set is different than what is already in the cell.
                 {
-                    if (value[0] == '=')
+                    if (value.Length > 0 && value[0] == '=')
                     {
                         valueTree = new ExpTree(value.Substring(1));
                         cellText = valueTree.Eval().ToString(); //change the value
@@ -55,6 +55,16 @@ namespace CptS321
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); //fancy way of only using PropertyChanged if it isn't null
+        }
+    }
+
+    public class SpreadsheetCell : Cell
+    {
+        public SpreadsheetCell(int column, int row) : base(column, row) { } //uses the base cell class constructor.
+
+        public void SetValue(string value)
+        {
+            cellParsedValue = value; //cellText from abstract cell class
         }
     }
 }

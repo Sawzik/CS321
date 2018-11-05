@@ -15,7 +15,7 @@ namespace SpreadsheetForm
     public partial class Form1 : Form
     {
         private Spreadsheet sheet;
-        private int SelectedCell 
+        private SpreadsheetCell selectedCell; //reference to the current cell being edited
 
         public Form1()
         {
@@ -73,14 +73,19 @@ namespace SpreadsheetForm
             DemoCells();
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(); //updates the textbox with the value of the cell
+            object GUIcell = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+            if (GUIcell != null) // If the cell is empty
+                textBox1.Text = GUIcell.ToString(); //updates the textbox with the value of the cell
+            else
+                textBox1.Text = "";
+           selectedCell = sheet.GetCell(e.ColumnIndex, e.RowIndex) as SpreadsheetCell; //saves a reference to the current cell
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
+            selectedCell.Text = textBox1.Text;
         }
     }
 }
