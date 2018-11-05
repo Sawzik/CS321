@@ -31,8 +31,8 @@ namespace CptS321
 
     public class VarNode : ExpNode
     {
-        double numericalValue;
-        string variable;
+        protected double numericalValue;
+        protected string variable;
 
         public VarNode(string varInput = "NoData", double numValInput = 0) //constructor for the variablenode with defaults if no data is specified
         {

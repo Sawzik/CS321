@@ -9,8 +9,8 @@ namespace CptS321
 {
     public class ExpTree
     {
-        ExpNode root = null;
-        string StringExpression; //used to sabe the expression for display purposes. Can just use a tree traversal later.
+        protected ExpNode root = null;
+        protected string StringExpression; //used to sabe the expression for display purposes. Can just use a tree traversal later.
 
         public class OperatorToken
         {
@@ -31,7 +31,7 @@ namespace CptS321
         }
 
         // Dictionary that contains a list of all the operators supported by the ExpTree and their precedence
-        private static readonly Dictionary<string, OperatorToken> operators = new Dictionary<string, OperatorToken>
+        protected static readonly Dictionary<string, OperatorToken> operators = new Dictionary<string, OperatorToken>
         {
             {"*", new OperatorToken("*", 3, false) },
             {"/", new OperatorToken("/", 3, false) },
@@ -74,7 +74,7 @@ namespace CptS321
             return splitString;
         }
 
-        public List<string> ShuntingYard(string expression)
+        protected List<string> ShuntingYard(string expression)
         {
             List<string> tokens = Split(expression, @"[-+\*/\(\)]"); // Splits the expression up into individual tokens
             Stack<string> stack = new Stack<string>();
@@ -118,7 +118,7 @@ namespace CptS321
         }
         
         // Factory for ExpNodes to create an expression tree.
-        private ExpNode ConstructTreeFromTokens(List<string> expressionInPostfixNotation)
+        protected ExpNode ConstructTreeFromTokens(List<string> expressionInPostfixNotation)
         {
             Stack<ExpNode> stack = new Stack<ExpNode>();
             foreach (string tok in expressionInPostfixNotation)
@@ -138,7 +138,7 @@ namespace CptS321
         }
 
         //simple function that turns a string into a Data node.
-        private ExpNode MakeDataNode(string operand)
+        protected virtual ExpNode MakeDataNode(string operand)
         {
             double number;
             bool isDouble = double.TryParse(operand, out number); //only stores the operand in number if it is actually a double
@@ -167,7 +167,7 @@ namespace CptS321
         }
 
         // recursive function to set a variable node.
-        private void SetVarNode(ref VarNode input, OpNode node)
+        protected void SetVarNode(ref VarNode input, OpNode node)
         {
             if (VariableNodeCompare(input, node.left)) //if the left node is a Variable node and has the same variable name
             {

@@ -10,6 +10,45 @@ namespace CptS321
 {
     public class Spreadsheet
     {
+        class SpreadsheetVarNode : VarNode
+        {
+            public SpreadsheetVarNode(string varInput, ref Cell[,] cells) //constructor for the variablenode with defaults if no data is specified
+            {
+                int column = varInput[0] - 'A'; //subtacts an ascii A from the first part of the coordinate to get a number from 0 o 26.
+                int row = Int32.Parse(varInput.Substring(1)) - 1; //Removes the letter from the string and converts it to an int. Subtracts 1 because array indexes start at 0, not 1.
+
+                numericalValue = double.Parse(cells[column, row].Value); //returns that cell at the parsed location.
+                variable = varInput;
+            }
+        }
+
+        class SpreadsheetTree : ExpTree
+        {
+            public SpreadsheetTree(string expression) : base(expression) { } //uses the base cell class constructor.
+            protected Cell[,] cellArray; // used to look up variable names from the spreadsheet.
+            public SpreadsheetTree(string expression, ref Cell[,] cells)
+            {
+                cellArray = cells; //saves a reference to spreadsheet cells
+                StringExpression = expression; //saves the expression for easy display purposes
+                root = ConstructTreeFromTokens(ShuntingYard(expression));
+            }
+
+            protected override ExpNode MakeDataNode(string operand) //the only functionality we need to change is the handling of variable nodes
+            {
+                double number;
+                bool isDouble = double.TryParse(operand, out number); //only stores the operand in number if it is actually a double
+                if (isDouble)
+                {
+                    ValNode numNode = new ValNode(number); //makes a Numerical node with the operand's value
+                    return numNode;
+                }
+                else
+                {
+                    VarNode varNode = new SpreadsheetVarNode(operand, ref cellArray); //makes a variable node with the operands variable name. 
+                    return varNode;
+                }
+            }
+        }
 
         private int columnCount;
         private int rowCount;        
