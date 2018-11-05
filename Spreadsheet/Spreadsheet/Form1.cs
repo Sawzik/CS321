@@ -15,6 +15,7 @@ namespace SpreadsheetForm
     public partial class Form1 : Form
     {
         private Spreadsheet sheet;
+        private int SelectedCell 
 
         public Form1()
         {
@@ -73,6 +74,11 @@ namespace SpreadsheetForm
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(); //updates the textbox with the value of the cell
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
