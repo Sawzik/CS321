@@ -67,6 +67,7 @@ namespace CptS321
             if (text[0] != '=') //when it isnt a calculated cell.
                 return text;
             string calculatedString = text.Substring(1); //removes the first character of the string, which is =
+
             return GetCell(calculatedString).Value; //returns the value of the cell that is being referenced.
         }
 
