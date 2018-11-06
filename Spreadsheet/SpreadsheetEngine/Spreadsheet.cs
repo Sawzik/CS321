@@ -27,6 +27,7 @@ namespace CptS321
 
                 if (column > cellArray.GetLength(0) || row > cellArray.GetLength(1))
                     throw new IndexOutOfRangeException("Coordinate out of range");
+                //cellArray[column, row].ValueChanged += Spreadsheet_ValueChanged;
                 return double.Parse(cellArray[column, row].Value); //returns that cell at the parsed location.
             }
         }
@@ -170,5 +171,9 @@ namespace CptS321
 
             CellPropertyChanged?.Invoke(sender, e); //fancy way to only call if CellPropertyChanged isnt null
         }
-    }
+
+        private void Spreadsheet_ValueChanged(object sender, PropertyChangedEventArgs e)
+        {
+        }
+        }
 }
