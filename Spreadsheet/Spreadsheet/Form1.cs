@@ -77,6 +77,7 @@ namespace SpreadsheetForm
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            selectedCell.Text = textBox1.Text; //save the text currently being typed
             selectedCell = sheet.GetCell(e.ColumnIndex, e.RowIndex) as SpreadsheetCell; //saves a reference to the current cell
             textBox1.Text = selectedCell.Text; //updates the textbox with the text of the cell
         }
