@@ -31,7 +31,7 @@ namespace CptS321
         }
 
         // Dictionary that contains a list of all the operators supported by the ExpTree and their precedence
-        protected static readonly Dictionary<string, OperatorToken> operators = new Dictionary<string, OperatorToken>
+        public static readonly Dictionary<string, OperatorToken> operators = new Dictionary<string, OperatorToken>
         {
             {"*", new OperatorToken("*", 3, false) },
             {"/", new OperatorToken("/", 3, false) },

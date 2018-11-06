@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace CptS321
 {
@@ -37,7 +38,7 @@ namespace CptS321
         public Cell GetCell(int column, int row)
         {
             if (column > columnCount || row > rowCount)
-                throw new IndexOutOfRangeException("GetCell");
+                throw new IndexOutOfRangeException("Coordinate out of range");
             return cells[column, row];
         }
 
@@ -48,7 +49,7 @@ namespace CptS321
             int row = Int32.Parse(strCoords.Substring(1)) - 1; //Removes the letter from the string and converts it to an int. Subtracts 1 because array indexes start at 0, not 1.
 
             if (column > columnCount || row > rowCount)
-                throw new IndexOutOfRangeException("GetCell");
+                throw new IndexOutOfRangeException("Coordinate out of range");
             return cells[column, row]; //returns that cell at the parsed location.
         }
 
@@ -57,7 +58,16 @@ namespace CptS321
             if (text.Length > 0 && text[0] == '=')
             {
                 text = text.Substring(1); //removes the first character of the string, which is =
-                return GetCell(text).Value; //returns the value of the cell that is being referenced.
+                if (text.Length > 1) // If there is a coordinate after the equals
+                {
+                    MatchCollection splitOperands = Regex.Matches(text, @"\w+\.?\d*"); //temporary way to get all the variables.
+                    foreach (Match mat in splitOperands)
+                    {
+                        if (!Regex.Match(mat.Value, @"^\d+").Success) // if the match starts with a number then its not a coordinate and we dont have to retrieve a value.
+                            text = text.Replace(mat.Value, GetCell(mat.Value).Value); //replaces that substring in the text with that cell's value.   
+                    }
+                }
+                return text;
             }
             else
                 return text;

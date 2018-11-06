@@ -59,6 +59,7 @@
     <Compile Include="ExpTreeTests.cs" />
     <Compile Include="OpNodeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpreadsheetTests.cs" />
     <Compile Include="ValNodeTests.cs" />
     <Compile Include="VarNodeTests.cs" />
   </ItemGroup>
