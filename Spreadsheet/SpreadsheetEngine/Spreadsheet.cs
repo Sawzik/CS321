@@ -78,7 +78,8 @@ namespace CptS321
                     {
                         foreach (SpreadsheetCell cell in referencedCells)
                         {
-                            cell.ValueChanged -= senderCell.OnValueChanged; // unsubsribes from the un-referenced cell.
+                            cell.ValueChanged -= senderCell.OnValueChanged; // unsubsribes from the cell that is no longer being referenced.
+                            senderCell.RemoveReferenceToCell(cell);
                         }
                     }
                     ExpTree tree = new ExpTree(text);

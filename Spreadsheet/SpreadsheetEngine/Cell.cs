@@ -60,7 +60,7 @@ namespace CptS321
 
     public class SpreadsheetCell : Cell
     {
-        public HashSet<SpreadsheetCell> ReferencedCells = new HashSet<SpreadsheetCell>();    
+        private HashSet<SpreadsheetCell> referencedCells = new HashSet<SpreadsheetCell>();
 
         public SpreadsheetCell(int column, int row) : base(column, row) { } //uses the base cell class constructor.
 
@@ -71,6 +71,13 @@ namespace CptS321
                 cellParsedValue = value; //cellText from abstract cell class
                 OnPropertyChanged("Value");
             }
+        }
+
+        public HashSet<SpreadsheetCell> ReferencedCells { get { return referencedCells; } } 
+
+        public void RemoveReferenceToCell(SpreadsheetCell cell)
+        {
+            referencedCells.Remove(cell);
         }
     }
 }
