@@ -53,7 +53,7 @@ namespace CptS321
             return cells[column, row]; //returns that cell at the parsed location.
         }
 
-        private string CalculateValue(string text, Cell senderCell)
+        private string CalculateValue(string text, SpreadsheetCell senderCell)
         {
             if (text.Length > 0 && text[0] == '=' && text.Length > 1) //using & to check if there is anything in the string first. Then checking if it has an equals, and then checking if there is even anything after the equals.
             {
@@ -61,13 +61,24 @@ namespace CptS321
                 if (text.Length > 1) //if there are variables to replace, they will be at least 2 chars
                 {
                     MatchCollection splitOperands = Regex.Matches(text, @"\w+\.?\d*"); //temporary way to get all the variables.
+                    HashSet<SpreadsheetCell> referencedCells = new HashSet<SpreadsheetCell>();
                     foreach (Match mat in splitOperands)
                     {
                         if (!Regex.Match(mat.Value, @"^\d+").Success) // if the match starts with a number then its not a coordinate and we dont have to retrieve a value.
                         {
                             SpreadsheetCell cell = GetCell(mat.Value) as SpreadsheetCell;
                             cell.ValueChanged += senderCell.OnValueChanged;
+                            senderCell.ReferencedCells.Add(cell); //tell the sender cell what its referencing. Hashsets can only have unique values, so adding something that is already here will do nothing.
+                            referencedCells.Add(cell); //keep track of which cells this specific expression looks for.
                             text = text.Replace(mat.Value, cell.Value); //replaces that substring in the text with that cell's value.   
+                        }
+                    }
+                    referencedCells.ExceptWith(senderCell.ReferencedCells); //removes all the cell references that are the same.
+                    if (referencedCells.Count > 0) // if they don't reference the same cells
+                    {
+                        foreach (SpreadsheetCell cell in referencedCells)
+                        {
+                            cell.ValueChanged -= senderCell.OnValueChanged; // unsubsribes from the un-referenced cell.
                         }
                     }
                     ExpTree tree = new ExpTree(text);
@@ -82,6 +93,10 @@ namespace CptS321
         private void Spreadsheet_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var cell = (SpreadsheetCell)sender; //casts the sending object as a SpreadsheetCell
+            if (cell.Text == string.Empty)
+            {
+                cell.SetValue(string.Empty);
+            }
             try
             {
                cell.SetValue(CalculateValue(cell.Text, cell)); //updates cell value if it needs to be

@@ -60,6 +60,8 @@ namespace CptS321
 
     public class SpreadsheetCell : Cell
     {
+        public HashSet<SpreadsheetCell> ReferencedCells = new HashSet<SpreadsheetCell>();    
+
         public SpreadsheetCell(int column, int row) : base(column, row) { } //uses the base cell class constructor.
 
         public void SetValue(string value)

@@ -81,14 +81,13 @@ namespace SpreadsheetForm
             textBox1.Text = selectedCell.Text; //updates the textbox with the text of the cell
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            selectedCell.Text = textBox1.Text;
+            if (e.KeyChar == '\r')
+            {
+                selectedCell.Text = textBox1.Text;
+            }
         }
 
-        private void dataGridView1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-        }
     }
 }
