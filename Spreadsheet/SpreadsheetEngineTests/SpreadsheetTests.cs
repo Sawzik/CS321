@@ -43,7 +43,7 @@ namespace CptS321.Tests
         {
             Spreadsheet sheet = new Spreadsheet(1, 3);
             sheet.GetCell("A1").Text = "1";
-            sheet.GetCell("A2").Text = "=A1+A2";
+            sheet.GetCell("A2").Text = "=A3+A2";
             sheet.GetCell("A3").Text = "34";
             Assert.AreEqual("35", sheet.GetCell("A2").Value);
         }

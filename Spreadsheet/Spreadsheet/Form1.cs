@@ -79,12 +79,16 @@ namespace SpreadsheetForm
         {
             selectedCell = sheet.GetCell(e.ColumnIndex, e.RowIndex) as SpreadsheetCell; //saves a reference to the current cell
             textBox1.Text = selectedCell.Text; //updates the textbox with the text of the cell
-
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             selectedCell.Text = textBox1.Text;
+        }
+
+        private void dataGridView1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
         }
     }
 }

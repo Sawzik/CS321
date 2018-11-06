@@ -16,6 +16,7 @@ namespace CptS321
         protected string cellParsedValue;
 
         public event PropertyChangedEventHandler PropertyChanged; //event to handle when a property of a cell changes
+        public event PropertyChangedEventHandler ValueChanged; //event to handle when a property of a cell changes
 
         //constructor that sets column and row indexes.
         public Cell(int column, int row)
@@ -37,15 +38,24 @@ namespace CptS321
                 if (value != cellText) //if the value being set is different than what is already in the cell.
                 {
                     cellText = value; //change the value
-                    OnPropertyChanged("text"); //event that the text was changed.
+                    OnPropertyChanged("Text"); //event that the text was changed.                     
                 }           
             }
         }
 
         protected void OnPropertyChanged(string name)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); //fancy way of only using PropertyChanged if it isn't null
+            if (name == "Text")
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); //fancy way of only using PropertyChanged if it isn't null
+            if (name == "Value")
+                ValueChanged?.Invoke(this, new PropertyChangedEventArgs(name)); //fancy way of only using PropertyChanged if it isn't null
         }
+
+        public void OnValueChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged("Text");
+        }
+
     }
 
     public class SpreadsheetCell : Cell
@@ -54,7 +64,11 @@ namespace CptS321
 
         public void SetValue(string value)
         {
-            cellParsedValue = value; //cellText from abstract cell class
+            if (value != cellParsedValue)
+            {
+                cellParsedValue = value; //cellText from abstract cell class
+                OnPropertyChanged("Value");
+            }
         }
     }
 }

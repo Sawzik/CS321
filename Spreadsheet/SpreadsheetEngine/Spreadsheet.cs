@@ -53,7 +53,7 @@ namespace CptS321
             return cells[column, row]; //returns that cell at the parsed location.
         }
 
-        private string CalculateValue(string text)
+        private string CalculateValue(string text, Cell senderCell)
         {
             if (text.Length > 0 && text[0] == '=' && text.Length > 1) //using & to check if there is anything in the string first. Then checking if it has an equals, and then checking if there is even anything after the equals.
             {
@@ -64,11 +64,15 @@ namespace CptS321
                     foreach (Match mat in splitOperands)
                     {
                         if (!Regex.Match(mat.Value, @"^\d+").Success) // if the match starts with a number then its not a coordinate and we dont have to retrieve a value.
-                            text = text.Replace(mat.Value, GetCell(mat.Value).Value); //replaces that substring in the text with that cell's value.   
+                        {
+                            SpreadsheetCell cell = GetCell(mat.Value) as SpreadsheetCell;
+                            cell.ValueChanged += senderCell.OnValueChanged;
+                            text = text.Replace(mat.Value, cell.Value); //replaces that substring in the text with that cell's value.   
+                        }
                     }
                     ExpTree tree = new ExpTree(text);
                     text = tree.Eval().ToString();
-                }
+                }                
                 return text;
             }
             else
@@ -80,7 +84,7 @@ namespace CptS321
             var cell = (SpreadsheetCell)sender; //casts the sending object as a SpreadsheetCell
             try
             {
-               cell.SetValue(CalculateValue(cell.Text)); //updates cell value if it needs to be
+               cell.SetValue(CalculateValue(cell.Text, cell)); //updates cell value if it needs to be
             }
             catch (Exception ex) //Kind of the nuclear option but there are so many exception types to handle one by one.
             {
