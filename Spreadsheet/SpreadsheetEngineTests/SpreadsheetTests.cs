@@ -17,17 +17,21 @@ namespace CptS321.Tests
         //    Assert.Fail();
         //}
 
-        //[TestMethod()]
-        //public void GetCellTest()
-        //{
-        //    Assert.Fail();
-        //}
+        [TestMethod()]
+        public void GetCellCoordsTest()
+        {
+            Spreadsheet sheet = new Spreadsheet(1, 1);
+            sheet.GetCell(0,0).Text = "1";            
+            Assert.AreEqual("1", sheet.GetCell(0,0).Value);
+        }
 
-        //[TestMethod()]
-        //public void GetCellTest1()
-        //{
-        //    Assert.Fail();
-        //}
+        [TestMethod()]
+        public void GetCellLetterTest()
+        {
+            Spreadsheet sheet = new Spreadsheet(1, 1);
+            sheet.GetCell("A1").Text = "1";
+            Assert.AreEqual("1", sheet.GetCell("A1").Value);
+        }
 
         [TestMethod()]
         public void CalculateValueTest1()
