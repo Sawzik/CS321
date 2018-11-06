@@ -104,9 +104,9 @@ namespace CptS321.Tests
                                          + Values[3].ToString() + '-' + Values[4].ToString() + ")/" + Values[5].ToString() + "+("
                                          + Values[6].ToString() + '+' + Values[7].ToString() + ")*" + Values[8].ToString());
 
-            double expectedOutput = Values[0] -(Values[1] + Values[2] +
-                                    Values[3] - Values[4])/ Values[5] +(
-                                    Values[6] + Values[7])* Values[8];
+            double expectedOutput = Values[0] - (Values[1] + Values[2] +
+                                    Values[3] - Values[4]) / Values[5] + (
+                                    Values[6] + Values[7]) * Values[8];
 
             Assert.AreEqual(testTree.Eval(), expectedOutput);
         }
@@ -121,7 +121,6 @@ namespace CptS321.Tests
                                          + Values[3].ToString() + '-' + Values[4].ToString() + ")/" + Values[5].ToString() + "+("
                                          + Values[6].ToString() + '+' + Values[7].ToString() + "*" + Values[8].ToString());
 
-            testTree.Eval();
         }
 
         [TestMethod()]
@@ -134,7 +133,20 @@ namespace CptS321.Tests
                                          + Values[3].ToString() + '-' + Values[4].ToString() + "/" + Values[5].ToString() + "+("
                                          + Values[6].ToString() + '+' + Values[7].ToString() + ")*" + Values[8].ToString());
 
-            testTree.Eval();
+        }
+
+        [TestMethod()]
+        public void SetVarNodeTest()
+        {
+            // Arrange
+            string testVariable = "hhhhhhhhhhh1";
+            double testValue = 1384.34;
+
+            ExpTree testTree = new ExpTree(testVariable);
+            testTree.SetVar(testVariable, testValue);
+
+            // Assert
+            Assert.AreEqual(testValue, testTree.Eval());
         }
     }
 }

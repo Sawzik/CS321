@@ -208,37 +208,4 @@ namespace CptS321
             return root.Eval();
         }
     }
-    //derived class that deals with indexing the array of cells so that VarNodes will contain the value of the cell they refer to.
-    public class SpreadTree : ExpTree
-    {
-        SpreadsheetCell[,] cellArray;
-        public SpreadTree(string expression) : base(expression) { }
-
-        public void CellArrayPass(ref SpreadsheetCell[,] cells) //I cannot get the constructor to accept an array of cells. Going to implement a function to deal with passing 
-        {
-            cellArray = cells;
-        }
-
-        protected override ExpNode MakeDataNode(string operand)
-        {
-            double number;
-            bool isDouble = double.TryParse(operand, out number); //only stores the operand in number if it is actually a double
-            if (isDouble)
-            {
-                ValNode numNode = new ValNode(number); //makes a Numerical node with the operand's value
-                return numNode;
-            }
-            else
-            {
-                int column = operand[0] - 'A'; //subtacts an ascii A from the first part of the coordinate to get a number from 0 o 26.
-                int row = Int32.Parse(operand.Substring(1)) - 1; //Removes the letter from the string and converts it to an int. Subtracts 1 because array indexes start at 0, not 1.
-
-                if (column > cellArray.GetLength(0) || row > cellArray.GetLength(1)) //GetLength checks the number of elements in that dimension of the array.
-                    throw new IndexOutOfRangeException("Cell Out of range");
-                //return cells[column, row]; //returns that cell at the parsed location.
-                VarNode varNode = new VarNode(operand, double.Parse(cellArray[column, row].Value)); //makes a variable node with the cell location as a name and its value as a value
-                return varNode;
-            }
-        }
-    }
 }

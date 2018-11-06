@@ -95,5 +95,18 @@ namespace CptS321.Tests
             sheet.GetCell("A2").Text = "34";
             Assert.AreEqual("-34", sheet.GetCell("A4").Value);
         }
+
+        [TestMethod()]
+        public void CalculateValueTest7()
+        {
+            Spreadsheet sheet = new Spreadsheet(1, 4);
+            sheet.GetCell("A1").Text = "=A2+A3";
+            sheet.GetCell("A2").Text = "35";
+            sheet.GetCell("A3").Text = "1";
+            sheet.GetCell("A4").Text = "=A3-A1";
+            sheet.GetCell("A2").Text = "34";
+            sheet.GetCell("A4").Text = "=A1+A2+A3";
+            Assert.AreEqual("70", sheet.GetCell("A4").Value);
+        }
     }
 }

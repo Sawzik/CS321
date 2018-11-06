@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetEngine", "Spread
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleMenu", "ConsoleMenu\ConsoleMenu.csproj", "{74A06B08-F7F0-480E-8E7D-BCEF2578FF1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetTests", "SpreadsheetEngineTests\SpreadsheetTests.csproj", "{0EC1227D-620C-42EF-95D8-911E72484E1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLLTests", "SpreadsheetEngineTests\DLLTests.csproj", "{0EC1227D-620C-42EF-95D8-911E72484E1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
