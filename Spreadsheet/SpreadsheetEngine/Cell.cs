@@ -14,7 +14,7 @@ namespace CptS321
         protected int cellRowIndex;
         protected string cellText;
         protected string cellParsedValue;
-        protected ExpTree valueTree;
+        protected SpreadTree valueTree;
 
         public event PropertyChangedEventHandler PropertyChanged; //event to handle when a property of a cell changes
 
@@ -39,8 +39,9 @@ namespace CptS321
                 {
                     if (value.Length > 0 && value[0] == '=')
                     {
-                        valueTree = new ExpTree(value.Substring(1));
-                        cellText = valueTree.Eval().ToString(); //change the value
+                        cellText = value;
+                        valueTree = new SpreadTree(value.Substring(1));
+                        cellParsedValue = valueTree.Eval().ToString(); //change the value
                         OnPropertyChanged("variable"); //event that the text was changed.
                     }
                     else
@@ -61,6 +62,7 @@ namespace CptS321
     public class SpreadsheetCell : Cell
     {
         public SpreadsheetCell(int column, int row) : base(column, row) { } //uses the base cell class constructor.
+
 
         public void SetValue(string value)
         {
