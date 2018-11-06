@@ -48,9 +48,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(748, 0);
+            this.button1.Location = new System.Drawing.Point(0, 0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(52, 23);
+            this.button1.Size = new System.Drawing.Size(48, 21);
             this.button1.TabIndex = 1;
             this.button1.Text = "Demo";
             this.button1.UseVisualStyleBackColor = true;
@@ -58,8 +58,8 @@
             // 
             // textBox1
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBox1.Location = new System.Drawing.Point(0, 427);
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.textBox1.Location = new System.Drawing.Point(0, 430);
             this.textBox1.Margin = new System.Windows.Forms.Padding(0);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(800, 20);

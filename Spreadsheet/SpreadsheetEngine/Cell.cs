@@ -14,7 +14,6 @@ namespace CptS321
         protected int cellRowIndex;
         protected string cellText;
         protected string cellParsedValue;
-        protected SpreadTree valueTree;
 
         public event PropertyChangedEventHandler PropertyChanged; //event to handle when a property of a cell changes
 
@@ -52,7 +51,6 @@ namespace CptS321
     public class SpreadsheetCell : Cell
     {
         public SpreadsheetCell(int column, int row) : base(column, row) { } //uses the base cell class constructor.
-
 
         public void SetValue(string value)
         {

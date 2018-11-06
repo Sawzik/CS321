@@ -55,10 +55,10 @@ namespace CptS321
 
         private string CalculateValue(string text)
         {
-            if (text.Length > 0 && text[0] == '=')
+            if (text.Length > 0 && text[0] == '=' && text.Length > 1) //using & to check if there is anything in the string first. Then checking if it has an equals, and then checking if there is even anything after the equals.
             {
                 text = text.Substring(1); //removes the first character of the string, which is =
-                if (text.Length > 1) // If there is a coordinate after the equals
+                if (text.Length > 1) //if there are variables to replace, they will be at least 2 chars
                 {
                     MatchCollection splitOperands = Regex.Matches(text, @"\w+\.?\d*"); //temporary way to get all the variables.
                     foreach (Match mat in splitOperands)
@@ -66,6 +66,8 @@ namespace CptS321
                         if (!Regex.Match(mat.Value, @"^\d+").Success) // if the match starts with a number then its not a coordinate and we dont have to retrieve a value.
                             text = text.Replace(mat.Value, GetCell(mat.Value).Value); //replaces that substring in the text with that cell's value.   
                     }
+                    ExpTree tree = new ExpTree(text);
+                    text = tree.Eval().ToString();
                 }
                 return text;
             }
@@ -76,7 +78,15 @@ namespace CptS321
         private void Spreadsheet_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var cell = (SpreadsheetCell)sender; //casts the sending object as a SpreadsheetCell
-            cell.SetValue(CalculateValue(cell.Text)); //updates cell value if it needs to be
+            try
+            {
+               cell.SetValue(CalculateValue(cell.Text)); //updates cell value if it needs to be
+            }
+            catch (Exception ex) //Kind of the nuclear option but there are so many exception types to handle one by one.
+            {
+                Console.WriteLine(ex.Message);
+                cell.SetValue("#REF!");
+            }
 
             CellPropertyChanged?.Invoke(sender, e); //fancy way to only call if CellPropertyChanged isnt null
         }

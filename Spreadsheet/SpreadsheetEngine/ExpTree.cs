@@ -211,10 +211,10 @@ namespace CptS321
     //derived class that deals with indexing the array of cells so that VarNodes will contain the value of the cell they refer to.
     public class SpreadTree : ExpTree
     {
-        Cell[,] cellArray;
+        SpreadsheetCell[,] cellArray;
         public SpreadTree(string expression) : base(expression) { }
 
-        public void CellArrayPass(ref Cell[,] cells) //I cannot get the constructor to accept an array of cells. Going to implement a function to deal with passing 
+        public void CellArrayPass(ref SpreadsheetCell[,] cells) //I cannot get the constructor to accept an array of cells. Going to implement a function to deal with passing 
         {
             cellArray = cells;
         }

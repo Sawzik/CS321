@@ -26,7 +26,9 @@ namespace SpreadsheetForm
         {
             sheet = new Spreadsheet(26, 50); //makes a 50 by 26 spreadsheet
             sheet.CellPropertyChanged += Sheet_CellPropertyChanged; //subscribes to the sheets event handler
+            selectedCell = sheet.GetCell(0, 0) as SpreadsheetCell; //sets a default selected cell to prevent crashes
             MakeCells();
+            
         }
 
         private void Sheet_CellPropertyChanged(object sender, EventArgs e)
@@ -76,17 +78,13 @@ namespace SpreadsheetForm
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             selectedCell = sheet.GetCell(e.ColumnIndex, e.RowIndex) as SpreadsheetCell; //saves a reference to the current cell
-            object GUIcell = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-            if (GUIcell != null) // If the cell isn't empty
-                textBox1.Text = GUIcell.ToString(); //updates the textbox with the value of the cell
-            else
-                textBox1.Text = "";
+            textBox1.Text = selectedCell.Text; //updates the textbox with the text of the cell
+
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             selectedCell.Text = textBox1.Text;
         }
-
     }
 }
