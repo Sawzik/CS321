@@ -53,7 +53,7 @@ namespace CptS321
 
         public void OnValueChanged(object sender, PropertyChangedEventArgs e)
         {
-            OnPropertyChanged("Text");
+            OnPropertyChanged("Value");
         }
 
     }

@@ -11,6 +11,53 @@ namespace CptS321
 {
     public class Spreadsheet
     {
+        public class CellVarNode : VarNode
+        {
+            Cell[,] cellArray;
+            public CellVarNode(string var, ref Cell [,] cells)
+            {
+                variable = var;
+                cellArray = cells;
+            }
+
+            public override double Eval()
+            {
+                int column = variable[0] - 'A'; //subtacts an ascii A from the first part of the coordinate to get a number from 0 o 26.
+                int row = Int32.Parse(variable.Substring(1)) - 1; //Removes the letter from the string and converts it to an int. Subtracts 1 because array indexes start at 0, not 1.
+
+                if (column > cellArray.GetLength(0) || row > cellArray.GetLength(1))
+                    throw new IndexOutOfRangeException("Coordinate out of range");
+                return double.Parse(cellArray[column, row].Value); //returns that cell at the parsed location.
+            }
+        }
+
+        public class CellExpTree : ExpTree
+        {
+            Cell[,] cellArray;
+
+            public CellExpTree(string expression, ref Cell [,] cells) : base(expression)
+            {
+                cellArray = cells;
+            }
+
+            protected override ExpNode MakeDataNode(string operand)
+            {
+                double number;
+                bool isDouble = double.TryParse(operand, out number); //only stores the operand in number if it is actually a double
+                if (isDouble)
+                {
+                    ValNode numNode = new ValNode(number); //makes a Numerical node with the operand's value
+                    return numNode;
+                }
+                else
+                {
+                    VarNode varNode = new CellVarNode(operand, ref cellArray); //makes a variable node with the cell location as a name and its value as a value
+                    return varNode;
+                }
+            }
+
+        }
+
         private int columnCount;
         private int rowCount;        
         public int ColumnCount { get { return columnCount; } }
@@ -53,7 +100,7 @@ namespace CptS321
             return cells[column, row]; //returns that cell at the parsed location.
         }
 
-        private string CalculateValue(string text, Cell senderCell)
+        private string CalculateValueWithLink(string text, Cell senderCell)
         {
             if (text.Length > 0 && text[0] == '=' && text.Length > 1) //using & to check if there is anything in the string first. Then checking if it has an equals, and then checking if there is even anything after the equals.
             {
@@ -79,17 +126,46 @@ namespace CptS321
                 return text;
         }
 
+        private string CalculateValue(string text, Cell senderCell)
+        {
+            if (text.Length > 0 && text[0] == '=' && text.Length > 1) //using & to check if there is anything in the string first. Then checking if it has an equals, and then checking if there is even anything after the equals.
+            {
+                text = text.Substring(1); //removes the first character of the string, which is =
+                if (text.Length > 1) //if there are variables to replace, they will be at least 2 chars
+                {
+                    ExpTree tree = new ExpTree(text);
+                    text = tree.Eval().ToString();
+                }
+                return text;
+            }
+            else
+                return text;
+        }
+
         private void Spreadsheet_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var cell = (SpreadsheetCell)sender; //casts the sending object as a SpreadsheetCell
-            try
+            if (e.PropertyName == "Text")
             {
-               cell.SetValue(CalculateValue(cell.Text, cell)); //updates cell value if it needs to be
+                try
+                {
+                    cell.SetValue(CalculateValueWithLink(cell.Text, cell)); //updates cell value if it needs to be
+                }
+                catch (Exception ex) //Kind of the nuclear option but there are so many exception types to handle one by one.
+                {
+                    cell.SetValue("#REF!");
+                }
             }
-            catch (Exception ex) //Kind of the nuclear option but there are so many exception types to handle one by one.
+            else
             {
-                Console.WriteLine(ex.Message);
-                cell.SetValue("#REF!");
+                try
+                {
+                    cell.SetValue(CalculateValueWithLink(cell.Text, cell)); //updates cell value if it needs to be
+                }
+                catch (Exception ex) //Kind of the nuclear option but there are so many exception types to handle one by one.
+                {
+                    cell.SetValue("#REF!");
+                }
             }
 
             CellPropertyChanged?.Invoke(sender, e); //fancy way to only call if CellPropertyChanged isnt null
