@@ -39,21 +39,7 @@ namespace CptS321
                 {
                     cellText = value; //change the value
                     OnPropertyChanged("text"); //event that the text was changed.
-                }
-
-                //    if (value.Length > 0 && value[0] == '=')
-                //    {
-                //        cellText = value;
-                //        valueTree = new SpreadTree(value.Substring(1));
-                //        cellParsedValue = valueTree.Eval().ToString(); //change the value
-                //        OnPropertyChanged("variable"); //event that the text was changed.
-                //    }
-                //    else
-                //    {
-                //        cellText = value;
-                //        OnPropertyChanged("text"); //event that the text was changed.
-                //    }
-                //}                
+                }           
             }
         }
 
