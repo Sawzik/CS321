@@ -136,7 +136,7 @@ namespace CptS321.Tests
         }
 
         [TestMethod()]
-        public void SetVarNodeTest()
+        public void SetVarNodeRootTest()
         {
             // Arrange
             string testVariable = "hhhhhhhhhhh1";
@@ -147,6 +147,20 @@ namespace CptS321.Tests
 
             // Assert
             Assert.AreEqual(testValue, testTree.Eval());
+        }
+
+        [TestMethod()]
+        public void SetVarNodeNonRootTest()
+        {
+            // Arrange
+            string testVariable = "hhhhhhhhhhh1";
+            double testValue = 1384.34;
+
+            ExpTree testTree = new ExpTree(testVariable + "+3454-2348*34/0.5");
+            testTree.SetVar(testVariable, testValue);
+
+            // Assert
+            Assert.AreEqual(-154825.66, testTree.Eval());
         }
     }
 }

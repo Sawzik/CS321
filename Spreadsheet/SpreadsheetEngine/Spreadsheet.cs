@@ -73,14 +73,11 @@ namespace CptS321
                             text = text.Replace(mat.Value, cell.Value); //replaces that substring in the text with that cell's value.   
                         }
                     }
-                    referencedCells.ExceptWith(senderCell.ReferencedCells); //removes all the cell references that are the same.
-                    if (referencedCells.Count > 0) // if they don't reference the same cells
+                    referencedCells.SymmetricExceptWith(senderCell.ReferencedCells); //removes all the cell references that are the same.
+                    foreach (SpreadsheetCell cell in referencedCells) // all the cells that were referenced previously but are no longer being referenced.
                     {
-                        foreach (SpreadsheetCell cell in referencedCells)
-                        {
-                            cell.ValueChanged -= senderCell.OnValueChanged; // unsubsribes from the cell that is no longer being referenced.
-                            senderCell.RemoveReferenceToCell(cell);
-                        }
+                        cell.ValueChanged -= senderCell.OnValueChanged; // unsubsribes from the cell that is no longer being referenced.
+                        senderCell.RemoveReferenceToCell(cell);
                     }
                     ExpTree tree = new ExpTree(text);
                     text = tree.Eval().ToString();
