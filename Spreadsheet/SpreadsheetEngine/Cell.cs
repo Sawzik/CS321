@@ -80,9 +80,5 @@ namespace CptS321
             referencedCells.Remove(cell);
         }
 
-        public void ExceptWith(HashSet<SpreadsheetCell> cells)
-        {
-            referencedCells.ExceptWith(cells);
-        }
     }
 }

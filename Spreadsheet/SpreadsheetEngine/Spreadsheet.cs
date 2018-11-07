@@ -55,7 +55,7 @@ namespace CptS321
 
         private string CalculateValue(string text, SpreadsheetCell senderCell)
         {
-            if (text.Length > 0 && text[0] == '=' && text.Length > 1) //using & to check if there is anything in the string first. Then checking if it has an equals, and then checking if there is even anything after the equals.
+            if (text[0] == '=' && text.Length > 1) //using & to check if there is anything in the string first. Then checking if it has an equals, and then checking if there is even anything after the equals.
             {
                 text = text.Substring(1); //removes the first character of the string, which is =
                 if (text.Length > 1) //if there are variables to replace, they will be at least 2 chars
@@ -91,18 +91,41 @@ namespace CptS321
         private void Spreadsheet_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var cell = (SpreadsheetCell)sender; //casts the sending object as a SpreadsheetCell
-            if (cell.Text == string.Empty)
-            {
+            string text = cell.Text;
+            if (text == string.Empty)
                 cell.SetValue(string.Empty);
-            }
-            try
+            else if (text.Length == 1)
+                cell.SetValue(text);
+            else if (text[0] == '=')
             {
-               cell.SetValue(CalculateValue(cell.Text, cell)); //updates cell value if it needs to be
+                if (text.Length == 2)
+                    cell.SetValue("#REF!");
+                else if (text.Length > 2 && text.Length < 5) //if the text could possibly be a cell reference
+                {
+
+                    if (Regex.Match(cell.Value, @"=[A-Z]\d+").Success) // if its a coordinate
+                    {
+                        text = text.Substring(1);
+                        SpreadsheetCell referencedCell = GetCell(text) as SpreadsheetCell;
+                        referencedCell.ValueChanged += cell.OnValueChanged;
+                        cell.ReferencedCells.Add(cell); //tell the sender cell what its referencing. Hashsets can only have unique values, so adding something that is already here will do nothing.
+                        //referencedCells.Add(cell); //keep track of which cells this specific expression looks for.
+                        text = text.Replace(text, referencedCell.Value); //replaces that substring in the text with that cell's value.  
+                    }                       
+                }
             }
-            catch (Exception ex) //Kind of the nuclear option but there are so many exception types to handle one by one.
+            
+            else
             {
-                Console.WriteLine(ex.Message);
-                cell.SetValue("#REF!");
+                try
+                {
+                    cell.SetValue(CalculateValue(cell.Text, cell)); //updates cell value if it needs to be
+                }
+                catch (Exception ex) //Kind of the nuclear option but there are so many exception types to handle one by one.
+                {
+                    Console.WriteLine(ex.Message);
+                    cell.SetValue("#REF!");
+                }
             }
 
             CellPropertyChanged?.Invoke(sender, e); //fancy way to only call if CellPropertyChanged isnt null
