@@ -68,7 +68,7 @@ namespace CptS321
                         {
                             SpreadsheetCell cell = GetCell(mat.Value) as SpreadsheetCell;
                             cell.ValueChanged += senderCell.OnValueChanged;
-                            senderCell.ReferencedCells.Add(cell); //tell the sender cell what its referencing. Hashsets can only have unique values, so adding something that is already here will do nothing.
+                            senderCell.AddReferenceToCell(cell); //tell the sender cell what its referencing. Hashsets can only have unique values, so adding something that is already here will do nothing.
                             referencedCells.Add(cell); //keep track of which cells this specific expression looks for.
                             text = text.Replace(mat.Value, cell.Value); //replaces that substring in the text with that cell's value.   
                         }
@@ -92,29 +92,38 @@ namespace CptS321
         {
             var cell = (SpreadsheetCell)sender; //casts the sending object as a SpreadsheetCell
             string text = cell.Text;
-            if (text == string.Empty)
-                cell.SetValue(string.Empty);
-            else if (text.Length == 1)
-                cell.SetValue(text);
-            else if (text[0] == '=')
+            if (text == string.Empty) //if there is no text
             {
-                if (text.Length == 2)
-                    cell.SetValue("#REF!");
-                else if (text.Length > 2 && text.Length < 5) //if the text could possibly be a cell reference
+                cell.SetValue(string.Empty);
+                // clears all of this cells references
+                foreach (SpreadsheetCell cellReference in cell.ReferencedCells)
                 {
-
-                    if (Regex.Match(cell.Value, @"=[A-Z]\d+").Success) // if its a coordinate
-                    {
-                        text = text.Substring(1);
-                        SpreadsheetCell referencedCell = GetCell(text) as SpreadsheetCell;
-                        referencedCell.ValueChanged += cell.OnValueChanged;
-                        cell.ReferencedCells.Add(cell); //tell the sender cell what its referencing. Hashsets can only have unique values, so adding something that is already here will do nothing.
-                        //referencedCells.Add(cell); //keep track of which cells this specific expression looks for.
-                        text = text.Replace(text, referencedCell.Value); //replaces that substring in the text with that cell's value.  
-                    }                       
+                    cellReference.ValueChanged -= cell.OnValueChanged; // unsubsribes from the cell
+                    cell.RemoveReferenceToCell(cellReference); //removes it from the list
                 }
             }
-            
+            else if (text.Length == 1)
+                cell.SetValue(text);
+            else if (Regex.Match(text, @"=[A-Z]\d+\z").Success) //matches if there is only a single reference with no operators
+            {
+                // Removes all references to other cells
+                SpreadsheetCell referencedCell = GetCell(text.Substring(1)) as SpreadsheetCell;
+                HashSet<SpreadsheetCell> senderReferencedCells = cell.ReferencedCells;
+                foreach (SpreadsheetCell cellReference in senderReferencedCells) // all the cells that were referenced previously but are no longer being referenced.
+                {
+                    referencedCell.ValueChanged -= cell.OnValueChanged; // unsubsribes from the cell
+                    cell.RemoveReferenceToCell(referencedCell);
+                }
+
+                //adds a reference to the cell in its text
+                cell.SetValue(referencedCell.Value);
+                cell.AddReferenceToCell(referencedCell);
+                referencedCell.ValueChanged += cell.OnValueChanged;
+            }
+            else if (text[0] == '=')
+            {
+
+            }
             else
             {
                 try

@@ -75,10 +75,19 @@ namespace CptS321
 
         public HashSet<SpreadsheetCell> ReferencedCells { get { return referencedCells; } } 
 
+        public void AddReferenceToCell(SpreadsheetCell cell)
+        {
+            referencedCells.Add(cell);
+        }
+
         public void RemoveReferenceToCell(SpreadsheetCell cell)
         {
             referencedCells.Remove(cell);
         }
 
+        public void MakeReferenceEmpty()
+        {
+            referencedCells = new HashSet<SpreadsheetCell>();
+        }
     }
 }
