@@ -55,8 +55,6 @@ namespace CptS321
 
         private string CalculateValue(string text, SpreadsheetCell senderCell)
         {
-            if (text[0] == '=' && text.Length > 1) //using & to check if there is anything in the string first. Then checking if it has an equals, and then checking if there is even anything after the equals.
-            {
                 text = text.Substring(1); //removes the first character of the string, which is =
                 if (text.Length > 1) //if there are variables to replace, they will be at least 2 chars
                 {
@@ -83,9 +81,6 @@ namespace CptS321
                     text = tree.Eval().ToString();
                 }                
                 return text;
-            }
-            else
-                return text;
         }
 
         private void Spreadsheet_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -109,10 +104,13 @@ namespace CptS321
                 // Removes all references to other cells
                 SpreadsheetCell referencedCell = GetCell(text.Substring(1)) as SpreadsheetCell;
                 HashSet<SpreadsheetCell> senderReferencedCells = cell.ReferencedCells;
-                foreach (SpreadsheetCell cellReference in senderReferencedCells) // all the cells that were referenced previously but are no longer being referenced.
+                if (senderReferencedCells.Count > 0)
                 {
-                    referencedCell.ValueChanged -= cell.OnValueChanged; // unsubsribes from the cell
-                    cell.RemoveReferenceToCell(referencedCell);
+                    foreach (SpreadsheetCell cellReference in senderReferencedCells.ToList()) // all the cells that were referenced previously but are no longer being referenced.
+                    {
+                        referencedCell.ValueChanged -= cell.OnValueChanged; // unsubsribes from the cell
+                        cell.RemoveReferenceToCell(referencedCell);
+                    }
                 }
 
                 //adds a reference to the cell in its text
@@ -121,10 +119,6 @@ namespace CptS321
                 referencedCell.ValueChanged += cell.OnValueChanged;
             }
             else if (text[0] == '=')
-            {
-
-            }
-            else
             {
                 try
                 {
@@ -136,6 +130,8 @@ namespace CptS321
                     cell.SetValue("#REF!");
                 }
             }
+            else
+                cell.SetValue(cell.Text);
 
             CellPropertyChanged?.Invoke(sender, e); //fancy way to only call if CellPropertyChanged isnt null
         }

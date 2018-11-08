@@ -73,7 +73,7 @@ namespace CptS321
             }
         }
 
-        public HashSet<SpreadsheetCell> ReferencedCells { get { return referencedCells; } } 
+        public ref HashSet<SpreadsheetCell> ReferencedCells { get { return ref referencedCells; } } 
 
         public void AddReferenceToCell(SpreadsheetCell cell)
         {
