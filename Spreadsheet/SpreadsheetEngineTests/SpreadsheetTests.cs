@@ -121,5 +121,25 @@ namespace CptS321.Tests
             sheet.GetCell("A5").Text = "=A1";
             Assert.AreEqual("1", sheet.GetCell("A5").Value);
         }
+
+        [TestMethod()]
+        public void ReferenceToString()
+        {
+            Spreadsheet sheet = new Spreadsheet(1, 2);
+            sheet.GetCell("A1").Text = "=A2";
+            sheet.GetCell("A2").Text = "2";
+            Assert.AreEqual("2", sheet.GetCell("A1").Value);
+        }
+
+        [TestMethod()]
+        public void ReferenceToString_WithCalculatedValue()
+        {
+            Spreadsheet sheet = new Spreadsheet(1, 2);
+            sheet.GetCell("A1").Text = "=A2";
+            sheet.GetCell("A2").Text = "=2+47";
+            Assert.AreEqual("49", sheet.GetCell("A1").Value);
+        }
+
+
     }
 }

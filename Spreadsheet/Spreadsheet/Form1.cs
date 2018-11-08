@@ -87,6 +87,7 @@ namespace SpreadsheetForm
             if (e.KeyChar == '\r')
             {
                 selectedCell.Text = textBox1.Text;
+                e.Handled = true;
             }
         }
 
