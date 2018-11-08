@@ -86,49 +86,53 @@ namespace CptS321
         private void Spreadsheet_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var cell = (SpreadsheetCell)sender; //casts the sending object as a SpreadsheetCell
-            string text = cell.Text;
-            if (text == string.Empty) //if there is no text
+            if (e.PropertyName == "Text")
             {
-                cell.SetValue(string.Empty);
-                // clears all of this cells references
-                foreach (SpreadsheetCell cellReference in cell.ReferencedCells)
+                string text = cell.Text;
+                if (text == string.Empty) //if there is no text
                 {
-                    cellReference.ValueChanged -= cell.OnValueChanged; // unsubsribes from the cell
-                    cell.RemoveReferenceToCell(cellReference); //removes it from the list
-                }
-            }
-            else if (text.Length == 1)
-                cell.SetValue(text);
-            else if (Regex.Match(text, @"=[A-Z]\d+\z").Success) //matches if there is only a single reference with no operators
-            {
-                // Removes all references to other cells
-                SpreadsheetCell referencedCell = GetCell(text.Substring(1)) as SpreadsheetCell;
-                HashSet<SpreadsheetCell> senderReferencedCells = cell.ReferencedCells;
-                if (senderReferencedCells.Count > 0)
-                {
-                    foreach (SpreadsheetCell cellReference in senderReferencedCells.ToList()) // all the cells that were referenced previously but are no longer being referenced.
+                    cell.SetValue(string.Empty);
+                    // clears all of this cells references
+                    foreach (SpreadsheetCell cellReference in cell.ReferencedCells.ToList())
                     {
-                        referencedCell.ValueChanged -= cell.OnValueChanged; // unsubsribes from the cell
-                        cell.RemoveReferenceToCell(referencedCell);
+                        cellReference.ValueChanged -= cell.OnValueChanged; // unsubsribes from the cell
+                        cell.RemoveReferenceToCell(cellReference); //removes it from the list
                     }
                 }
+                else if (text.Length == 1)
+                    cell.SetValue(text);
+                else if (Regex.Match(text, @"=[A-Z]\d+\z").Success) //matches if there is only a single reference with no operators
+                {
+                    // Removes all references to other cells
+                    SpreadsheetCell referencedCell = GetCell(text.Substring(1)) as SpreadsheetCell;
+                    HashSet<SpreadsheetCell> senderReferencedCells = cell.ReferencedCells;
+                    if (senderReferencedCells.Count > 0)
+                    {
+                        foreach (SpreadsheetCell cellReference in senderReferencedCells.ToList()) // all the cells that were referenced previously but are no longer being referenced.
+                        {
+                            referencedCell.ValueChanged -= cell.OnValueChanged; // unsubsribes from the cell
+                            cell.RemoveReferenceToCell(referencedCell);
+                        }
+                    }
 
-                //adds a reference to the cell in its text
-                cell.SetValue(referencedCell.Value);
-                cell.AddReferenceToCell(referencedCell);
-                referencedCell.ValueChanged += cell.OnValueChanged;
-            }
-            else if (text[0] == '=')
-            {
-                try
-                {
-                    cell.SetValue(CalculateValue(cell.Text, cell)); //updates cell value if it needs to be
+                    //adds a reference to the cell in its text
+                    cell.SetValue(referencedCell.Value);
+                    cell.AddReferenceToCell(referencedCell);
+                    referencedCell.ValueChanged += cell.OnValueChanged;
                 }
-                catch (Exception ex) //Kind of the nuclear option but there are so many exception types to handle one by one.
+                else if (text[0] == '=')
                 {
-                    Console.WriteLine(ex.Message);
-                    cell.SetValue("#REF!");
+                    try
+                    {
+                        cell.SetValue(CalculateValue(cell.Text, cell)); //updates cell value if it needs to be
+                    }
+                    catch //Kind of the nuclear option but there are so many exception types to handle one by one.
+                    {
+                        cell.SetValue("#REF!");
+                    }
                 }
+                else
+                    cell.SetValue(cell.Text);
             }
             else
                 cell.SetValue(cell.Text);

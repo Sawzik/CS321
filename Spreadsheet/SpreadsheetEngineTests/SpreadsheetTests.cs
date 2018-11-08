@@ -140,6 +140,24 @@ namespace CptS321.Tests
             Assert.AreEqual("49", sheet.GetCell("A1").Value);
         }
 
+        [TestMethod()]
+        public void ReferenceToString_WithCalculatedValueAndRefereceToANotherCell()
+        {
+            Spreadsheet sheet = new Spreadsheet(1, 3);
+            sheet.GetCell("A1").Text = "=A2";
+            sheet.GetCell("A2").Text = "=A3";
+            sheet.GetCell("A3").Text = "=2+47";
+            Assert.AreEqual("49", sheet.GetCell("A1").Value);
+        }
 
+        [TestMethod()]
+        public void ReferenceToString_WithRefereceToANotherCell()
+        {
+            Spreadsheet sheet = new Spreadsheet(1, 3);
+            sheet.GetCell("A1").Text = "=A2";
+            sheet.GetCell("A2").Text = "=A3";
+            sheet.GetCell("A3").Text = "Test";
+            Assert.AreEqual("Test", sheet.GetCell("A1").Value);
+        }
     }
 }
