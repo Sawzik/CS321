@@ -53,6 +53,6 @@ namespace CptS321.Tests
 
             // Assert
             Assert.AreEqual(testValue, testVarNode.Eval());
-        }
+        }        
     }
 }
