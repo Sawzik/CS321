@@ -37,7 +37,7 @@ namespace CptS321
         //gets a cell at a position in the spreadsheet
         public Cell GetCell(int column, int row)
         {
-            if (column > columnCount || row > rowCount)
+            if (column > columnCount || row > rowCount || column < 0 || row < 0)
                 throw new IndexOutOfRangeException("Coordinate out of range");
             return cells[column, row];
         }
@@ -134,7 +134,7 @@ namespace CptS321
                 else
                     cell.SetValue(cell.Text);
             }
-            else
+            else //dont really need this. But going to keep it to keep track of value/text changes in the future.
                 cell.SetValue(cell.Text);
 
             CellPropertyChanged?.Invoke(sender, e); //fancy way to only call if CellPropertyChanged isnt null
