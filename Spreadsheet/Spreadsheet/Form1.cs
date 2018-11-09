@@ -77,18 +77,27 @@ namespace SpreadsheetForm
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            selectedCell = sheet.GetCell(e.ColumnIndex, e.RowIndex) as SpreadsheetCell; //saves a reference to the current cell
-            textBox1.Text = selectedCell.Text; //updates the textbox with the text of the cell
+            selectedCell.Text = textBox1.Text; //save the text currently being typed
+            try
+            {
+                selectedCell = sheet.GetCell(e.ColumnIndex, e.RowIndex) as SpreadsheetCell; //saves a reference to the current cell
+                textBox1.Text = selectedCell.Text; //updates the textbox with the text of the cell
+            }
+            catch (IndexOutOfRangeException exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            selectedCell.Text = textBox1.Text;
+            if (e.KeyChar == '\r')
+            {
+                selectedCell.Text = textBox1.Text;
+                e.Handled = true;
+            }
         }
 
-        private void dataGridView1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-        }
     }
 }
