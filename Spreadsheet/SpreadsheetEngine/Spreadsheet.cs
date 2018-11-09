@@ -139,6 +139,5 @@ namespace CptS321
 
             CellPropertyChanged?.Invoke(sender, e); //fancy way to only call if CellPropertyChanged isnt null
         }
-
     }
 }
