@@ -45,14 +45,15 @@ namespace CptS321
 
         protected void OnPropertyChanged(string name)
         {
-
+            if (name == "Text")
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); //fancy way of only using PropertyChanged if it isn't null
-           
+            if (name == "Value")
+                ValueChanged?.Invoke(this, new PropertyChangedEventArgs(name)); //fancy way of only using PropertyChanged if it isn't null
         }
 
         public void OnValueChanged(object sender, PropertyChangedEventArgs e)
         {
-            OnPropertyChanged("Value");
+            OnPropertyChanged("Text");
         }
 
     }
