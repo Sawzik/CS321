@@ -32,8 +32,8 @@ namespace CptS321
             foreach (Cell cell in cells)
             {
                 string cellCoordAsString = ""; //converting cell location to a string
-                cellCoordAsString += (char)(cell.ColumnIndex + 1 + 'A');
-                cellCoordAsString += cell.RowIndex.ToString();
+                cellCoordAsString += (char)(cell.ColumnIndex + 'A');
+                cellCoordAsString += (cell.RowIndex + 1).ToString();
 
                 XElement xmlCell = new XElement("Cell",
                         new XAttribute("Name", cellCoordAsString),
@@ -65,6 +65,11 @@ namespace CptS321
                       Value = cell.Element("Value").Value
                   }).ToList();
 
+            foreach (SheetCell cell in cellList)
+            {
+                sheet.GetCell(cell.Name).Text = cell.Text;
+                //sheet.
+            }
 
 
             Debug.WriteLine(xmlSheet);
