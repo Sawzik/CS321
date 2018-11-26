@@ -70,6 +70,18 @@ namespace SpreadsheetForm
                 sheet.GetCell(2, i).Text = "=B" + (i + 1).ToString();
         }
 
+        private void ForceSheetUpdate()
+        {
+            for (int i = 0; i < sheet.ColumnCount; i++)
+            {
+                for (int j = 0; j < sheet.RowCount; j++)
+                {
+                    Cell cell = sheet.GetCell(i, j); //creates a cell with its position in the array.
+                    dataGridView1.Rows[cell.RowIndex].Cells[cell.ColumnIndex].Value = cell.Value; //updates the dataGridView's cells with the cells new value.
+                }
+            }
+        }
+
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             selectedCell.Text = textBox1.Text; //save the text currently being typed
@@ -107,26 +119,26 @@ namespace SpreadsheetForm
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //options for filetypes in the open file window
+            openFileDialog1.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 2;
 
-            XMLInterface saver = new XMLInterface();
-            saver.XMLSave(sheet.GetUsedCells());
-
-            ////options for filetypes in the open file window
-            //openFileDialog1.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
-            //openFileDialog1.FilterIndex = 2;
-
-            ////checks if the user selected a file
-            //if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{   // loading from the xml file
-            //    System.IO.StreamWriter selectedFile = new System.IO.StreamWriter(openFileDialog1.FileName);
-            //    LoadText(selectedFile); 
-            //}
+            //checks if the user selected a file
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {   // loading from the xml file
+                XMLInterface loadFile = new XMLInterface(openFileDialog1.OpenFile());
+                if (loadFile != null) //if the path isnt null
+                {
+                    sheet = loadFile.XMLLoad();
+                    sheet.CellPropertyChanged += Sheet_CellPropertyChanged; //subscribes to the sheets event handler
+                    selectedCell = sheet.GetCell(0, 0) as SpreadsheetCell; //sets a default selected cell to prevent crashes
+                    ForceSheetUpdate();
+                }
+            }
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //XMLInterface saver = new XMLInterface();
-
             //options for filetypes in the save file window
             saveFileDialog1.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 2;
