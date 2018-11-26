@@ -13,6 +13,18 @@ namespace CptS321
 {
     public class XMLInterface
     {
+        Stream stream;
+
+        public XMLInterface()
+        {
+            stream = null;
+        }
+
+        public XMLInterface(Stream constructStream)
+        {
+            stream = constructStream;
+        }
+
         public void XMLSave(/*Stream saveStream,*/ List<Cell> cells)
         {
             XDocument xmlSheet = new XDocument();
@@ -20,9 +32,8 @@ namespace CptS321
             foreach (Cell cell in cells)
             {
                 string cellCoordAsString = "";
-                cellCoordAsString += (char)(cell.ColumnIndex + 'A');
+                cellCoordAsString += (char)(cell.ColumnIndex + 1 + 'A');
                 cellCoordAsString += cell.RowIndex.ToString();
-
 
                 XElement xmlCell = new XElement("Cell",
                         new XAttribute("Name", cellCoordAsString),
@@ -33,6 +44,7 @@ namespace CptS321
                 root.Add(xmlCell);
             }
             xmlSheet.Add(root);
+            xmlSheet.Save(stream); // saves to file
             Debug.WriteLine(xmlSheet);
         }
     }
