@@ -12,12 +12,12 @@ using CptS321;
 
 namespace SpreadsheetForm
 {
-    public partial class Form1 : Form
+    public partial class SpreadSheetForm : Form
     {
         private Spreadsheet sheet;
         private SpreadsheetCell selectedCell; //reference to the current cell being edited
 
-        public Form1()
+        public SpreadSheetForm()
         {
             InitializeComponent();
         }
@@ -97,6 +97,12 @@ namespace SpreadsheetForm
         private void demoCellsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DemoCells();
+        }
+
+        private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            AboutForm af = new AboutForm();
+            af.ShowDialog();
         }
     }
 }
