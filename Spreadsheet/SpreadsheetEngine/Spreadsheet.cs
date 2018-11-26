@@ -53,6 +53,22 @@ namespace CptS321
             return cells[column, row]; //returns that cell at the parsed location.
         }
 
+        //returns a list of the used cells
+        public List<Cell> GetUsedCells()
+        {
+            List<Cell> returnedCells = new List<Cell>();
+            for (int i = 0; i < columnCount; i++)
+            {
+                for (int j = 0; j < rowCount; j++)
+                {
+                    SpreadsheetCell tempCell = GetCell(i, j) as SpreadsheetCell;
+                    if (tempCell.Value != null)
+                        returnedCells.Add(tempCell); //copies the cell at that position in the array.
+                }
+            }
+            return returnedCells;
+        }
+
         private string CalculateValue(string text, SpreadsheetCell senderCell)
         {
                 text = text.Substring(1); //removes the first character of the string, which is =

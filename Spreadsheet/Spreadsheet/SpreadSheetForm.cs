@@ -107,16 +107,20 @@ namespace SpreadsheetForm
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //options for filetypes in the open file window
-            openFileDialog1.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 2;
 
-            //checks if the user selected a file
-            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {   // loading from the xml file
-                //System.IO.StreamReader selectedFile = new System.IO.StreamReader(openFileDialog1.FileName);
-                //LoadText(selectedFile); 
-            }
+            XMLInterface saver = new XMLInterface();
+            saver.XMLSave(sheet.GetUsedCells());
+
+            ////options for filetypes in the open file window
+            //openFileDialog1.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            //openFileDialog1.FilterIndex = 2;
+
+            ////checks if the user selected a file
+            //if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{   // loading from the xml file
+            //    //System.IO.StreamReader selectedFile = new System.IO.StreamReader(openFileDialog1.FileName);
+            //    //LoadText(selectedFile); 
+            //}
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
