@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Xml;
 using System.Xml.Linq;
-
-using System.Diagnostics;
 
 namespace CptS321
 {
-    public class XMLInterface
+    public class XMLInterface : IDisposable
     {
         private Stream stream;
 
@@ -37,16 +34,14 @@ namespace CptS321
 
                 // saves the data into XML
                 XElement xmlCell = new XElement("cell", 
-                        new XAttribute("came", cellCoordAsString),
-                        new XElement("cext", cell.Text),
-                        new XElement("calue", cell.Value)
+                        new XAttribute("name", cellCoordAsString),
+                        new XElement("text", cell.Text)
                 );
                 //Debug.WriteLine(xmlCell);
                 root.Add(xmlCell);
             }
             xmlSheet.Add(root); // puts all the elements from root into XMLsheet
             xmlSheet.Save(stream); // saves to file
-            Debug.WriteLine(xmlSheet);
         }
 
         public Spreadsheet XMLLoad()
@@ -56,20 +51,22 @@ namespace CptS321
 
             // reads data from XML into a list of SheetCell Structs
             List<SheetCell> cellList
-               = (from cell in xmlSheet.Element("spreadsheet").Elements("cell")
+               = (from cell in xmlSheet.Element("spreadsheet")?.Elements("cell")
                   select new SheetCell
                   {
                       Name = cell.Attribute("name").Value,
-                      Text = cell.Element("text").Value,
-                      Value = cell.Element("value").Value
+                      Text = cell.Element("text").Value
                   }).ToList();
 
-            foreach (SheetCell cell in cellList)
-            {
-                sheet.GetCell(cell.Name).Text = cell.Text; // updates the cell in the sheet with the one from XML               
-            }  
-            //Debug.WriteLine(xmlSheet);
+            foreach (SheetCell cell in cellList)            
+                sheet.GetCell(cell.Name).Text = cell.Text; // updates the cell in the sheet with the one from XML
+            
             return sheet; 
+        }
+
+        public void Dispose()
+        {
+            stream.Close();
         }
     }
 
@@ -78,6 +75,5 @@ namespace CptS321
     {
         public string Name;
         public string Text;
-        public string Value;
     }
 }
