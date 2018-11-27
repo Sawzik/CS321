@@ -120,7 +120,7 @@ namespace SpreadsheetForm
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //options for filetypes in the open file window
-            openFileDialog1.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            openFileDialog1.Filter = "All files (*.*)|*.*|xml files (*.xml)|*.xml";
             openFileDialog1.FilterIndex = 2;
 
             //checks if the user selected a file
@@ -129,10 +129,17 @@ namespace SpreadsheetForm
                 XMLInterface loadFile = new XMLInterface(openFileDialog1.OpenFile());
                 if (loadFile != null) //if the path isnt null
                 {
-                    sheet = loadFile.XMLLoad();
-                    sheet.CellPropertyChanged += Sheet_CellPropertyChanged; //subscribes to the sheets event handler
-                    selectedCell = sheet.GetCell(0, 0) as SpreadsheetCell; //sets a default selected cell to prevent crashes
-                    ForceSheetUpdate();
+                    try
+                    {
+                        sheet = loadFile.XMLLoad();
+                        sheet.CellPropertyChanged += Sheet_CellPropertyChanged; //subscribes to the sheets event handler    
+                        selectedCell = sheet.GetCell(0, 49) as SpreadsheetCell; //sets a default selected cell to prevent crashes
+                        ForceSheetUpdate();
+                    }
+                    catch (Exception except)
+                    {
+                        Console.WriteLine(except.Message);
+                    }
                 }
             }
         }
@@ -140,7 +147,7 @@ namespace SpreadsheetForm
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //options for filetypes in the save file window
-            saveFileDialog1.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            saveFileDialog1.Filter = "All files (*.*)|*.*|xml files (*.xml)|*.xml";
             saveFileDialog1.FilterIndex = 2;
 
             if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
