@@ -43,6 +43,7 @@ namespace SpreadsheetForm
             {
                 DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn(); //makes a column TextBox
                 column.HeaderText = i.ToString(); //sets the column header to the letter in its position
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
                 dataGridView1.Columns.Add(column); //adds the column into the dataGridView
             }
             for (int i = 0; i < 50; i++) //counts up to Z
@@ -126,21 +127,21 @@ namespace SpreadsheetForm
             //checks if the user selected a file
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {   // loading from the xml file
-                XMLInterface loadFile = new XMLInterface(openFileDialog1.OpenFile());
-                if (loadFile != null) //if the path isnt null
-                {
-                    try
+                using (XMLInterface loadFile = new XMLInterface(openFileDialog1.OpenFile()))
+                    if (loadFile != null) //if the path isnt null
                     {
-                        sheet = loadFile.XMLLoad();
-                        sheet.CellPropertyChanged += Sheet_CellPropertyChanged; //subscribes to the sheets event handler    
-                        selectedCell = sheet.GetCell(0, 49) as SpreadsheetCell; //sets a default selected cell to prevent crashes
-                        ForceSheetUpdate();
+                        try
+                        {
+                            sheet = loadFile.XMLLoad();
+                            sheet.CellPropertyChanged += Sheet_CellPropertyChanged; //subscribes to the sheets event handler    
+                            selectedCell = sheet.GetCell(0, 49) as SpreadsheetCell; //sets a default selected cell to prevent crashes
+                            ForceSheetUpdate();
+                        }
+                        catch (Exception except)
+                        {
+                            Console.WriteLine(except.Message);
+                        }
                     }
-                    catch (Exception except)
-                    {
-                        Console.WriteLine(except.Message);
-                    }
-                }
             }
         }
 
@@ -153,9 +154,9 @@ namespace SpreadsheetForm
             if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 //using cleans up after itself by calling Dispose once its done.
-                XMLInterface saveFile = new XMLInterface(saveFileDialog1.OpenFile()); //opens the save file window and makes an XMLInterface with the path        
-                if (saveFile != null) //if the path isnt null
-                    saveFile.XMLSave(sheet.GetUsedCells()); //write to the file
+                using (XMLInterface saveFile = new XMLInterface(saveFileDialog1.OpenFile())) //opens the save file window and makes an XMLInterface with the path        
+                    if (saveFile != null) //if the path isnt null
+                        saveFile.XMLSave(sheet.GetUsedCells()); //write to the file
             }
         }
     }
