@@ -28,7 +28,7 @@ namespace CptS321
         public void XMLSave(List<Cell> cells)
         {
             XDocument xmlSheet = new XDocument();
-            XElement root = new XElement("cpreadsheet");
+            XElement root = new XElement("spreadsheet");
             foreach (Cell cell in cells)
             {
                 string cellCoordAsString = ""; //converting cell location to a string
@@ -56,7 +56,7 @@ namespace CptS321
 
             // reads data from XML into a list of SheetCell Structs
             List<SheetCell> cellList
-               = (from cell in xmlSheet.Element("Spreadsheet").Elements("cell")
+               = (from cell in xmlSheet.Element("spreadsheet").Elements("cell")
                   select new SheetCell
                   {
                       Name = cell.Attribute("name").Value,
