@@ -10,7 +10,10 @@ namespace MergeSort
     {
         static void Main(string[] args)
         {
-            int[] SIZES = { 8, 64, 256, 1024 };
+            int[] SIZES = { 8, 64, 256, 1024, 4096, 16384, 65536 };
+
+            Console.WriteLine("Threads:\tArray Size\tTime to completion (milliseconds)");
+
             foreach (int size in SIZES)
             {
                 Random rand = new Random();
@@ -28,10 +31,12 @@ namespace MergeSort
                 List<int> list = merger.Sort();
                 offset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - offset;
 
+                foreach (int i in list)
+                    Console.Write(", {0}", i);
 
-                Console.WriteLine(offset.ToString());
+                Console.WriteLine("Single\t\t{0} \t\t" + offset.ToString(), size);
             }
-            Console.Read();
+            Console.ReadKey();
         }
     }
 }
