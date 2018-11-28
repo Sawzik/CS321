@@ -10,12 +10,28 @@ namespace MergeSort
     {
         static void Main(string[] args)
         {
-            Random rand = new Random();
-            Merge merger;
-            int[] data = new int[1024];
-            for (int i = 0; i != 1024; i++)
-                data[i] = rand.Next(Int32.MaxValue);
-            merger.mergeSort(data)
+            int[] SIZES = { 8, 64, 256, 1024 };
+            foreach (int size in SIZES)
+            {
+                Random rand = new Random();
+                List<int> data = new List<int>();
+
+                for (int i = 0; i != size; i++)
+                    data.Add(rand.Next(Int32.MaxValue));
+
+                //List<int> threadedData = data.ToList(); //copies the data into another list
+
+                Merger merger = new Merger(data);
+                ThreadedMerger threadedMerger = new ThreadedMerger(data);
+
+                long offset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                List<int> list = merger.Sort();
+                offset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - offset;
+
+
+                Console.WriteLine(offset.ToString());
+            }
+            Console.Read();
         }
     }
 }
