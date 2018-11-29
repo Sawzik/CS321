@@ -180,7 +180,7 @@ namespace MergeSort
             {            
                 // Calculating value to split into separate parts with integer math
                 // can deal with larger numbers than Int32.MaxLength
-                int split = left + (right - left) / 2; ;
+                int split = left + (right - left) / 2;
 
                 // Recursive call on left and right sides                
 
@@ -221,6 +221,7 @@ namespace MergeSort
             {
                 threads[i] = new Thread(() => Sort(currIndex, currIndex + split - 1)); // making a thread on about 1/maxThreads of the array
                 threads[i].Start();
+                Thread.Sleep(10); // 10ms should be more than enough to wait for all threads to be completed.
                 currIndex += split;
             }
 
@@ -228,7 +229,49 @@ namespace MergeSort
             threads[maxThreads - 1].Start();
 
             foreach (Thread thread in threads)
+            {                
                 thread.Join(); //tell all the threads to wait until they are all finished to continue.
+            }
+
+
+            // middle > end
+            if (mergeList.Length / (maxThreads / 2) > maxThreads / 2)
+            {
+                int chunks = maxThreads / 2; //breaks up the rest of the work into half as many units for merging.            
+
+                while (chunks > 1)
+                {
+                    threads = new Thread[chunks]; // deletes all the old threads and makes a new array with half as many.
+                    split = mergeList.Length / chunks; // determining where to split up the work.
+                    currIndex = 0;
+
+                    for (int i = 0; i < chunks - 1; i++)
+                    {
+                        // (MAX-1-MAX/2)/2
+                        
+                        int end = currIndex + split;
+                        int middle = currIndex + (end - currIndex) / 2;
+                        threads[i] = new Thread(() => Merge(currIndex, middle, end - 1)); // making a thread on about 1/chunks of the array
+                        threads[i].Start();
+                        Thread.Sleep(10); // 10ms should be more than enough to wait for all threads to be completed.
+                        currIndex += split;
+                    }
+                    
+                    int e = mergeList.Length - 1;
+                    int m = currIndex + (e - currIndex)  / 2;
+                    threads[chunks - 1] = new Thread(() => Merge(currIndex, m, e)); // making a thread on the last section until the end of the array
+                    threads[chunks - 1].Start();
+
+                    foreach (Thread thread in threads)
+                    {
+                        thread.Join(); //tell all the threads to wait until they are all finished to continue.
+                    }
+
+                    chunks /= 2;
+                }
+
+                Merge(0, (mergeList.Length / 2) - 1, mergeList.Length - 1);
+            }
 
             return mergeList;
         }
