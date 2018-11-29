@@ -10,7 +10,7 @@ namespace MergeSort
     {
         static void Main(string[] args)
         {
-            int[] SIZES = {4, 8, 64 }; //, 256, 1024, 4096, 16384, 65536 };
+            int[] SIZES = {4, 8, 64, 256, 1024, 4096, 16384, 65536 };
 
             Console.WriteLine("Threads:\tArray Size\tTime to completion (milliseconds)");
 
@@ -24,18 +24,25 @@ namespace MergeSort
 
                 //List<int> threadedData = data.ToList(); //copies the data into another list
 
-                ArrayMerger merger = new ArrayMerger(data.ToArray());
+                Merger merger = new Merger(data);
+                ArrayMerger arrayMerger = new ArrayMerger(data.ToArray());
                 ThreadedMerger threadedMerger = new ThreadedMerger(data);
 
-                long offset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                //List<int> list = merger.Sort();
-                int[] list = merger.Sort();
-                offset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - offset;
+                long offset1 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                int[] list1 = arrayMerger.Sort();
+                offset1 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - offset1;
 
-                foreach (int i in list)
-                    Console.WriteLine(", {0}", i);
+                long offset2 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                List<int> list2 = merger.Sort();
+                offset2 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - offset2;
 
-                Console.WriteLine("Single\t\t{0} \t\t" + offset.ToString(), size);
+
+                //foreach (int i in list)
+                //    Console.WriteLine(", {0}", i);
+
+                Console.WriteLine("array\t\t{0} \t\t" + offset1.ToString(), size);
+                Console.WriteLine("list\t\t{0} \t\t" + offset2.ToString(), size);
+                Console.WriteLine();
             }
             Console.ReadKey();
         }
