@@ -62,7 +62,7 @@ namespace MergeSort
                     }
                     else // right list haas larger value
                     {
-                        merged.Add(right.First());
+                        merged.Add(right.First()); 
                         right.Remove(right.First());
                     }
                 }
@@ -146,99 +146,47 @@ namespace MergeSort
             return mergeList;
         }
 
-        protected virtual void Merge(int l, int m, int r)
+        protected virtual void Merge(int left, int split, int right)
         {
-            int i, j, k;
-            int n1 = m - l + 1;
-            int n2 = r - m;
+            int leftSize = split - left + 1;
+            int rightSize = right - split;
 
-            /* create temp mergeListays */
-            int[] L = new int[n1];
-            int[] R = new int[n2];
+            // creating temporary copies of mergeList to prevent overwrite of data
+            int[] leftArray = new int[leftSize];
+            int[] rightArray = new int[rightSize];
+            Array.Copy(mergeList, left, leftArray, 0, leftSize); // deep copies mergeList into two smaller arrays.
+            Array.Copy(mergeList, split + 1, rightArray, 0, rightSize);
 
-            /* Copy data to temp mergeListays L[] and R[] */
-            for (i = 0; i < n1; i++)
-                L[i] = mergeList[l + i];
-            for (j = 0; j < n2; j++)
-                R[j] = mergeList[m + 1 + j];
-
-            /* Merge the temp mergeListays back into mergeList[l..r]*/
-            i = 0; // Initial index of first submergeListay 
-            j = 0; // Initial index of second submergeListay 
-            k = l; // Initial index of merged submergeListay 
-            while (i < n1 && j < n2)
+            int leftIndex = 0, rightIndex = 0; // Initial index of sub-arrays
+            int mergeListIndex = left; // Initial index of the merge
+            while (leftIndex < leftSize && rightIndex < rightSize)
             {
-                if (L[i] <= R[j])
+                if (leftArray[leftIndex] <= rightArray[rightIndex]) // if element in the left array is less than or equal to the one on the right
                 {
-                    mergeList[k] = L[i];
-                    i++;
+                    mergeList[mergeListIndex] = leftArray[leftIndex]; //
+                    leftIndex++;
                 }
                 else
                 {
-                    mergeList[k] = R[j];
-                    j++;
+                    mergeList[mergeListIndex] = rightArray[rightIndex];
+                    rightIndex++;
                 }
-                k++;
+                mergeListIndex++;
             }
 
-            /* Copy the remaining elements of L[], if there 
-               are any */
-            while (i < n1)
+            while (leftIndex < leftSize) // copies the remaining elements in the left array to source array.
             {
-                mergeList[k] = L[i];
-                i++;
-                k++;
+                mergeList[mergeListIndex] = leftArray[leftIndex];
+                leftIndex++;
+                mergeListIndex++;
             }
 
-            /* Copy the remaining elements of R[], if there 
-               are any */
-            while (j < n2)
+            while (rightIndex < rightSize) // copies the remaining elements in the right array to source array.
             {
-                mergeList[k] = R[j];
-                j++;
-                k++;
-            }
+                mergeList[mergeListIndex] = rightArray[rightIndex];
+                rightIndex++;
+                mergeListIndex++;
+            }            
         }
-
-        //    int leftSize = split - left + 1;
-        //int rightSize = right - split;
-
-        //// creating temporary copies of mergeList to prevent overwrite of data
-        //int[] leftArray = new int[leftSize];
-        //int[] rightArray = new int[rightSize];
-        //Array.Copy(mergeList, left, leftArray, 0, leftSize); // deep copies mergeList into two smaller arrays.
-        //Array.Copy(mergeList, split + 1, rightArray, 0, rightSize);
-
-        //int leftIndex = 0, rightIndex = 0; // Initial index of sub-arrays
-        //int mergeListIndex = left; // Initial index of the merge
-        //while (leftIndex < leftSize && rightIndex < rightSize)
-        //{
-        //    if (leftArray[leftIndex] <= rightArray[rightIndex]) // if element in the left array is less than or equal to the one on the right
-        //    {
-        //        mergeList[mergeListIndex] = leftArray[leftIndex]; //
-        //        leftIndex++;
-        //    }
-        //    else
-        //    {
-        //        mergeList[mergeListIndex] = rightArray[rightIndex];
-        //        rightIndex++;
-        //    }
-        //    mergeListIndex++;
-        //}
-
-        //while (leftIndex < leftSize) // copies the remaining elements in the left array to source array.
-        //{
-        //    mergeList[mergeListIndex] = leftArray[leftIndex];
-        //    leftIndex++;
-        //    mergeListIndex++;
-        //}
-
-        //while (rightIndex < rightSize) // copies the remaining elements in the right array to source array.
-        //{
-        //    mergeList[mergeListIndex] = rightArray[rightIndex];
-        //    rightIndex++;
-        //    mergeListIndex++;
-        //}            
     }
 }
-
