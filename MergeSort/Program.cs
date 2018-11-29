@@ -50,6 +50,9 @@ namespace MergeSort
                 //int[] staticThreaded = staticThreadedMerger.Sort();
                 //staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - staticThreadedOffset;
 
+                foreach (int i in threaded)
+                    Console.Write("{0}, ", i);
+
                 //int temp = 0;
                 //int index = 0;
                 //foreach (int i in staticThreaded)
