@@ -10,7 +10,7 @@ namespace MergeSort
     {
         static void Main(string[] args)
         {
-            int[] SIZES = { 8, 64, 256, 1024, 4096, 16384, 65536 };
+            int[] SIZES = {4, 8, 64 }; //, 256, 1024, 4096, 16384, 65536 };
 
             Console.WriteLine("Threads:\tArray Size\tTime to completion (milliseconds)");
 
@@ -24,15 +24,16 @@ namespace MergeSort
 
                 //List<int> threadedData = data.ToList(); //copies the data into another list
 
-                Merger merger = new Merger(data);
+                ArrayMerger merger = new ArrayMerger(data.ToArray());
                 ThreadedMerger threadedMerger = new ThreadedMerger(data);
 
                 long offset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                List<int> list = merger.Sort();
+                //List<int> list = merger.Sort();
+                int[] list = merger.Sort();
                 offset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - offset;
 
                 foreach (int i in list)
-                    Console.Write(", {0}", i);
+                    Console.WriteLine(", {0}", i);
 
                 Console.WriteLine("Single\t\t{0} \t\t" + offset.ToString(), size);
             }
