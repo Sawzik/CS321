@@ -212,30 +212,23 @@ namespace MergeSort
 
         public override int[] Sort()
         {
+            Thread[] threads = new Thread[maxThreads];
+            int split = mergeList.Length / maxThreads; //determining indexes to split up into threads
+            int currIndex = 0;
 
-            int chunks = maxThreads;
 
-            while (chunks > 1)
+            for (int i = 0; i < maxThreads - 1; i++)
             {
-                List<Thread> threads = new List<Thread>();
-                int currIndex = 0;
-                int split = mergeList.Length / chunks; //determining indexes to split up into threads
-
-                for (int i = 0; i < chunks - 1; i++)
-                {
-                    threads.Add(new Thread(() => Sort(currIndex, currIndex + split - 1))); // making a thread on about 1/maxThreads of the array
-                    threads[i].Start();
-                    currIndex += split;
-                }
-
-                threads.Add(new Thread(() => Sort(currIndex, mergeList.Length - 1))); // making a thread on the last section until the end of the array
-                threads[chunks - 1].Start();
-
-                foreach (Thread thread in threads)
-                    thread.Join(); //tell all the threads to wait until they are all finished to continue.
-
-                chunks /= 2;
+                threads[i] = new Thread(() => Sort(currIndex, currIndex + split - 1)); // making a thread on about 1/maxThreads of the array
+                threads[i].Start();
+                currIndex += split;
             }
+
+            threads[maxThreads - 1] = new Thread(() => Sort(currIndex, mergeList.Length - 1)); // making a thread on the last section until the end of the array
+            threads[maxThreads - 1].Start();
+
+            foreach (Thread thread in threads)
+                thread.Join(); //tell all the threads to wait until they are all finished to continue.
 
             return mergeList;
         }
