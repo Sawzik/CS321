@@ -62,7 +62,7 @@ namespace MergeSort
                     }
                     else // right list haas larger value
                     {
-                        merged.Add(right.First()); 
+                        merged.Add(right.First());
                         right.Remove(right.First());
                     }
                 }
@@ -125,7 +125,7 @@ namespace MergeSort
 
         public virtual int[] Sort()
         {
-            return Sort(0, mergeList.Length);
+            return Sort(0, mergeList.Length - 1);
         }
 
         protected virtual int[] Sort(int left, int right)
@@ -133,11 +133,12 @@ namespace MergeSort
             if (left < right)
             {
                 // Calculating value to split into separate parts with integer math
-                int split = (left + right) / 2;
+                // can deal with larger numbers than Int32.MaxLength
+                int split = left + (right - left) / 2; ;
 
                 // Recursive call on left and right sides
                 Sort(left, split);
-                Sort(split, right - 1);
+                Sort(split + 1, right);
 
                 // Merge the two sides 
                 Merge(left, split, right);
@@ -145,47 +146,99 @@ namespace MergeSort
             return mergeList;
         }
 
-        protected virtual void Merge(int left, int split, int right)
+        protected virtual void Merge(int l, int m, int r)
         {
-            int leftSize = split - left + 1;
-            int rightSize = right - split;
+            int i, j, k;
+            int n1 = m - l + 1;
+            int n2 = r - m;
 
-            // creating temporary copies of mergeList to prevent overwrite of data
-            int[] leftArray = new int[leftSize];
-            int[] rightArray = new int[rightSize];
-            Array.Copy(mergeList, left, leftArray, 0, leftSize); // deep copies mergeList into two smaller arrays.
-            Array.Copy(mergeList, split, rightArray, 0, rightSize);
+            /* create temp mergeListays */
+            int[] L = new int[n1];
+            int[] R = new int[n2];
 
-            int leftIndex = 0, rightIndex = 0; // Initial index of sub-arrays
-            int mergeListIndex = left; // Initial index of the merge
-            while (leftIndex < leftSize && rightIndex < rightSize)
+            /* Copy data to temp mergeListays L[] and R[] */
+            for (i = 0; i < n1; i++)
+                L[i] = mergeList[l + i];
+            for (j = 0; j < n2; j++)
+                R[j] = mergeList[m + 1 + j];
+
+            /* Merge the temp mergeListays back into mergeList[l..r]*/
+            i = 0; // Initial index of first submergeListay 
+            j = 0; // Initial index of second submergeListay 
+            k = l; // Initial index of merged submergeListay 
+            while (i < n1 && j < n2)
             {
-                if (leftArray[leftIndex] <= mergeList[rightIndex]) // if element in the left array is less than or equal to the one on the right
+                if (L[i] <= R[j])
                 {
-                    mergeList[mergeListIndex] = leftArray[leftIndex]; //
-                    leftIndex++;
+                    mergeList[k] = L[i];
+                    i++;
                 }
                 else
                 {
-                    mergeList[mergeListIndex] = rightArray[rightIndex];
-                    rightIndex++;
+                    mergeList[k] = R[j];
+                    j++;
                 }
-                mergeListIndex++;
+                k++;
             }
 
-            while (leftIndex < leftSize) // copies the remaining elements in the left array to source array.
+            /* Copy the remaining elements of L[], if there 
+               are any */
+            while (i < n1)
             {
-                mergeList[mergeListIndex] = leftArray[leftIndex];
-                leftIndex++;
-                mergeListIndex++;
+                mergeList[k] = L[i];
+                i++;
+                k++;
             }
 
-            while (rightIndex < rightSize) // copies the remaining elements in the right array to source array.
+            /* Copy the remaining elements of R[], if there 
+               are any */
+            while (j < n2)
             {
-                mergeList[mergeListIndex] = rightArray[rightIndex];
-                rightIndex++;
-                mergeListIndex++;
-            }            
+                mergeList[k] = R[j];
+                j++;
+                k++;
+            }
         }
+
+        //    int leftSize = split - left + 1;
+        //int rightSize = right - split;
+
+        //// creating temporary copies of mergeList to prevent overwrite of data
+        //int[] leftArray = new int[leftSize];
+        //int[] rightArray = new int[rightSize];
+        //Array.Copy(mergeList, left, leftArray, 0, leftSize); // deep copies mergeList into two smaller arrays.
+        //Array.Copy(mergeList, split + 1, rightArray, 0, rightSize);
+
+        //int leftIndex = 0, rightIndex = 0; // Initial index of sub-arrays
+        //int mergeListIndex = left; // Initial index of the merge
+        //while (leftIndex < leftSize && rightIndex < rightSize)
+        //{
+        //    if (leftArray[leftIndex] <= rightArray[rightIndex]) // if element in the left array is less than or equal to the one on the right
+        //    {
+        //        mergeList[mergeListIndex] = leftArray[leftIndex]; //
+        //        leftIndex++;
+        //    }
+        //    else
+        //    {
+        //        mergeList[mergeListIndex] = rightArray[rightIndex];
+        //        rightIndex++;
+        //    }
+        //    mergeListIndex++;
+        //}
+
+        //while (leftIndex < leftSize) // copies the remaining elements in the left array to source array.
+        //{
+        //    mergeList[mergeListIndex] = leftArray[leftIndex];
+        //    leftIndex++;
+        //    mergeListIndex++;
+        //}
+
+        //while (rightIndex < rightSize) // copies the remaining elements in the right array to source array.
+        //{
+        //    mergeList[mergeListIndex] = rightArray[rightIndex];
+        //    rightIndex++;
+        //    mergeListIndex++;
+        //}            
     }
 }
+
