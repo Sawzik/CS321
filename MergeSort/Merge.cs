@@ -7,14 +7,14 @@ using System.Threading;
 
 namespace MergeSort
 {
-    class Merger
+    class ListMerger
     {
         protected bool isSorted;
         protected List<int> mergeList;
 
         public bool IsSorted { get { return isSorted; } }
 
-        public Merger(List<int> list)
+        public ListMerger(List<int> list)
         {
             isSorted = false;
             mergeList = list;
@@ -81,43 +81,16 @@ namespace MergeSort
         }
     }
 
-    class ThreadedMerger : Merger
-    {
-        public ThreadedMerger(List<int> list) : base(list) { } // uses the constructor for base class.
-
-        protected override List<int> Sort(ref List<int> notSorted)
-        {
-            if (notSorted.Count <= 1) //cannot sort something with less than 2 elements.
-                return notSorted;
-
-            int split = notSorted.Count / 2; //integer math to find the middle point.
-
-            List<int> left = new List<int>(); // creating left and right SubLists
-            List<int> right = new List<int>();
-
-            for (int i = 0; i < split; i++)  //Dividing the unsorted lists         
-                left.Add(notSorted[i]);
-
-            for (int i = split; i < notSorted.Count; i++)  //Dividing the unsorted lists         
-                right.Add(notSorted[i]);
-
-            //left = Sort(left);      //recursively call merge on left and right arrays.
-            //right = Sort(right);
-
-            return Merge(ref left, ref right);
-        }
-    }
-
     //testing to see if using arrays is more efficient since arrays arent managed objects.
     // Structs arent managed objects. So this _SHOULD_ be faster at least a little bit.
-    class ArrayMerger
+    class Merger
     {
         protected bool isSorted;
         protected int[] mergeList;
 
         public bool IsSorted { get { return isSorted; } }
 
-        public ArrayMerger(int[] list)
+        public Merger(int[] list)
         {
             isSorted = false;
             mergeList = list.ToArray(); //does a deep copy of the array
@@ -125,10 +98,11 @@ namespace MergeSort
 
         public virtual int[] Sort()
         {
-            return Sort(0, mergeList.Length - 1);
+            Sort(0, mergeList.Length - 1);
+            return mergeList;
         }
 
-        protected virtual int[] Sort(int left, int right)
+        protected virtual void Sort(int left, int right)
         {
             if (left < right)
             {
@@ -143,7 +117,6 @@ namespace MergeSort
                 // Merge the two sides 
                 Merge(left, split, right);
             }
-            return mergeList;
         }
 
         protected virtual void Merge(int left, int split, int right)
@@ -187,6 +160,131 @@ namespace MergeSort
                 rightIndex++;
                 mergeListIndex++;
             }            
+        }
+    }
+
+    class ThreadedMerger : Merger
+    {
+        int maxThreads;
+        //public ThreadedMerger(int[] list) : base(list) { } // uses the constructor for base class.
+
+        public ThreadedMerger(int[] list, int threads) : base(list)
+        {
+            //mergeList = list.ToArray();
+            maxThreads = threads;
+        }
+
+        protected override void Sort(int left, int right)
+        {
+            if (left < right)
+            {            
+                // Calculating value to split into separate parts with integer math
+                // can deal with larger numbers than Int32.MaxLength
+                int split = left + (right - left) / 2; ;
+
+                // Recursive call on left and right sides                
+
+                Thread leftThread = new Thread(() => Sort(left, split));
+                leftThread.Start();
+
+                Thread rightThread = new Thread(() => Sort(split + 1, right));
+                rightThread.Start();
+
+                leftThread.Join(); //waits for both threads to be done before merging
+                rightThread.Join();
+
+                // Merge the two sides 
+                Merge(left, split, right);
+
+                Thread.Sleep(0);
+            }
+        }
+    }
+
+    class StaticThreadedMerger : Merger
+    {
+        int maxThreads;
+
+        public StaticThreadedMerger(int[] list, int threads) : base(list)
+        {
+            maxThreads = threads;
+        }
+
+        public override int[] Sort()
+        {
+
+            int chunks = maxThreads;
+
+            while (chunks > 1)
+            {
+                List<Thread> threads = new List<Thread>();
+                int currIndex = 0;
+                int split = mergeList.Length / chunks; //determining indexes to split up into threads
+
+                for (int i = 0; i < chunks - 1; i++)
+                {
+                    threads.Add(new Thread(() => Sort(currIndex, currIndex + split - 1))); // making a thread on about 1/maxThreads of the array
+                    threads[i].Start();
+                    currIndex += split;
+                }
+
+                threads.Add(new Thread(() => Sort(currIndex, mergeList.Length - 1))); // making a thread on the last section until the end of the array
+                threads[chunks - 1].Start();
+
+                foreach (Thread thread in threads)
+                    thread.Join(); //tell all the threads to wait until they are all finished to continue.
+
+                chunks /= 2;
+            }
+
+            return mergeList;
+        }
+
+        protected override void Merge(int left, int split, int right)
+        {
+            int leftSize = split - left + 1;
+            int rightSize = right - split;
+
+            // creating temporary copies of mergeList to prevent overwrite of data
+            int[] leftArray = new int[leftSize];
+            int[] rightArray = new int[rightSize];
+            Array.Copy(mergeList, left, leftArray, 0, leftSize); // deep copies mergeList into two smaller arrays.
+            Array.Copy(mergeList, split + 1, rightArray, 0, rightSize);
+
+            int leftIndex = 0, rightIndex = 0; // Initial index of sub-arrays
+            int mergeListIndex = left; // Initial index of the merge
+            while (leftIndex < leftSize && rightIndex < rightSize)
+            {
+                if (leftArray[leftIndex] <= rightArray[rightIndex]) // if element in the left array is less than or equal to the one on the right
+                {
+                    lock (mergeList)
+                        mergeList[mergeListIndex] = leftArray[leftIndex]; 
+                    leftIndex++;
+                }
+                else
+                {
+                    lock (mergeList)
+                        mergeList[mergeListIndex] = rightArray[rightIndex];
+                    rightIndex++;
+                }
+                mergeListIndex++;
+            }
+
+            while (leftIndex < leftSize) // copies the remaining elements in the left array to source array.
+            {
+                lock (mergeList)
+                    mergeList[mergeListIndex] = leftArray[leftIndex];
+                leftIndex++;
+                mergeListIndex++;
+            }
+
+            while (rightIndex < rightSize) // copies the remaining elements in the right array to source array.
+            {
+                lock (mergeList)
+                    mergeList[mergeListIndex] = rightArray[rightIndex];
+                rightIndex++;
+                mergeListIndex++;
+            }
         }
     }
 }

@@ -10,38 +10,59 @@ namespace MergeSort
     {
         static void Main(string[] args)
         {
-            int[] SIZES = {4, 8, 64, 256, 1024, 4096, 16384, 65536 };
+            int[] SIZES = {4, 8, 64, 256, 1024, 4096, 16384, 65536, 262144, 1048576, 4194304, 16777216 };
+            int[] smallerSizes = { 2, 4, 8, 16, 32, 64 };
+            int[] test = { 1024 };
 
-            Console.WriteLine("Threads:\tArray Size\tTime to completion (milliseconds)");
+            Console.WriteLine("Threads:\t\tArray Size\tTime to completion (milliseconds)");
 
-            foreach (int size in SIZES)
+            foreach (int size in test)
             {
                 Random rand = new Random();
-                List<int> data = new List<int>();
+                int[] data = new int[size];
 
                 for (int i = 0; i != size; i++)
-                    data.Add(rand.Next(Int32.MaxValue));
+                    data[i] = rand.Next(Int32.MaxValue);
 
-                //List<int> threadedData = data.ToList(); //copies the data into another list
+                ListMerger listMerger = new ListMerger(data.ToList());
+                Merger arrayMerger = new Merger(data);
+                ThreadedMerger threadedMerger = new ThreadedMerger(data, 8);
+                StaticThreadedMerger staticThreadedMerger = new StaticThreadedMerger(data, 8);
 
-                Merger merger = new Merger(data);
-                ArrayMerger arrayMerger = new ArrayMerger(data.ToArray());
-                ThreadedMerger threadedMerger = new ThreadedMerger(data);
+                // Array version is better likely because it is much more cache optimized.
+                long arrayOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();                
+                int[] array = arrayMerger.Sort();
+                arrayOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - arrayOffset;
 
-                long offset1 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                int[] list1 = arrayMerger.Sort();
-                offset1 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - offset1;
+                //// List is slower but still not that bad. Also probably using an inefficient algorithm here.
+                //long listOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                //List<int> list = listMerger.Sort();
+                //listOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - listOffset;
 
-                long offset2 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                List<int> list2 = merger.Sort();
-                offset2 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - offset2;
+                //// Making so many threads is really expensive, and doesnt speed anything up at all.
+                //long threadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                //int[] threaded = threadedMerger.Sort();
+                //threadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - threadedOffset;
 
+                // Making 8 threads at the start might be the most efficient.
+                long staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                int[] staticThreaded = staticThreadedMerger.Sort();
+                staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - staticThreadedOffset;
 
-                //foreach (int i in list)
-                //    Console.WriteLine(", {0}", i);
+                int temp = 0;
+                int index = 0;
+                foreach (int i in staticThreaded)
+                {
+                    if (temp > i)
+                        Console.Write("{1}, {0} at {2}\n", i, temp, index++);
+                    temp = i;
+                }
 
-                Console.WriteLine("array\t\t{0} \t\t" + offset1.ToString(), size);
-                Console.WriteLine("list\t\t{0} \t\t" + offset2.ToString(), size);
+                Console.WriteLine();
+                Console.WriteLine("Single\t\t\t{0}\t\t" + arrayOffset.ToString(), size);
+                //Console.WriteLine("Single(list)\t\t{0}\t\t" + listOffset.ToString(), size);
+                //Console.WriteLine("Threaded\t\t{0}\t\t" + threadedOffset.ToString(), size);
+                Console.WriteLine("8 threads\t\t{0}\t\t" + staticThreadedOffset.ToString(), size);
                 Console.WriteLine();
             }
             Console.ReadKey();
