@@ -241,7 +241,7 @@ namespace MergeSort
 
                 while (chunks > 1)
                 {
-                    threads = new Thread[chunks]; // deletes all the old threads and makes a new array with half as many.
+                    //threads = new Thread[chunks]; // deletes all the old threads and makes a new array with half as many.
                     split = mergeList.Length / chunks; // determining where to split up the work.
                     currIndex = 0;
 
