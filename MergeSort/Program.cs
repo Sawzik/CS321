@@ -17,7 +17,7 @@ namespace MergeSort
 
             Console.WriteLine("Threads:\t\tArray Size\tTime to completion (milliseconds)");
 
-            foreach (int size in test)
+            foreach (int size in SIZES)
             {
                 Random rand = new Random();
                 int[] data = new int[size];
@@ -50,8 +50,8 @@ namespace MergeSort
                 int[] staticThreaded = staticThreadedMerger.Sort();
                 staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - staticThreadedOffset;
 
-                for (int i = 0; i < staticThreaded.Length; i++)
-                    Console.Write("{0}\t at: {1}\n", staticThreaded[i], i);
+                //for (int i = 0; i < staticThreaded.Length; i++)
+                //    Console.Write("{0}\t at: {1}\n", staticThreaded[i], i);
 
                 //int temp = 0;
                 //int index = 0;

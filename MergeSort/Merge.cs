@@ -221,7 +221,7 @@ namespace MergeSort
             {
                 threads[i] = new Thread(() => Sort(currIndex, currIndex + split - 1)); // making a thread on about 1/maxThreads of the array
                 threads[i].Start();
-                Thread.Sleep(10); // 10ms should be more than enough to wait for all threads to be completed.
+                Thread.Sleep(100); // 10ms should be more than enough to wait for all threads to be completed.
                 currIndex += split;
             }
 
@@ -247,19 +247,17 @@ namespace MergeSort
 
                     for (int i = 0; i < chunks - 1; i++)
                     {
-                        // (MAX-1-MAX/2)/2
-                        
                         int end = currIndex + split;
-                        int middle = currIndex + (end - currIndex) / 2;
-                        threads[i] = new Thread(() => Merge(currIndex, middle, end - 1)); // making a thread on about 1/chunks of the array
+                        int middle = currIndex + ((end - currIndex) / 2);
+                        threads[i] = new Thread(() => Merge(currIndex, middle -1, end - 1)); // making a thread on about 1/chunks of the array
                         threads[i].Start();
-                        Thread.Sleep(10); // 10ms should be more than enough to wait for all threads to be completed.
+                        Thread.Sleep(100); // 10ms should be more than enough to wait for all threads to be completed.
                         currIndex += split;
                     }
                     
-                    int e = mergeList.Length - 1;
-                    int m = currIndex + (e - currIndex)  / 2;
-                    threads[chunks - 1] = new Thread(() => Merge(currIndex, m, e)); // making a thread on the last section until the end of the array
+                    int e = mergeList.Length;
+                    int m = currIndex + ((e - currIndex)  / 2);
+                    threads[chunks - 1] = new Thread(() => Merge(currIndex + 1, m - 1, e - 1)); // making a thread on the last section until the end of the array
                     threads[chunks - 1].Start();
 
                     foreach (Thread thread in threads)
