@@ -204,16 +204,13 @@ namespace MergeSort
 
     class StaticThreadedMerger : Merger
     {
-        int maxThreads;
+        int maxThreads = Environment.ProcessorCount;
 
-        public StaticThreadedMerger(int[] list, int threads) : base(list)
-        {
-            maxThreads = threads;
-        }
+        public StaticThreadedMerger(int[] list) : base(list) { }
 
         public override int[] Sort()
         {
-            Thread[] threads = new Thread[maxThreads];
+            Thread[] threads = new Thread[maxThreads - 1];
             int split = mergeList.Length / maxThreads; //determining indexes to split up into threads
             int currIndex = 0;
 
@@ -226,8 +223,7 @@ namespace MergeSort
                 currIndex += split;
             }
 
-            threads[maxThreads - 1] = new Thread(() => Sort(currIndex, mergeList.Length - 1)); // making a thread on the last section until the end of the array
-            threads[maxThreads - 1].Start();
+            Sort(currIndex, mergeList.Length - 1); // making a thread on the last section until the end of the array
 
             foreach (Thread thread in threads)
             {                
@@ -258,8 +254,7 @@ namespace MergeSort
                     
                     int e = mergeList.Length;
                     int m = currIndex + ((e - currIndex)  / 2);
-                    threads[chunks - 1] = new Thread(() => Merge(currIndex + 1, m - 1, e - 1)); // making a thread on the last section until the end of the array
-                    threads[chunks - 1].Start();
+                    Merge(currIndex + 1, m - 1, e - 1); // making a thread on the last section until the end of the array
 
                     foreach (Thread thread in threads)
                     {
