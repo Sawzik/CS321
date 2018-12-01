@@ -13,11 +13,11 @@ namespace MergeSort
             int[] SIZES = {4, 8, 64, 256, 1024, 4096, 16384, 65536, 262144, 1048576, 4194304, 16777216 };
             int[] smallerSizes = { 2, 4, 8, 16, 32, 64 };
             int[] test = { 1024, 8192 };
-            int[] normalSizes = { 4, 8, 64, 256, 1024 };
+            int[] normalSizes = { 8, 64, 256, 1024 };
 
             Console.WriteLine("Threads:\t\tArray Size\tTime to completion (milliseconds)");
 
-            foreach (int size in SIZES)
+            foreach (int size in normalSizes)
             {
                 Random rand = new Random();
                 int[] data = new int[size];
@@ -35,15 +35,15 @@ namespace MergeSort
                 int[] array = arrayMerger.Sort();
                 arrayOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - arrayOffset;
 
-                //// List is slower but still not that bad. Also probably using an inefficient algorithm here.
-                //long listOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                //List<int> list = listMerger.Sort();
-                //listOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - listOffset;
+                // List is slower but still not that bad. Also probably using an inefficient algorithm here.
+                long listOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                List<int> list = listMerger.Sort();
+                listOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - listOffset;
 
-                //// Making so many threads is really expensive, and doesnt speed anything up at all.
-                //long threadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                //int[] threaded = threadedMerger.Sort();
-                //threadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - threadedOffset;
+                // Making so many threads is really expensive, and doesnt speed anything up at all.
+                long threadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                int[] threaded = threadedMerger.Sort();
+                threadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - threadedOffset;
 
                 // Making 8 threads at the start might be the most efficient.
                 long staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -64,8 +64,8 @@ namespace MergeSort
 
                 Console.WriteLine();
                 Console.WriteLine("Single\t\t\t{0}\t\t" + arrayOffset.ToString(), size);
-                //Console.WriteLine("Single(list)\t\t{0}\t\t" + listOffset.ToString(), size);
-                //Console.WriteLine("Threaded\t\t{0}\t\t" + threadedOffset.ToString(), size);
+                Console.WriteLine("Single(list)\t\t{0}\t\t" + listOffset.ToString(), size);
+                Console.WriteLine("Threaded\t\t{0}\t\t" + threadedOffset.ToString(), size);
                 Console.WriteLine("8 threads\t\t{0}\t\t" + staticThreadedOffset.ToString(), size);
                 Console.WriteLine();
             }
