@@ -33,7 +33,29 @@ namespace CptS321
                 }
             }
         }
-        
+
+        public Spreadsheet(int columns, int rows, List<Cell> cellList)
+        {
+            columnCount = columns;
+            rowCount = rows;
+
+            cells = new SpreadsheetCell[columns, rows]; //allocating memory
+            for (int i = 0; i < columns; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    cells[i, j] = new SpreadsheetCell(i, j); //creates a cell with its position in the array.
+                    cells[i, j].PropertyChanged += Spreadsheet_PropertyChanged; //tells the cell to call Spreadsheet_propertyChanged when PropertyChanged is called.              
+                }
+            }
+
+            foreach (Cell cell in cellList)
+            {
+                cells[cell.ColumnIndex, cell.RowIndex] = cell as SpreadsheetCell;
+                cells[cell.ColumnIndex, cell.RowIndex].PropertyChanged += Spreadsheet_PropertyChanged; //tells the cell to call Spreadsheet_propertyChanged when PropertyChanged is called.              
+            }
+        }
+
         //gets a cell at a position in the spreadsheet
         public Cell GetCell(int column, int row)
         {
@@ -51,6 +73,22 @@ namespace CptS321
             if (column > columnCount || row > rowCount)
                 throw new IndexOutOfRangeException("Coordinate out of range");
             return cells[column, row]; //returns that cell at the parsed location.
+        }
+
+        //returns a list of the used cells
+        public List<Cell> GetUsedCells()
+        {
+            List<Cell> returnedCells = new List<Cell>();
+            for (int i = 0; i < columnCount; i++)
+            {
+                for (int j = 0; j < rowCount; j++)
+                {
+                    SpreadsheetCell tempCell = GetCell(i, j) as SpreadsheetCell;
+                    if (tempCell.Value != null)
+                        returnedCells.Add(tempCell); //copies the cell at that position in the array.
+                }
+            }
+            return returnedCells;
         }
 
         private string CalculateValue(string text, SpreadsheetCell senderCell)

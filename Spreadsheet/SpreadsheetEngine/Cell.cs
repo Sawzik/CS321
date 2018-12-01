@@ -25,6 +25,11 @@ namespace CptS321
             cellRowIndex = row;
         }
 
+        //public Cell()
+        //{
+
+        //}
+
         //getters of cell properties.
         public int RowIndex { get { return cellRowIndex; } }
         public int ColumnIndex { get { return cellColumnIndex; } }
@@ -63,6 +68,7 @@ namespace CptS321
         private HashSet<SpreadsheetCell> referencedCells = new HashSet<SpreadsheetCell>();
 
         public SpreadsheetCell(int column, int row) : base(column, row) { } //uses the base cell class constructor.
+        //public SpreadsheetCell() : base() { } //uses the base cell class constructor.
 
         public void SetValue(string value)
         {
