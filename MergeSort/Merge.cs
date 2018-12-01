@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
+// A whole bunch of different mergesorts with different algorithms and thread handling
 namespace MergeSort
 {
     class ListMerger
