@@ -379,25 +379,25 @@ namespace MergeSort
 
                 Parallel.ForEach(threadWork, x => Merge(x.Start, x.Middle, x.End));
 
-                List<int> IsOrdered = mergeList.OrderBy(x => x).ToList();
-                if (!IsOrdered.SequenceEqual(mergeList.ToList())) // if they arent ordered
-                {
-                    foreach (ThreadWork t in threadWork)
-                    {
-                        Console.WriteLine("{0}, {1}, {2}", t.Start, t.Middle, t.End);
-                    }
-                    Console.WriteLine();
-                    //for (int j = 1; j < mergeList.Length; j++)
-                    //{
-                    //    int diff = mergeList[j] - mergeList[j - 1];
-                    //    if (diff < 0)
-                    //    {
-                    //        //Console.Write("{0}\t", j.ToString());
-                    //    }
-                    //}
-                    //Console.WriteLine("\n");
-                    //Console.WriteLine("\nnotSorted\n");
-                }
+                //List<int> IsOrdered = mergeList.OrderBy(x => x).ToList();
+                //if (!IsOrdered.SequenceEqual(mergeList.ToList())) // if they arent ordered
+                //{
+                //    foreach (ThreadWork t in threadWork)
+                //    {
+                //        Console.WriteLine("{0}, {1}, {2}", t.Start, t.Middle, t.End);
+                //    }
+                //    Console.WriteLine();
+                //    //for (int j = 1; j < mergeList.Length; j++)
+                //    //{
+                //    //    int diff = mergeList[j] - mergeList[j - 1];
+                //    //    if (diff < 0)
+                //    //    {
+                //    //        //Console.Write("{0}\t", j.ToString());
+                //    //    }
+                //    //}
+                //    //Console.WriteLine("\n");
+                //    //Console.WriteLine("\nnotSorted\n");
+                //}
 
                 chunks /= 2;
             }
@@ -408,53 +408,6 @@ namespace MergeSort
 
             Merge(0, (mergeList.Length / 2) - 1, mergeList.Length - 1);
             return mergeList;
-        }
-
-        protected override void Merge(int left, int split, int right)
-        {
-            int leftSize = split - left + 1;
-            int rightSize = right - split;
-
-            // creating temporary copies of mergeList to prevent overwrite of data
-            int[] leftArray = new int[leftSize];
-            int[] rightArray = new int[rightSize];
-            Array.Copy(mergeList, left, leftArray, 0, leftSize); // deep copies mergeList into two smaller arrays.
-            Array.Copy(mergeList, split + 1, rightArray, 0, rightSize);
-
-            int leftIndex = 0, rightIndex = 0; // Initial index of sub-arrays
-            int mergeListIndex = left; // Initial index of the merge
-            while (leftIndex < leftSize && rightIndex < rightSize)
-            {
-                if (leftArray[leftIndex] <= rightArray[rightIndex]) // if element in the left array is less than or equal to the one on the right
-                {
-                    lock (mergeList)
-                        mergeList[mergeListIndex] = leftArray[leftIndex];
-                    leftIndex++;
-                }
-                else
-                {
-                    lock (mergeList)
-                        mergeList[mergeListIndex] = rightArray[rightIndex];
-                    rightIndex++;
-                }
-                mergeListIndex++;
-            }
-
-            while (leftIndex < leftSize) // copies the remaining elements in the left array to source array.
-            {
-                lock (mergeList)
-                    mergeList[mergeListIndex] = leftArray[leftIndex];
-                leftIndex++;
-                mergeListIndex++;
-            }
-
-            while (rightIndex < rightSize) // copies the remaining elements in the right array to source array.
-            {
-                lock (mergeList)
-                    mergeList[mergeListIndex] = rightArray[rightIndex];
-                rightIndex++;
-                mergeListIndex++;
-            }
         }
     }
 }
