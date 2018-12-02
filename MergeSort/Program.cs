@@ -59,8 +59,8 @@ namespace MergeSort
                 //for (int i = 0; i < staticThreaded.Length; i++)
                 //    Console.Write("{0}\t at: {1}\n", staticThreaded[i], i);
 
-                List<int> isOrdered = parallel.OrderBy(x => x).ToList();
-                Console.WriteLine(isOrdered.SequenceEqual(parallel).ToString());
+                //List<int> isOrdered = parallel.OrderBy(x => x).ToList(); //checks if the list is in order
+                //Console.WriteLine(isOrdered.SequenceEqual(parallel).ToString());
 
                 //int temp = 0;
                 //int index = 0;

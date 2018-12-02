@@ -352,10 +352,7 @@ namespace MergeSort
 
             //Sort(currIndex, mergeList.Length - 1); // making a thread on the last section until the end of the array
 
-
-
             int chunks = maxThreads / 2; //breaks up the rest of the work into half as many units for merging.    
-
 
             while (chunks > 1)
             {
@@ -375,11 +372,9 @@ namespace MergeSort
                 threadWork[chunks - 1].Middle = currIndex + ((mergeList.Length - currIndex) / 2) - 1;
                 threadWork[chunks - 1].End = mergeList.Length - 1;
 
-                Console.WriteLine();
-
                 Parallel.ForEach(threadWork, x => Merge(x.Start, x.Middle, x.End));
 
-                //List<int> IsOrdered = mergeList.OrderBy(x => x).ToList();
+                //List<int> IsOrdered = mergeList.OrderBy(x => x).ToList(); //debug
                 //if (!IsOrdered.SequenceEqual(mergeList.ToList())) // if they arent ordered
                 //{
                 //    foreach (ThreadWork t in threadWork)
