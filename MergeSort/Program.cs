@@ -53,6 +53,9 @@ namespace MergeSort
                 //for (int i = 0; i < staticThreaded.Length; i++)
                 //    Console.Write("{0}\t at: {1}\n", staticThreaded[i], i);
 
+                List<int> isOrdered = staticThreaded.OrderBy(x => x).ToList();
+                Console.WriteLine(isOrdered.SequenceEqual(staticThreaded).ToString());
+
                 //int temp = 0;
                 //int index = 0;
                 //foreach (int i in staticThreaded)
