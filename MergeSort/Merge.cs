@@ -317,4 +317,144 @@ namespace MergeSort
             }
         }
     }
+
+    class ParallelMerger : Merger
+    {
+        struct ThreadWork
+        {
+            public int Start;
+            public int Middle;
+            public int End;
+        }
+
+        int maxThreads = Environment.ProcessorCount;
+
+        public ParallelMerger(int[] list) : base(list) { }
+
+        public override int[] Sort()
+        {
+            int split = mergeList.Length / maxThreads; //determining indexes to split up into threads
+            int currIndex = 0;
+
+            ThreadWork[] threadWork = new ThreadWork[maxThreads];
+
+            for (int i = 0; i < maxThreads - 1; i++)
+            {
+                threadWork[i].Start = currIndex;
+                threadWork[i].End = currIndex + split - 1;
+                currIndex += split;
+            }
+
+            threadWork[maxThreads - 1].Start = currIndex;
+            threadWork[maxThreads - 1].End = mergeList.Length - 1;
+
+            Parallel.ForEach(threadWork, x => Sort(x.Start, x.End)); // lets the CLR manage starting/assigning threads.
+
+            //Sort(currIndex, mergeList.Length - 1); // making a thread on the last section until the end of the array
+
+
+
+            int chunks = maxThreads / 2; //breaks up the rest of the work into half as many units for merging.    
+
+
+            while (chunks > 1)
+            {
+                threadWork = new ThreadWork[chunks]; // resizes threadWork array
+                split = mergeList.Length / chunks; // determining where to split up the work.
+                currIndex = 0;
+
+                for (int i = 0; i < chunks - 1; i++)
+                {
+                    threadWork[i].Start = currIndex;
+                    threadWork[i].Middle = currIndex + ((currIndex + split - currIndex) / 2) - 1;
+                    threadWork[i].End = currIndex + split - 1;
+                    currIndex += split;
+                }
+
+                threadWork[chunks - 1].Start = currIndex;
+                threadWork[chunks - 1].Middle = currIndex + ((mergeList.Length - currIndex) / 2) - 1;
+                threadWork[chunks - 1].End = mergeList.Length - 1;
+
+                Console.WriteLine();
+
+                Parallel.ForEach(threadWork, x => Merge(x.Start, x.Middle, x.End));
+
+                List<int> IsOrdered = mergeList.OrderBy(x => x).ToList();
+                if (!IsOrdered.SequenceEqual(mergeList.ToList())) // if they arent ordered
+                {
+                    foreach (ThreadWork t in threadWork)
+                    {
+                        Console.WriteLine("{0}, {1}, {2}", t.Start, t.Middle, t.End);
+                    }
+                    Console.WriteLine();
+                    //for (int j = 1; j < mergeList.Length; j++)
+                    //{
+                    //    int diff = mergeList[j] - mergeList[j - 1];
+                    //    if (diff < 0)
+                    //    {
+                    //        //Console.Write("{0}\t", j.ToString());
+                    //    }
+                    //}
+                    //Console.WriteLine("\n");
+                    //Console.WriteLine("\nnotSorted\n");
+                }
+
+                chunks /= 2;
+            }
+
+            //List<int> isOrdered = mergeList.OrderBy(x => x).ToList();
+            //if (!isOrdered.SequenceEqual(mergeList.ToList())) // if they arent ordered
+            //    Console.WriteLine("notSorted");
+
+            Merge(0, (mergeList.Length / 2) - 1, mergeList.Length - 1);
+            return mergeList;
+        }
+
+        protected override void Merge(int left, int split, int right)
+        {
+            int leftSize = split - left + 1;
+            int rightSize = right - split;
+
+            // creating temporary copies of mergeList to prevent overwrite of data
+            int[] leftArray = new int[leftSize];
+            int[] rightArray = new int[rightSize];
+            Array.Copy(mergeList, left, leftArray, 0, leftSize); // deep copies mergeList into two smaller arrays.
+            Array.Copy(mergeList, split + 1, rightArray, 0, rightSize);
+
+            int leftIndex = 0, rightIndex = 0; // Initial index of sub-arrays
+            int mergeListIndex = left; // Initial index of the merge
+            while (leftIndex < leftSize && rightIndex < rightSize)
+            {
+                if (leftArray[leftIndex] <= rightArray[rightIndex]) // if element in the left array is less than or equal to the one on the right
+                {
+                    lock (mergeList)
+                        mergeList[mergeListIndex] = leftArray[leftIndex];
+                    leftIndex++;
+                }
+                else
+                {
+                    lock (mergeList)
+                        mergeList[mergeListIndex] = rightArray[rightIndex];
+                    rightIndex++;
+                }
+                mergeListIndex++;
+            }
+
+            while (leftIndex < leftSize) // copies the remaining elements in the left array to source array.
+            {
+                lock (mergeList)
+                    mergeList[mergeListIndex] = leftArray[leftIndex];
+                leftIndex++;
+                mergeListIndex++;
+            }
+
+            while (rightIndex < rightSize) // copies the remaining elements in the right array to source array.
+            {
+                lock (mergeList)
+                    mergeList[mergeListIndex] = rightArray[rightIndex];
+                rightIndex++;
+                mergeListIndex++;
+            }
+        }
+    }
 }

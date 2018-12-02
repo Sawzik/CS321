@@ -29,6 +29,7 @@ namespace MergeSort
                 Merger arrayMerger = new Merger(data);
                 ThreadedMerger threadedMerger = new ThreadedMerger(data, 8);
                 StaticThreadedMerger staticThreadedMerger = new StaticThreadedMerger(data);
+                ParallelMerger parallelMerger = new ParallelMerger(data);
 
                 // Array version is better likely because it is much more cache optimized.
                 long arrayOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();                
@@ -45,16 +46,21 @@ namespace MergeSort
                 //int[] threaded = threadedMerger.Sort();
                 //threadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - threadedOffset;
 
+                //// Making 8 threads at the start might be the most efficient.
+                //long staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                //int[] staticThreaded = staticThreadedMerger.Sort();
+                //staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - staticThreadedOffset;
+
                 // Making 8 threads at the start might be the most efficient.
-                long staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                int[] staticThreaded = staticThreadedMerger.Sort();
-                staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - staticThreadedOffset;
+                long parallelOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                int[] parallel = parallelMerger.Sort();
+                parallelOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - parallelOffset;
 
                 //for (int i = 0; i < staticThreaded.Length; i++)
                 //    Console.Write("{0}\t at: {1}\n", staticThreaded[i], i);
 
-                List<int> isOrdered = staticThreaded.OrderBy(x => x).ToList();
-                Console.WriteLine(isOrdered.SequenceEqual(staticThreaded).ToString());
+                List<int> isOrdered = parallel.OrderBy(x => x).ToList();
+                Console.WriteLine(isOrdered.SequenceEqual(parallel).ToString());
 
                 //int temp = 0;
                 //int index = 0;
@@ -69,7 +75,8 @@ namespace MergeSort
                 Console.WriteLine("Single\t\t\t{0}\t\t" + arrayOffset.ToString(), size);
                 //Console.WriteLine("Single(list)\t\t{0}\t\t" + listOffset.ToString(), size);
                 //Console.WriteLine("Threaded\t\t{0}\t\t" + threadedOffset.ToString(), size);
-                Console.WriteLine("8 threads\t\t{0}\t\t" + staticThreadedOffset.ToString(), size);
+                //Console.WriteLine("8 threads\t\t{0}\t\t" + staticThreadedOffset.ToString(), size);
+                Console.WriteLine("parallel\t\t{0}\t\t" + parallelOffset.ToString(), size);
                 Console.WriteLine();
             }
             Console.ReadKey();
