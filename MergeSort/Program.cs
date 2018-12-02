@@ -15,7 +15,7 @@ namespace MergeSort
             int[] test = { 1024, 8192 };
             int[] normalSizes = { 8, 64, 256, 1024 };
 
-            Console.WriteLine("Threads:\t\tArray Size\tTime to completion (milliseconds)");
+            Console.WriteLine("Threads:\t\tArray Size\t\tTime to completion (milliseconds)");
 
             foreach (int size in SIZES)
             {
@@ -25,16 +25,16 @@ namespace MergeSort
                 for (int i = 0; i != size; i++)
                     data[i] = rand.Next(Int32.MaxValue);
 
-                ListMerger listMerger = new ListMerger(data.ToList());
-                Merger arrayMerger = new Merger(data);
-                ThreadedMerger threadedMerger = new ThreadedMerger(data, 8);
-                StaticThreadedMerger staticThreadedMerger = new StaticThreadedMerger(data);
+                //ListMerger listMerger = new ListMerger(data.ToList());
+                //Merger arrayMerger = new Merger(data);
+                //ThreadedMerger threadedMerger = new ThreadedMerger(data, 8);
+                //StaticThreadedMerger staticThreadedMerger = new StaticThreadedMerger(data);
                 ParallelMerger parallelMerger = new ParallelMerger(data);
 
-                // Array version is better likely because it is much more cache optimized.
-                long arrayOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();                
-                int[] array = arrayMerger.Sort();
-                arrayOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - arrayOffset;
+                //// Array version is better likely because it is much more cache optimized.
+                //long arrayOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();                
+                //int[] array = arrayMerger.Sort();
+                //arrayOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - arrayOffset;
 
                 //// List is slower but still not that bad. Also probably using an inefficient algorithm here.
                 //long listOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -71,13 +71,13 @@ namespace MergeSort
                 //    temp = i;
                 //}
 
-                Console.WriteLine();
-                Console.WriteLine("Single\t\t\t{0}\t\t" + arrayOffset.ToString(), size);
+                //Console.WriteLine();
+                //Console.WriteLine("Single\t\t\t{0}\t\t" + arrayOffset.ToString(), size);
                 //Console.WriteLine("Single(list)\t\t{0}\t\t" + listOffset.ToString(), size);
                 //Console.WriteLine("Threaded\t\t{0}\t\t" + threadedOffset.ToString(), size);
                 //Console.WriteLine("8 threads\t\t{0}\t\t" + staticThreadedOffset.ToString(), size);
-                Console.WriteLine("parallel\t\t{0}\t\t" + parallelOffset.ToString(), size);
-                Console.WriteLine();
+                Console.WriteLine("parallel\t\t{0}\t\t\t" + parallelOffset.ToString(), size);
+                //Console.WriteLine();
             }
             Console.ReadKey();
         }
