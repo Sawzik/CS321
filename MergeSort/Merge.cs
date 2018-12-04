@@ -188,11 +188,12 @@ namespace MergeSort
                 Thread leftThread = new Thread(() => Sort(left, split));
                 leftThread.Start();
 
-                Thread rightThread = new Thread(() => Sort(split + 1, right));
-                rightThread.Start();
+                //Thread rightThread = new Thread(() => Sort(split + 1, right));
+                //rightThread.Start();
+                Sort(split + 1, right);
 
                 leftThread.Join(); //waits for both threads to be done before merging
-                rightThread.Join();
+                //rightThread.Join();
 
                 // Merge the two sides 
                 Merge(left, split, right);
