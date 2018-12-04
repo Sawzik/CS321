@@ -10,6 +10,9 @@ namespace MergeSort
     {
         static void Main(string[] args)
         {
+
+            // Tested on Ryzen 5 2500U and i5 6600K with consistent results on both.
+
             int[] SIZES = {4, 8, 64, 256, 1024, 4096, 16384, 65536, 262144, 1048576, 4194304, 16777216, 67108864, 88888888 };
             int[] smallerSizes = { 2, 4, 8, 16, 32, 64 };
             int[] test = { 1024, 8192 };
@@ -49,7 +52,7 @@ namespace MergeSort
                     Console.WriteLine("Single(list)\t\t{0}\t\t\t**Above 30 seconds**", size);
 
                 // Making so many threads is really expensive, and doesnt speed anything up at all.
-                if (size < 5000) //crashes aboce 4096 elements in debug mode
+                if (size < 5000) //crashes above 4096 elements in debug mode. 4 core 8 thread CPU
                 {
                     long threadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                     int[] threaded = threadedMerger.Sort();
@@ -67,6 +70,8 @@ namespace MergeSort
                 Console.WriteLine("8 threads\t\t{0}\t\t\t" + staticThreadedOffset.ToString(), size);
 
                 // Letting Parallel.ForEach is already optimized and creates threads respective to work. Is the fastest method
+                // Usually ends up being about twice as fast as single threaded.
+                // I think this can be further inproved by only invoking parallel once by changing the algorithm of the Sort() method to automatically call merge on the two halves after it finished.
                 long parallelOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 int[] parallel = parallelMerger.Sort();
                 parallelOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - parallelOffset;
