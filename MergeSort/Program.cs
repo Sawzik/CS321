@@ -13,7 +13,7 @@ namespace MergeSort
             int[] SIZES = {4, 8, 64, 256, 1024, 4096, 16384, 65536, 262144, 1048576, 4194304, 16777216, 67108864, 88888888 };
             int[] smallerSizes = { 2, 4, 8, 16, 32, 64 };
             int[] test = { 1024, 8192 };
-            int[] normalSizes = { 8, 64, 256, 1024, 4096, 1634, 65536, 262144, 1048576 };
+            int[] normalSizes = { 8, 64, 256, 1024, 4096, 16384, 65536, 262144, 1048576, };
 
             Console.WriteLine("Threads:\t\tArray Size\t\tTime to completion (milliseconds)");
 
@@ -46,7 +46,7 @@ namespace MergeSort
                     Console.WriteLine("Single(list)\t\t{0}\t\t\t" + listOffset.ToString(), size);
                 }
                 else
-                    Console.WriteLine("Single(list)\t\t{0}\t\t\tAbove 30 seconds", size);
+                    Console.WriteLine("Single(list)\t\t{0}\t\t\t**Above 30 seconds**", size);
 
                 // Making so many threads is really expensive, and doesnt speed anything up at all.
                 if (size < 5000) //crashes aboce 4096 elements in debug mode
@@ -57,9 +57,10 @@ namespace MergeSort
                     Console.WriteLine("Threaded\t\t{0}\t\t\t" + threadedOffset.ToString(), size); // will only happen if there is no exception
                 }
                 else
-                    Console.WriteLine("Threaded\t\t{0}\t\t\tCrash", size);
+                    Console.WriteLine("Threaded\t\t{0}\t\t\t**Crash**", size);
 
                 // Making 8 threads at the start might be the most efficient.
+                // This method does not work as well because My algorithm always creates like 16 threads on each call. This is really expensive and limits the speed of this sort heavily.
                 long staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 int[] staticThreaded = staticThreadedMerger.Sort();
                 staticThreadedOffset = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - staticThreadedOffset;
